@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Avaliação — SENAI · Zeiss Metrologia</title>
+  <meta name="_csrf"        th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <script>!function(){var t=localStorage.getItem("zp-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.style.background=t==="dark"?"#0D1117":"#F0F4F8";}();</script>
+  <link rel="stylesheet" href="/css/design-system.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/avaliacao.css" />
+  <link rel="icon" href="/img/zeiss-logo.png" type="image/png" />
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <img class="sidebar__brand-logo" src="/img/CentroMetrologia-logo.png" alt="Logo" />
+      <div class="sidebar__brand-text">
+        <span class="sidebar__brand-title">ZEISS·PILOT</span>
+        <span class="sidebar__brand-subtitle">Metrologia SENAI</span>
+      </div>
+    </div>
+        <div class="sidebar__nav" id="sidebarNav">
+      <span class="sidebar__section-label">Principal</span>
+      <a href="/" class="sidebar__nav-item" title="Dashboard">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <span class="sidebar__section-label">Atendimento</span>
+      <a href="/servicos" class="sidebar__nav-item" title="Serviços (OS)">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="sidebar__nav-label">Serviços (OS)</span>
+      </a>
+      <a href="/amostras" class="sidebar__nav-item" title="Amostras">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
+        <span class="sidebar__nav-label">Amostras</span>
+      </a>
+      <a href="/visitas-tecnicas" class="sidebar__nav-item" title="Visitas Técnicas">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"/></svg>
+        <span class="sidebar__nav-label">Visitas Técnicas</span>
+      </a>
+      <span class="sidebar__section-label">Gestão</span>
+      <a href="/projetos" class="sidebar__nav-item" title="Projetos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        <span class="sidebar__nav-label">Projetos</span>
+      </a>
+      <a href="/eventos/listar" class="sidebar__nav-item" title="Eventos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+        <span class="sidebar__nav-label">Eventos</span>
+      </a>
+      <a href="/editais/lista" class="sidebar__nav-item" title="Editais">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span class="sidebar__nav-label">Editais</span>
+      </a>
+      <a href="/documentos" class="sidebar__nav-item" title="Documentos PDF">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>
+        <span class="sidebar__nav-label">Documentos PDF</span>
+      </a>
+      <span class="sidebar__section-label">Laboratório</span>
+      <a href="/maquinas" class="sidebar__nav-item" title="Máquinas">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        <span class="sidebar__nav-label">Máquinas</span>
+      </a>
+      <a href="/almoxarifado" class="sidebar__nav-item" title="Almoxarifado">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        <span class="sidebar__nav-label">Almoxarifado</span>
+      </a>
+      <a href="/verificacao-ambiental" class="sidebar__nav-item" title="Verificação CEM">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="sidebar__nav-label">Verificação CEM</span>
+      </a>
+      <span class="sidebar__section-label">Relatórios</span>
+      <a href="/servicos/relatorio-servicos" class="sidebar__nav-item" title="Relatório Serviços">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span class="sidebar__nav-label">Relatório Serviços</span>
+      </a>
+      <a href="/eventos/dashboard" class="sidebar__nav-item" title="Dashboard Eventos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span class="sidebar__nav-label">Dashboard Eventos</span>
+      </a>
+      <span class="sidebar__section-label">Qualidade</span>
+      <a href="/avaliacao" class="sidebar__nav-item active" title="Avaliação">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span class="sidebar__nav-label">Avaliação</span>
+      </a>
+      <a href="/dashboard-avaliacao" class="sidebar__nav-item" title="Dashboard Avaliações">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <span class="sidebar__nav-label">Dashboard Avaliações</span>
+      </a>
+      <a href="/qrcode-avaliacao" class="sidebar__nav-item" title="QR Code Avaliação">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h4"/><path d="M17 14v4"/></svg>
+        <span class="sidebar__nav-label">QR Code Avaliação</span>
+      </a>
+      <span class="sidebar__section-label">Estagiários</span>
+      <a href="/kanban-estagiarios" class="sidebar__nav-item" title="Kanban de Atividades">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="5" height="15" rx="1"/></svg>
+        <span class="sidebar__nav-label">Kanban Atividades</span>
+      </a>
+      <a href="/dashboard-estagiarios" class="sidebar__nav-item" title="Dashboard Estagiários">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <span class="sidebar__nav-label">Dashboard Estagiários</span>
+      </a>
+      <span class="sidebar__section-label">Administração</span>
+      <a href="/usuarios" class="sidebar__nav-item" title="Usuários">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="sidebar__nav-label">Usuários</span>
+      </a>
+    </div>
+
+    <button class="sidebar__toggle" id="sidebarToggle">&#x276E;</button>
+  </nav>
+
+  <div class="app-main">
+    <header class="topbar">
+      <div class="topbar__left">
+        <button class="topbar__hamburger" id="mobileMenuBtn" aria-label="Abrir menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <span class="topbar__breadcrumb">
+          <a href="/">ZEISS·PILOT</a>
+          <span class="topbar__breadcrumb-separator">›</span>
+          <span style="color:var(--text-primary)">Avaliação</span>
+        </span>
+      </div>
+      <div class="topbar__right">
+        <button class="topbar__icon-btn" id="themeToggle" title="Alternar tema">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+        </button>
+        <div class="topbar__divider"></div>
+        <div class="topbar__user-wrap" id="userMenuWrap">
+          <div class="topbar__user" id="userMenuBtn" role="button" tabindex="0">
+            <div class="topbar__user-avatar">U</div>
+            <span class="topbar__user-name" id="topbarName">Usuário</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="topbar__dropdown">
+            <div class="topbar__dropdown-user">
+              <div class="topbar__dropdown-avatar" id="dropdownAvatar">U</div>
+              <div>
+                <div class="topbar__dropdown-name" id="dropdownName">Usuário</div>
+                <div class="topbar__dropdown-role" id="dropdownRole"></div>
+              </div>
+            </div>
+            <div class="topbar__dropdown-divider"></div>
+            <a href="/usuarios" class="topbar__dropdown-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Gerenciar Usuários
+            </a>
+            <div class="topbar__dropdown-divider"></div>
+            <button class="topbar__dropdown-item topbar__dropdown-item--danger" id="logoutBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Sair
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <div class="page-header">
+        <div class="page-header__left">
+          <h1 class="page-header__title">Avaliação</h1>
+          <p class="page-header__subtitle">Formulário de satisfação — Centro de Excelência em Metrologia SENAI ZEISS</p>
+        </div>
+        <div class="page-header__actions">
+          <a href="/dashboard-avaliacao" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            Ver Dashboard
+          </a>
+        </div>
+      </div>
+
+      <div class="aval-wrapper">
+
+        <!-- Header card -->
+        <div class="aval-header-card">
+          <div class="aval-header-body">
+            <h2>Avaliação — Centro de Excelência SENAI ZEISS</h2>
+            <p>Quando você enviar este formulário, ele não coletará automaticamente seus detalhes, como nome e endereço de e-mail, a menos que você mesmo o forneça.</p>
+          </div>
+        </div>
+
+        <!-- Formulário -->
+        <div id="formArea">
+
+          <!-- Q1: Vínculo -->
+          <div class="aval-card">
+            <div class="aval-q-num">Pergunta 1</div>
+            <div class="aval-q-text">Qual seu vínculo com o Centro de Excelência em Metrologia Senai Zeiss?<span class="req">*</span></div>
+            <div class="aval-options" id="optVinculo">
+              <label class="aval-option"><input type="radio" name="vinculo" value="Cliente" /><span class="aval-option-label">Cliente</span></label>
+              <label class="aval-option"><input type="radio" name="vinculo" value="Visitante" /><span class="aval-option-label">Visitante</span></label>
+              <label class="aval-option"><input type="radio" name="vinculo" value="Colaborador do sistema S" /><span class="aval-option-label">Colaborador do sistema S</span></label>
+              <label class="aval-option"><input type="radio" name="vinculo" value="Estudante do sistema S" /><span class="aval-option-label">Estudante do sistema S</span></label>
+              <label class="aval-option"><input type="radio" name="vinculo" value="Colaborador da Zeiss" /><span class="aval-option-label">Colaborador da Zeiss</span></label>
+              <label class="aval-option">
+                <input type="radio" name="vinculo" value="Outra" />
+                <input type="text" id="vinculoOutra" placeholder="Outra (especifique)" />
+              </label>
+            </div>
+          </div>
+
+          <!-- Q2: Realizou serviço? -->
+          <div class="aval-card">
+            <div class="aval-q-num">Pergunta 2</div>
+            <div class="aval-q-text">A sua empresa ou o(a) senhor(a) realizou algum tipo de serviço com o Centro de Excelência em Metrologia Senai Zeiss?</div>
+            <div class="aval-options" id="optServico">
+              <label class="aval-option"><input type="radio" name="realizouServico" value="Sim" /><span class="aval-option-label">Sim</span></label>
+              <label class="aval-option"><input type="radio" name="realizouServico" value="Não" /><span class="aval-option-label">Não</span></label>
+            </div>
+
+            <!-- Q3: conditional -->
+            <div class="aval-conditional" id="q3Area" style="margin-top:var(--space-4)">
+              <div class="aval-q-num" style="margin-top:var(--space-2)">Pergunta 3</div>
+              <div class="aval-q-text">Sobre qual serviço deseja avaliar? (Descrição breve do serviço realizado)<span class="req">*</span></div>
+              <textarea class="form-control" id="descServico" rows="3" placeholder="Descreva brevemente o serviço realizado..." maxlength="400" style="resize:vertical"></textarea>
+            </div>
+          </div>
+
+          <!-- Q4: NPS -->
+          <div class="aval-card">
+            <div class="aval-q-num">Pergunta 4</div>
+            <div class="aval-q-text">Qual é a probabilidade de você nos recomendar a um amigo ou a um colega os serviços prestados pelo Centro de Excelência em Metrologia Senai Zeiss?<span class="req">*</span></div>
+            <div class="aval-nps-scale" id="npsScale">
+              <button class="aval-nps-btn" data-val="0" type="button">0</button>
+              <button class="aval-nps-btn" data-val="1" type="button">1</button>
+              <button class="aval-nps-btn" data-val="2" type="button">2</button>
+              <button class="aval-nps-btn" data-val="3" type="button">3</button>
+              <button class="aval-nps-btn" data-val="4" type="button">4</button>
+              <button class="aval-nps-btn" data-val="5" type="button">5</button>
+              <button class="aval-nps-btn" data-val="6" type="button">6</button>
+              <button class="aval-nps-btn" data-val="7" type="button">7</button>
+              <button class="aval-nps-btn" data-val="8" type="button">8</button>
+              <button class="aval-nps-btn" data-val="9" type="button">9</button>
+              <button class="aval-nps-btn" data-val="10" type="button">10</button>
+            </div>
+            <div class="aval-nps-labels">
+              <span>Nada provável</span>
+              <span>Extremamente provável</span>
+            </div>
+          </div>
+
+          <!-- Q5: Comentário -->
+          <div class="aval-card">
+            <div class="aval-q-num">Pergunta 5</div>
+            <div class="aval-q-text">O Centro de Excelência em Metrologia SENAI ZEISS busca sempre melhorar, escutando nossos clientes, visitantes, colaboradores e toda a comunidade. Você poderia nos ajudar nessa missão de melhoria contínua? Caso tenha, registre aqui alguma observação / reclamação / sugestão ou outro tipo de comentário adicional.</div>
+            <textarea class="form-control" id="comentario" rows="4" placeholder="Sua opinião é muito importante para nós..." maxlength="1000" style="resize:vertical"></textarea>
+          </div>
+
+          <div class="aval-submit-area">
+            <button class="btn btn-primary" id="btnEnviar" style="min-width:140px;padding:var(--space-3) var(--space-6)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Enviar
+            </button>
+          </div>
+
+        </div><!-- /formArea -->
+
+        <!-- Mensagem de sucesso -->
+        <div class="aval-success" id="successArea">
+          <div class="aval-success-icon">✓</div>
+          <h3>Resposta enviada com sucesso!</h3>
+          <p>Obrigado pela sua avaliação. Sua opinião é fundamental para melhorarmos continuamente nossos serviços.</p>
+          <div style="margin-top:var(--space-5)">
+            <button class="btn btn-primary" id="btnNovaResposta">Nova avaliação</button>
+            <a href="/dashboard-avaliacao" class="btn btn-secondary" style="margin-left:var(--space-3)">Ver resultados</a>
+          </div>
+        </div>
+
+      </div><!-- /aval-wrapper -->
+    </div><!-- /content-area -->
+  </div><!-- /app-main -->
+</div><!-- /app-shell -->
+
+<div id="toastContainer"></div>
+<script src="/js/i18n.js"></script>
+<script src="/js/core.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/ui.js"></script>
+<script src="/js/modules/notifications.js"></script>
+<script src="/js/modules/avaliacao.js"></script>
+</body>
+</html>

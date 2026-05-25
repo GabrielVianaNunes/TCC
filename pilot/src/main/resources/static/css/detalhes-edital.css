@@ -1,0 +1,20 @@
+/* ============================================================
+   DETALHES EDITAL — Page-specific styles
+   ============================================================ */
+
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.detail-field { display: flex; flex-direction: column; gap: 0.25rem; }
+.detail-field__label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+.detail-field__value { font-size: 0.95rem; color: var(--text-primary); font-weight: 500; word-break: break-word; }
+.detail-field__value--large { font-size: 1.25rem; font-weight: 700; color: var(--color-primary); }
+.detail-field--full { grid-column: 1 / -1; }
+.detail-section { background: var(--color-surface); border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); padding: 1.5rem; }
+.detail-section__title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); }
+.status-chip { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.85rem; border-radius: var(--border-radius-full, 9999px); font-size: 0.8rem; font-weight: 600; }
+.observacao-block { background: var(--color-surface-alt); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 1rem 1.25rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.65; white-space: pre-wrap; }
+.observacao-block--empty { color: var(--text-muted); font-style: italic; }
+
+@media (max-width: 640px) {
+  .detail-grid { grid-template-columns: 1fr; }
+  .detail-field--full { grid-column: 1; }
+}

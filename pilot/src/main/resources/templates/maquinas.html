@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Máquinas do Laboratório — SENAI · Zeiss Metrologia</title>
+  <meta name="_csrf"        th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <script>!function(){var t=localStorage.getItem("zp-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.style.background=t==="dark"?"#0D1117":"#F0F4F8";}();</script>
+  <link rel="stylesheet" href="/css/design-system.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/maquinas.css" />
+  <link rel="icon" href="/img/zeiss-logo.png" type="image/png" />
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <img class="sidebar__brand-logo" src="/img/CentroMetrologia-logo.png" alt="Logo" />
+      <div class="sidebar__brand-text">
+        <span class="sidebar__brand-title">ZEISS·PILOT</span>
+        <span class="sidebar__brand-subtitle">Metrologia SENAI</span>
+      </div>
+    </div>
+        <div class="sidebar__nav" id="sidebarNav">
+      <span class="sidebar__section-label">Principal</span>
+      <a href="/" class="sidebar__nav-item" title="Dashboard">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <span class="sidebar__section-label">Atendimento</span>
+      <a href="/servicos" class="sidebar__nav-item" title="Serviços (OS)">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="sidebar__nav-label">Serviços (OS)</span>
+      </a>
+      <a href="/amostras" class="sidebar__nav-item" title="Amostras">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
+        <span class="sidebar__nav-label">Amostras</span>
+      </a>
+      <a href="/visitas-tecnicas" class="sidebar__nav-item" title="Visitas Técnicas">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"/></svg>
+        <span class="sidebar__nav-label">Visitas Técnicas</span>
+      </a>
+      <span class="sidebar__section-label">Gestão</span>
+      <a href="/projetos" class="sidebar__nav-item" title="Projetos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        <span class="sidebar__nav-label">Projetos</span>
+      </a>
+      <a href="/eventos/listar" class="sidebar__nav-item" title="Eventos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+        <span class="sidebar__nav-label">Eventos</span>
+      </a>
+      <a href="/editais/lista" class="sidebar__nav-item" title="Editais">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span class="sidebar__nav-label">Editais</span>
+      </a>
+      <a href="/documentos" class="sidebar__nav-item" title="Documentos PDF">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>
+        <span class="sidebar__nav-label">Documentos PDF</span>
+      </a>
+      <span class="sidebar__section-label">Laboratório</span>
+      <a href="/maquinas" class="sidebar__nav-item active" title="Máquinas">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        <span class="sidebar__nav-label">Máquinas</span>
+      </a>
+      <a href="/almoxarifado" class="sidebar__nav-item" title="Almoxarifado">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        <span class="sidebar__nav-label">Almoxarifado</span>
+      </a>
+      <a href="/verificacao-ambiental" class="sidebar__nav-item" title="Verificação CEM">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="sidebar__nav-label">Verificação CEM</span>
+      </a>
+      <span class="sidebar__section-label">Relatórios</span>
+      <a href="/servicos/relatorio-servicos" class="sidebar__nav-item" title="Relatório Serviços">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span class="sidebar__nav-label">Relatório Serviços</span>
+      </a>
+      <a href="/eventos/dashboard" class="sidebar__nav-item" title="Dashboard Eventos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span class="sidebar__nav-label">Dashboard Eventos</span>
+      </a>
+      <span class="sidebar__section-label">Qualidade</span>
+      <a href="/avaliacao" class="sidebar__nav-item" title="Avaliação">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span class="sidebar__nav-label">Avaliação</span>
+      </a>
+      <a href="/dashboard-avaliacao" class="sidebar__nav-item" title="Dashboard Avaliações">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <span class="sidebar__nav-label">Dashboard Avaliações</span>
+      </a>
+      <a href="/qrcode-avaliacao" class="sidebar__nav-item" title="QR Code Avaliação">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h4"/><path d="M17 14v4"/></svg>
+        <span class="sidebar__nav-label">QR Code Avaliação</span>
+      </a>
+      <span class="sidebar__section-label">Estagiários</span>
+      <a href="/kanban-estagiarios" class="sidebar__nav-item" title="Kanban de Atividades">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="5" height="15" rx="1"/></svg>
+        <span class="sidebar__nav-label">Kanban Atividades</span>
+      </a>
+      <a href="/dashboard-estagiarios" class="sidebar__nav-item" title="Dashboard Estagiários">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <span class="sidebar__nav-label">Dashboard Estagiários</span>
+      </a>
+      <span class="sidebar__section-label">Administração</span>
+      <a href="/usuarios" class="sidebar__nav-item" title="Usuários">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="sidebar__nav-label">Usuários</span>
+      </a>
+    </div>
+
+    <button class="sidebar__toggle" id="sidebarToggle">&#x276E;</button>
+  </nav>
+
+  <div class="app-main">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <button class="topbar__hamburger" id="mobileMenuBtn" aria-label="Abrir menu de navegação">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <span class="topbar__breadcrumb">
+          <a href="/">ZEISS·PILOT</a>
+          <span class="topbar__breadcrumb-separator">›</span>
+          <span style="color:var(--text-primary)">Máquinas do Laboratório</span>
+        </span>
+      </div>
+      <div class="topbar__right">
+        <button class="topbar__icon-btn" id="themeToggle" title="Alternar tema">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+        </button>
+        <div class="topbar__divider"></div>
+        <div class="topbar__user-wrap" id="userMenuWrap">
+          <div class="topbar__user" id="userMenuBtn" role="button" tabindex="0" aria-label="Menu do usuário" aria-haspopup="true">
+            <div class="topbar__user-avatar">U</div>
+            <span class="topbar__user-name" th:text="${#authentication?.name}">Usuário</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+                    <div class="topbar__dropdown">
+            <div class="topbar__dropdown-user">
+              <div class="topbar__dropdown-avatar" id="dropdownAvatar">U</div>
+              <div>
+                <div class="topbar__dropdown-name" id="dropdownName">Usuário</div>
+                <div class="topbar__dropdown-role" id="dropdownRole"></div>
+              </div>
+            </div>
+            <div class="topbar__dropdown-divider"></div>
+            <a href="/usuarios" class="topbar__dropdown-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Gerenciar Usuários
+            </a>
+            <div class="topbar__dropdown-divider"></div>
+            <button class="topbar__dropdown-item topbar__dropdown-item--danger" id="logoutBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Sair
+            </button>
+          </div>
+          </div>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header__left">
+          <h1 class="page-header__title">Máquinas &amp; Scanners</h1>
+          <p class="page-header__subtitle">Controle de uso, manutenções, agendamentos e retirada de equipamentos</p>
+        </div>
+      </div>
+
+      <!-- Page-level Tab Nav -->
+      <div class="maq-page-tabs">
+        <button class="maq-page-tab active" data-section="cmm">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+          Equipamentos CMM
+        </button>
+        <button class="maq-page-tab" data-section="scanners">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 012-2h2"/><path d="M17 3h2a2 2 0 012 2v2"/><path d="M21 17v2a2 2 0 01-2 2h-2"/><path d="M7 21H5a2 2 0 01-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+          Scanners 3D
+        </button>
+      </div>
+
+      <!-- ══ SECTION: CMM ══ -->
+      <div class="maq-page-section" id="section-cmm">
+
+      <!-- Machine Nav Tabs -->
+      <div class="maq-nav" id="maqNav">
+        <p style="color:var(--text-muted);padding:var(--space-2);font-size:var(--font-size-sm)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:middle"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Carregando máquinas…
+        </p>
+      </div>
+
+      <!-- Detail Panel (initially hidden) -->
+      <div class="machine-detail" id="machineDetail" style="display:none">
+
+        <!-- Header with machine info -->
+        <div class="machine-detail__header" id="detailHeader">
+          <!-- populated by JS -->
+        </div>
+
+        <!-- Tabs -->
+        <div class="detail-tabs">
+          <button class="detail-tab active" data-tab="visao-geral">Visão Geral</button>
+          <button class="detail-tab" data-tab="registros">Registros de Uso</button>
+          <button class="detail-tab" data-tab="manutencao">Manutenção</button>
+          <button class="detail-tab" data-tab="agendamentos">Agendamentos</button>
+          <button class="detail-tab" data-tab="documentos">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+            Documentos
+            <span id="docsTabCount" style="font-size:10px;padding:1px 5px;background:var(--color-primary);color:#fff;border-radius:9px;margin-left:4px;display:none"></span>
+          </button>
+        </div>
+
+        <!-- Tab: Visão Geral -->
+        <div class="detail-tab-panel active" id="tab-visao-geral">
+          <div id="currentUserSection"><!-- populated by JS --></div>
+          <div class="overview-grid" id="overviewGrid"><!-- populated by JS --></div>
+        </div>
+
+        <!-- Tab: Registros de Uso -->
+        <div class="detail-tab-panel" id="tab-registros">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-4)">
+            <h3 style="font-size:var(--font-size-base); font-weight:var(--font-weight-semibold)">Histórico de Uso</h3>
+            <button class="btn btn-primary btn-sm" id="btnLigar">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              Registrar Uso
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="sessoesTable">
+              <thead>
+                <tr>
+                  <th>Usuário</th>
+                  <th>Ligada em</th>
+                  <th>Desligada em</th>
+                  <th>Horas</th>
+                  <th>Motivo</th>
+                  <th>Obs.</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="sessoesBody"><!-- populated by JS --></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab: Manutenção -->
+        <div class="detail-tab-panel" id="tab-manutencao">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-4)">
+            <h3 style="font-size:var(--font-size-base); font-weight:var(--font-weight-semibold)">Registros de Manutenção</h3>
+            <button class="btn btn-primary btn-sm" id="btnNovaManutencao">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Nova Manutenção
+            </button>
+          </div>
+          <div class="maint-subtabs">
+            <button class="maint-subtab active" data-maint="todos">Todos</button>
+            <button class="maint-subtab" data-maint="Revisão Geral">Revisão Geral</button>
+            <button class="maint-subtab" data-maint="Revisão de Ponteiras">Revisão de Ponteiras</button>
+            <button class="maint-subtab" data-maint="Limpeza">Limpeza</button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="manutTable">
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Responsável</th>
+                  <th>Data</th>
+                  <th>Próxima</th>
+                  <th>Status</th>
+                  <th>Observação</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="manutBody"><!-- populated by JS --></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab: Agendamentos -->
+        <div class="detail-tab-panel" id="tab-agendamentos">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-5)">
+            <h3 style="font-size:var(--font-size-base); font-weight:var(--font-weight-semibold)">Agendamentos</h3>
+            <button class="btn btn-primary btn-sm" id="btnNovoAgendamento">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Novo Agendamento
+            </button>
+          </div>
+          <div id="agendaList"><!-- populated by JS --></div>
+        </div>
+
+        <!-- Tab: Documentos -->
+        <div class="detail-tab-panel" id="tab-documentos">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-4)">
+            <div>
+              <h3 style="font-size:var(--font-size-base); font-weight:var(--font-weight-semibold)">Documentos da Máquina</h3>
+              <p style="font-size:var(--font-size-sm); color:var(--text-muted); margin-top:2px">Calibrações, manuais, laudos técnicos e certificados vinculados a este equipamento.</p>
+            </div>
+            <button class="btn btn-primary btn-sm perm-edit" id="btnNovoDocMaquina">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Anexar Documento
+            </button>
+          </div>
+          <div id="docsMaquinaAlerts"></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Arquivo</th>
+                  <th>Tipo</th>
+                  <th>Upload</th>
+                  <th>Validade</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="docsMaquinaBody"><!-- populated by JS --></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- end machine-detail -->
+
+      </div><!-- end section-cmm -->
+
+      <!-- ══ SECTION: Scanners 3D ══ -->
+      <div class="maq-page-section" id="section-scanners" style="display:none">
+
+        <!-- Scanner Status Cards -->
+        <div class="scanner-grid" id="scannerGrid">
+          <!-- populated by scanners.js -->
+        </div>
+
+        <!-- Scanner Detail Panel -->
+        <div class="machine-detail" style="display:block;margin-top:var(--space-5)">
+
+          <!-- Header do scanner selecionado -->
+          <div class="machine-detail__header" id="scannerDetailHeader"><!-- populated by scanners.js --></div>
+
+          <!-- Tabs -->
+          <div class="detail-tabs">
+            <button class="detail-tab active" data-scanner-tab="registros">Registros de Uso</button>
+            <button class="detail-tab" data-scanner-tab="manutencao">Manutenção</button>
+            <button class="detail-tab" data-scanner-tab="agendamentos">Agendamentos</button>
+          </div>
+
+          <!-- Tab: Registros de Uso -->
+          <div class="detail-tab-panel active" id="scanner-tab-registros">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4)">
+              <div style="display:flex;gap:var(--space-2)">
+                <button class="scanner-filter-tab active" data-filter="todos">Todos</button>
+                <button class="scanner-filter-tab" data-filter="em-uso">Em uso</button>
+                <button class="scanner-filter-tab" data-filter="devolvido">Devolvidos</button>
+              </div>
+              <button class="btn btn-primary btn-sm" id="btnNovaRetirada">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Registrar Retirada
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table" id="scannerLogsTable">
+                <thead>
+                  <tr>
+                    <th>Responsável</th>
+                    <th>Retirada</th>
+                    <th>Retorno</th>
+                    <th>Duração</th>
+                    <th>Local</th>
+                    <th>Observações</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="scannerLogsBody"><!-- populated by scanners.js --></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab: Manutenção -->
+          <div class="detail-tab-panel" id="scanner-tab-manutencao">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4)">
+              <h3 style="font-size:var(--font-size-base);font-weight:var(--font-weight-semibold)">Registros de Manutenção</h3>
+              <button class="btn btn-primary btn-sm" id="btnNovaScannerManut">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Nova Manutenção
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table" id="scannerManutTable">
+                <thead>
+                  <tr>
+                    <th>Scanner</th>
+                    <th>Tipo</th>
+                    <th>Responsável</th>
+                    <th>Data</th>
+                    <th>Próxima</th>
+                    <th>Status</th>
+                    <th>Observação</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="scannerManutBody"><!-- populated by scanners.js --></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab: Agendamentos -->
+          <div class="detail-tab-panel" id="scanner-tab-agendamentos">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4)">
+              <h3 style="font-size:var(--font-size-base);font-weight:var(--font-weight-semibold)">Agendamentos</h3>
+              <button class="btn btn-primary btn-sm" id="btnNovoScannerAgend">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Novo Agendamento
+              </button>
+            </div>
+            <div id="scannerAgendList"><!-- populated by scanners.js --></div>
+          </div>
+
+        </div><!-- end machine-detail -->
+
+      </div><!-- end section-scanners -->
+
+    </div><!-- content-area -->
+  </div><!-- app-main -->
+</div><!-- app-shell -->
+
+<!-- ══════════════ MODALS ══════════════ -->
+
+<!-- Modal: Registrar Uso -->
+<div class="modal" id="modalUsoBackdrop">
+  <div class="modal__dialog" style="max-width:480px">
+    <div class="modal__header">
+      <h2 class="modal__title" id="modalUsoTitle">Registrar Uso</h2>
+      <button class="modal__close" id="modalUsoClose">&#x2715;</button>
+    </div>
+    <div class="modal__body">
+      <form id="formUso" novalidate>
+        <input type="hidden" id="usoSessaoId" value="" />
+        <div class="form-group" id="grupoUsuario">
+          <label class="form-label form-label--required" for="usoUsuario">Usuário responsável</label>
+          <input class="form-control" type="text" id="usoUsuario" placeholder="Nome completo" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="usoMotivo">Motivo / Peças</label>
+          <input class="form-control" type="text" id="usoMotivo" placeholder="Ex: Medição peças lote 47 — Bosch" />
+        </div>
+        <div class="form-group" id="grupoDataLigada">
+          <label class="form-label form-label--required" for="usoDataLigada">Data / hora ligada</label>
+          <input class="form-control" type="datetime-local" id="usoDataLigada" required />
+        </div>
+        <div class="form-group" id="grupoDataDesligada" style="display:none">
+          <label class="form-label form-label--required" for="usoDataDesligada">Data / hora desligada</label>
+          <input class="form-control" type="datetime-local" id="usoDataDesligada" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="usoObs">Observações</label>
+          <input class="form-control" type="text" id="usoObs" placeholder="Opcional" />
+        </div>
+      </form>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" id="cancelUso">Cancelar</button>
+      <button class="btn btn-primary" id="saveUso">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Nova Manutenção -->
+<div class="modal" id="modalManutBackdrop">
+  <div class="modal__dialog" style="max-width:480px">
+    <div class="modal__header">
+      <h2 class="modal__title">Registrar Manutenção</h2>
+      <button class="modal__close" id="modalManutClose">&#x2715;</button>
+    </div>
+    <div class="modal__body">
+      <form id="formManut" novalidate>
+        <input type="hidden" id="manutId" value="" />
+        <div class="form-group">
+          <label class="form-label form-label--required" for="manutTipo">Tipo</label>
+          <select class="form-control" id="manutTipo" required>
+            <option value="">Selecione…</option>
+            <option value="Revisão Geral">Revisão Geral</option>
+            <option value="Revisão de Ponteiras">Revisão de Ponteiras</option>
+            <option value="Limpeza">Limpeza</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required" for="manutResponsavel">Responsável</label>
+          <input class="form-control" type="text" id="manutResponsavel" placeholder="Nome ou empresa" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required" for="manutData">Data realizada</label>
+          <input class="form-control" type="date" id="manutData" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="manutProxima">Próxima manutenção</label>
+          <input class="form-control" type="date" id="manutProxima" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="manutStatus">Status</label>
+          <select class="form-control" id="manutStatus">
+            <option value="Concluída">Concluída</option>
+            <option value="Em andamento">Em andamento</option>
+            <option value="Agendada">Agendada</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="manutObs">Observações</label>
+          <textarea class="form-control" id="manutObs" rows="2" placeholder="Opcional"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" id="cancelManut">Cancelar</button>
+      <button class="btn btn-primary" id="saveManut">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo Agendamento -->
+<div class="modal" id="modalAgendBackdrop">
+  <div class="modal__dialog" style="max-width:480px">
+    <div class="modal__header">
+      <h2 class="modal__title" id="modalAgendTitle">Novo Agendamento</h2>
+      <button class="modal__close" id="modalAgendClose">&#x2715;</button>
+    </div>
+    <div class="modal__body">
+      <form id="formAgend" novalidate>
+        <input type="hidden" id="agendId" value="" />
+        <div class="form-group">
+          <label class="form-label form-label--required" for="agendUsuario">Usuário</label>
+          <input class="form-control" type="text" id="agendUsuario" placeholder="Nome do usuário" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required" for="agendInicio">Data / hora início</label>
+          <input class="form-control" type="datetime-local" id="agendInicio" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required" for="agendFim">Data / hora fim</label>
+          <input class="form-control" type="datetime-local" id="agendFim" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="agendMotivo">Motivo</label>
+          <input class="form-control" type="text" id="agendMotivo" placeholder="Ex: Medição lote ABC" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="agendConfirmado">Confirmado?</label>
+          <select class="form-control" id="agendConfirmado">
+            <option value="false">Pendente</option>
+            <option value="true">Confirmado</option>
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" id="cancelAgend">Cancelar</button>
+      <button class="btn btn-primary" id="saveAgend">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Scanner Manutenção -->
+<div class="modal" id="modalScannerManut">
+  <div class="modal__dialog" style="max-width:480px">
+    <div class="modal__header">
+      <h2 class="modal__title" id="scannerManutModalTitle">Registrar Manutenção</h2>
+      <button class="modal__close" id="modalScannerManutClose">&#x2715;</button>
+    </div>
+    <div class="modal__body">
+      <form id="formScannerManut" novalidate>
+        <input type="hidden" id="scannerManutId" />
+        <div class="form-group">
+          <label class="form-label form-label--required">Scanner</label>
+          <select class="form-control" id="scannerManutScanner" required>
+            <option value="">Selecione o scanner…</option>
+            <option value="tscan-hawk2">T-SCAN Hawk 2</option>
+            <option value="atos-q">ATOS Q</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Tipo</label>
+          <select class="form-control" id="scannerManutTipo" required>
+            <option value="">Selecione…</option>
+            <option value="Revisão Geral">Revisão Geral</option>
+            <option value="Limpeza">Limpeza</option>
+            <option value="Calibração">Calibração</option>
+            <option value="Troca de Componente">Troca de Componente</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Responsável</label>
+          <input class="form-control" type="text" id="scannerManutResp" placeholder="Nome ou empresa" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Data realizada</label>
+          <input class="form-control" type="date" id="scannerManutData" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Próxima manutenção</label>
+          <input class="form-control" type="date" id="scannerManutProxima" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-control" id="scannerManutStatus">
+            <option value="Concluída">Concluída</option>
+            <option value="Em andamento">Em andamento</option>
+            <option value="Agendada">Agendada</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Observações</label>
+          <textarea class="form-control" id="scannerManutObs" rows="2" placeholder="Opcional"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" id="btnCancelarScannerManut">Cancelar</button>
+      <button class="btn btn-primary" id="btnSalvarScannerManut">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Scanner Agendamento -->
+<div class="modal" id="modalScannerAgend">
+  <div class="modal__dialog" style="max-width:480px">
+    <div class="modal__header">
+      <h2 class="modal__title" id="scannerAgendModalTitle">Novo Agendamento</h2>
+      <button class="modal__close" id="modalScannerAgendClose">&#x2715;</button>
+    </div>
+    <div class="modal__body">
+      <form id="formScannerAgend" novalidate>
+        <input type="hidden" id="scannerAgendId" />
+        <div class="form-group">
+          <label class="form-label form-label--required">Scanner</label>
+          <select class="form-control" id="scannerAgendScanner" required>
+            <option value="">Selecione o scanner…</option>
+            <option value="tscan-hawk2">T-SCAN Hawk 2</option>
+            <option value="atos-q">ATOS Q</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Usuário</label>
+          <input class="form-control" type="text" id="scannerAgendUsuario" placeholder="Nome do usuário" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Data / hora início</label>
+          <input class="form-control" type="datetime-local" id="scannerAgendInicio" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Data / hora fim</label>
+          <input class="form-control" type="datetime-local" id="scannerAgendFim" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Motivo</label>
+          <input class="form-control" type="text" id="scannerAgendMotivo" placeholder="Ex: Digitalização lote ABC" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirmado?</label>
+          <select class="form-control" id="scannerAgendConfirmado">
+            <option value="false">Pendente</option>
+            <option value="true">Confirmado</option>
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" id="btnCancelarScannerAgend">Cancelar</button>
+      <button class="btn btn-primary" id="btnSalvarScannerAgend">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Scanner Log -->
+<div class="modal" id="modalScannerLog">
+  <div class="modal__dialog" style="max-width:500px">
+    <div class="modal__header">
+      <h2 class="modal__title" id="scannerModalTitle">Registrar Retirada de Scanner</h2>
+      <button class="modal__close" id="modalScannerLogClose">&#x2715;</button>
+    </div>
+    <div class="modal__body">
+      <form id="formScannerLog" novalidate>
+        <input type="hidden" id="scannerLogId" />
+        <div class="form-group">
+          <label class="form-label form-label--required">Scanner</label>
+          <select class="form-control" id="scannerSelect" required>
+            <option value="">Selecione o scanner…</option>
+            <option value="tscan-hawk2">T-SCAN Hawk 2</option>
+            <option value="atos-q">ATOS Q</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Responsável pela retirada</label>
+          <input class="form-control" type="text" id="scannerResp" placeholder="Nome completo" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Data / Hora de Retirada</label>
+          <input class="form-control" type="datetime-local" id="scannerRetirada" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Local de Utilização</label>
+          <select class="form-control" id="scannerLocal" required>
+            <option value="Laboratório">Laboratório</option>
+            <option value="Em Campo">Em Campo (fora do laboratório)</option>
+          </select>
+          <span class="form-hint" id="scannerLocalHint" style="color:var(--color-warning,#f59e0b)"></span>
+        </div>
+        <div class="form-group" id="scannerRetornoGroup" style="display:none">
+          <label class="form-label">Data / Hora de Retorno</label>
+          <input class="form-control" type="datetime-local" id="scannerRetorno" />
+          <span class="form-hint">Preencha somente ao registrar a devolução.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Observações</label>
+          <textarea class="form-control" id="scannerObs" rows="2" placeholder="Ex: Utilizado para digitalização da peça motor XB-47…"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" id="btnCancelarScannerLog">Cancelar</button>
+      <button class="btn btn-primary" id="btnSalvarScannerLog">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Anexar Documento à Máquina -->
+<div class="modal" id="modalDocMaquina">
+  <div class="modal__dialog" style="max-width:480px">
+    <div class="modal__header">
+      <h2 class="modal__title">Anexar Documento</h2>
+      <button class="modal__close" id="modalDocMaquinaClose">&#x2715;</button>
+    </div>
+    <div class="modal__body">
+      <form id="formDocMaquina" novalidate>
+        <div class="form-group">
+          <label class="form-label form-label--required">Arquivo PDF</label>
+          <input class="form-control" type="file" id="docMaquinaArquivo" accept=".pdf" required />
+          <span class="form-hint">Somente arquivos PDF são aceitos.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Tipo de Documento</label>
+          <select class="form-control" id="docMaquinaTipo" required>
+            <option value="">Selecione…</option>
+            <option value="Calibração">Certificado de Calibração</option>
+            <option value="Manual">Manual do Equipamento</option>
+            <option value="NR-12">NR-12 (Segurança em Máquinas)</option>
+            <option value="Laudo Técnico">Laudo Técnico</option>
+            <option value="Relatório de Manutenção">Relatório de Manutenção</option>
+            <option value="Certificado de Garantia">Certificado de Garantia</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data de Validade</label>
+          <input class="form-control" type="date" id="docMaquinaValidade" />
+          <span class="form-hint">Deixe em branco se o documento não expira.</span>
+        </div>
+      </form>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" id="cancelDocMaquina">Cancelar</button>
+      <button class="btn btn-primary" id="saveDocMaquina">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/i18n.js"></script>
+<script src="/js/core.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/ui.js"></script>
+<script src="/js/modules/notifications.js"></script>
+<script src="/js/modules/maquinas.js"></script>
+<script src="/js/modules/scanners.js"></script>
+</body>
+</html>

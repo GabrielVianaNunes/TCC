@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Usuários — SENAI · Zeiss Metrologia</title>
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <script>!function(){var t=localStorage.getItem("zp-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.style.background=t==="dark"?"#0D1117":"#F0F4F8";}();</script>
+  <link rel="stylesheet" href="/css/design-system.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="icon" href="/img/zeiss-logo.png" type="image/png" />
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="app-shell">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar__brand"><img class="sidebar__brand-logo" src="/img/CentroMetrologia-logo.png" alt="Logo" /><div class="sidebar__brand-text"><span class="sidebar__brand-title">ZEISS·PILOT</span><span class="sidebar__brand-subtitle">Metrologia SENAI</span></div></div>
+        <div class="sidebar__nav" id="sidebarNav">
+      <span class="sidebar__section-label">Principal</span>
+      <a href="/" class="sidebar__nav-item" title="Dashboard">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <span class="sidebar__section-label">Atendimento</span>
+      <a href="/servicos" class="sidebar__nav-item" title="Serviços (OS)">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="sidebar__nav-label">Serviços (OS)</span>
+      </a>
+      <a href="/amostras" class="sidebar__nav-item" title="Amostras">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
+        <span class="sidebar__nav-label">Amostras</span>
+      </a>
+      <a href="/visitas-tecnicas" class="sidebar__nav-item" title="Visitas Técnicas">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"/></svg>
+        <span class="sidebar__nav-label">Visitas Técnicas</span>
+      </a>
+      <span class="sidebar__section-label">Gestão</span>
+      <a href="/projetos" class="sidebar__nav-item" title="Projetos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        <span class="sidebar__nav-label">Projetos</span>
+      </a>
+      <a href="/eventos/listar" class="sidebar__nav-item" title="Eventos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+        <span class="sidebar__nav-label">Eventos</span>
+      </a>
+      <a href="/editais/lista" class="sidebar__nav-item" title="Editais">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span class="sidebar__nav-label">Editais</span>
+      </a>
+      <a href="/documentos" class="sidebar__nav-item" title="Documentos PDF">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>
+        <span class="sidebar__nav-label">Documentos PDF</span>
+      </a>
+      <span class="sidebar__section-label">Laboratório</span>
+      <a href="/maquinas" class="sidebar__nav-item" title="Máquinas">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        <span class="sidebar__nav-label">Máquinas</span>
+      </a>
+      <a href="/almoxarifado" class="sidebar__nav-item" title="Almoxarifado">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        <span class="sidebar__nav-label">Almoxarifado</span>
+      </a>
+      <a href="/verificacao-ambiental" class="sidebar__nav-item" title="Verificação CEM">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="sidebar__nav-label">Verificação CEM</span>
+      </a>
+      <span class="sidebar__section-label">Relatórios</span>
+      <a href="/servicos/relatorio-servicos" class="sidebar__nav-item" title="Relatório Serviços">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span class="sidebar__nav-label">Relatório Serviços</span>
+      </a>
+      <a href="/eventos/dashboard" class="sidebar__nav-item" title="Dashboard Eventos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span class="sidebar__nav-label">Dashboard Eventos</span>
+      </a>
+      <span class="sidebar__section-label">Qualidade</span>
+      <a href="/avaliacao" class="sidebar__nav-item" title="Avaliação">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span class="sidebar__nav-label">Avaliação</span>
+      </a>
+      <a href="/dashboard-avaliacao" class="sidebar__nav-item" title="Dashboard Avaliações">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <span class="sidebar__nav-label">Dashboard Avaliações</span>
+      </a>
+      <a href="/qrcode-avaliacao" class="sidebar__nav-item" title="QR Code Avaliação">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h4"/><path d="M17 14v4"/></svg>
+        <span class="sidebar__nav-label">QR Code Avaliação</span>
+      </a>
+      <span class="sidebar__section-label">Estagiários</span>
+      <a href="/kanban-estagiarios" class="sidebar__nav-item" title="Kanban de Atividades">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="5" height="15" rx="1"/></svg>
+        <span class="sidebar__nav-label">Kanban Atividades</span>
+      </a>
+      <a href="/dashboard-estagiarios" class="sidebar__nav-item" title="Dashboard Estagiários">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <span class="sidebar__nav-label">Dashboard Estagiários</span>
+      </a>
+      <span class="sidebar__section-label">Administração</span>
+      <a href="/usuarios" class="sidebar__nav-item active" title="Usuários">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="sidebar__nav-label">Usuários</span>
+      </a>
+    </div>
+
+    <button class="sidebar__toggle" id="sidebarToggle">&#x276E;</button>
+  </nav>
+
+  <div class="app-main">
+    <header class="topbar">
+      <div class="topbar__left"><button class="topbar__hamburger" id="mobileMenuBtn" aria-label="Abrir menu de navegação"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button><span class="topbar__breadcrumb"><a href="/">ZEISS·PILOT</a><span class="topbar__breadcrumb-separator">›</span><span style="color:var(--text-primary)">Usuários</span></span></div>
+      <div class="topbar__right">
+        <button class="topbar__icon-btn" id="themeToggle" title="Alternar tema"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></button>
+        <div class="topbar__divider"></div>
+        <div class="topbar__user-wrap" id="userMenuWrap"><div class="topbar__user" id="userMenuBtn" role="button" tabindex="0" aria-label="Menu do usuário" aria-haspopup="true"><div class="topbar__user-avatar">U</div><span class="topbar__user-name" th:text="${#authentication?.name}">Usuário</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)"><polyline points="6 9 12 15 18 9"/></svg></div>          <div class="topbar__dropdown">
+            <div class="topbar__dropdown-user">
+              <div class="topbar__dropdown-avatar" id="dropdownAvatar">U</div>
+              <div>
+                <div class="topbar__dropdown-name" id="dropdownName">Usuário</div>
+                <div class="topbar__dropdown-role" id="dropdownRole"></div>
+              </div>
+            </div>
+            <div class="topbar__dropdown-divider"></div>
+            <a href="/usuarios" class="topbar__dropdown-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Gerenciar Usuários
+            </a>
+            <div class="topbar__dropdown-divider"></div>
+            <button class="topbar__dropdown-item topbar__dropdown-item--danger" id="logoutBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Sair
+            </button>
+          </div>
+          </div>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <div class="page-header">
+        <div class="page-header__left">
+          <h1 class="page-header__title">Usuários</h1>
+          <p class="page-header__subtitle">Gerenciamento de contas de acesso ao sistema</p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn btn-primary" id="btnNovoUsuario">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Novo Usuário
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-toolbar">
+        <div class="search-bar">
+          <svg class="search-bar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="form-control search-bar__input" type="text" id="campoBusca" placeholder="Buscar por nome ou e-mail..." />
+        </div>
+        <div class="filter-toolbar__group">
+          <label>Cargo:</label>
+          <select class="filter-toolbar__select" id="filtroCargo">
+            <option value="">Todos</option>
+            <option value="ESTAGIARIO">Estagiário</option>
+            <option value="GESTOR">Gestor</option>
+            <option value="DIRETOR_CEM">Diretor do CEM</option>
+          </select>
+        </div>
+        <div class="filter-toolbar__spacer"></div>
+        <button class="btn btn-ghost btn-sm" id="btnLimparFiltros">Limpar</button>
+      </div>
+
+      <div class="table-container" style="border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg);border-top:none">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome</th><th>E-mail</th><th>Cargo</th>
+              <th>Data de Criação</th><th class="actions-cell">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaUsuarios"></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <span class="pagination__info" id="paginacaoInfo">–</span>
+        <button class="pagination__btn" id="btnAnterior" disabled>‹ Anterior</button>
+        <span class="pagination__btn active" id="paginaAtual">1</span>
+        <button class="pagination__btn" id="btnProximo">Próxima ›</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modalUsuario">
+  <div class="modal__dialog" style="max-width:620px">
+    <div class="modal__header">
+      <h3 class="modal__title" id="modalTitulo">Novo Usuário</h3>
+      <button class="modal__close" data-modal-close="modalUsuario">&times;</button>
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex;border-bottom:1px solid var(--border-color);padding:0 24px;background:var(--color-surface)">
+      <button type="button" id="tabDados" onclick="UsuariosModule.switchTab('dados')"
+        style="padding:12px 16px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--color-primary);border-bottom:2px solid var(--color-primary);margin-bottom:-1px">
+        Dados do usuário
+      </button>
+      <button type="button" id="tabPerms" onclick="UsuariosModule.switchTab('perms')"
+        style="padding:12px 16px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-1px">
+        Permissões
+      </button>
+      <button type="button" id="tabDocs" onclick="UsuariosModule.switchTab('docs')"
+        style="padding:12px 16px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-1px;display:none">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>
+        Documentos <span id="tabDocsCount" style="font-size:11px;padding:1px 6px;background:var(--color-primary);color:#fff;border-radius:9px;margin-left:4px;display:none"></span>
+      </button>
+    </div>
+
+    <div class="modal__body">
+      <form id="usuarioForm" autocomplete="off">
+        <input type="hidden" id="usuarioId" />
+
+        <!-- ── Aba: Dados ── -->
+        <div id="panelDados">
+          <div class="form-group"><label class="form-label form-label--required">Nome Completo</label><input class="form-control" id="nome" autocomplete="name" required /></div>
+          <div class="form-group">
+            <label class="form-label form-label--required">E-mail</label>
+            <input class="form-control" type="email" id="email" autocomplete="email" required />
+            <span class="form-hint">Será usado para login no sistema.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label form-label--required">Cargo</label>
+            <select class="form-control" id="cargo" required>
+              <option value="">Selecione...</option>
+              <option value="ESTAGIARIO">Estagiário</option>
+              <option value="GESTOR">Gestor</option>
+              <option value="DIRETOR_CEM">Diretor do CEM</option>
+            </select>
+            <span class="form-hint">O cargo define as permissões padrão. Ajuste-as na aba Permissões.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label form-label--required" id="senhaLabel">Senha</label>
+            <input class="form-control" type="password" id="senha" autocomplete="new-password" />
+            <span class="form-hint" id="senhaHint">Mínimo 6 caracteres.</span>
+          </div>
+        </div>
+
+        <!-- ── Aba: Documentos ── -->
+        <div id="panelDocs" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <p style="font-size:12px;color:var(--text-muted);margin:0">Certificados, termos e documentos vinculados a este usuário.</p>
+            <button type="button" class="btn btn-primary btn-sm" id="btnAnexarDoc">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Anexar
+            </button>
+          </div>
+          <div id="docsList"><!-- populated by JS --></div>
+        </div>
+
+        <!-- ── Aba: Permissões ── -->
+        <div id="panelPerms" style="display:none">
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">
+            As permissões abaixo são preenchidas automaticamente ao selecionar o cargo. Você pode personalizar individualmente.
+          </p>
+
+          <!-- Ações gerais -->
+          <div style="margin-bottom:20px">
+            <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px">Ações gerais</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" id="perm_create" /> Criar registros</label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" id="perm_edit" /> Editar registros</label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" id="perm_delete" /> Excluir registros</label>
+            </div>
+          </div>
+
+          <!-- Módulos -->
+          <div style="margin-bottom:20px">
+            <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px">Módulos</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" id="perm_viewEditais" /> Acessar Editais</label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" id="perm_viewDocumentos" /> Acessar Documentos PDF</label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" id="perm_viewUsuarios" /> Gerenciar Usuários</label>
+            </div>
+          </div>
+
+          <!-- Dados financeiros -->
+          <div style="margin-bottom:8px">
+            <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px">Dados financeiros</p>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" id="perm_viewFinancial" /> Ver valores, custos e retornos financeiros</label>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-danger" id="btnExcluirUsuario" style="display:none;margin-right:auto">Excluir</button>
+      <button class="btn btn-secondary" data-modal-close="modalUsuario">Cancelar</button>
+      <button class="btn btn-primary" id="btnSalvarUsuario">Salvar Usuário</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Anexar Documento -->
+<div class="modal" id="modalAnexarDoc">
+  <div class="modal__dialog" style="max-width:460px">
+    <div class="modal__header">
+      <h3 class="modal__title">Anexar Documento</h3>
+      <button class="modal__close" data-modal-close="modalAnexarDoc">&times;</button>
+    </div>
+    <div class="modal__body">
+      <form id="docForm" novalidate>
+        <input type="hidden" id="docEditId" />
+        <div class="form-group">
+          <label class="form-label form-label--required">Tipo de Documento</label>
+          <select class="form-control" id="docTipo" required>
+            <option value="">Selecione…</option>
+            <option value="Certificado de Treinamento">Certificado de Treinamento</option>
+            <option value="Termo de Confidencialidade">Termo de Confidencialidade</option>
+            <option value="Currículo">Currículo</option>
+            <option value="NR-10">NR-10</option>
+            <option value="NR-12">NR-12</option>
+            <option value="ISO 17025 — Competência">ISO 17025 — Competência</option>
+            <option value="Atestado Médico">Atestado Médico</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Nome / Descrição do Arquivo</label>
+          <input class="form-control" type="text" id="docNome" placeholder="Ex: certificado-nr10-2024.pdf" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Data do Documento</label>
+          <input class="form-control" type="date" id="docData" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data de Validade</label>
+          <input class="form-control" type="date" id="docValidade" />
+          <span class="form-hint">Deixe em branco se não tiver prazo de vencimento.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Observações</label>
+          <input class="form-control" type="text" id="docObs" placeholder="Opcional" />
+        </div>
+      </form>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" data-modal-close="modalAnexarDoc">Cancelar</button>
+      <button class="btn btn-primary" id="btnSalvarDoc">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/i18n.js"></script>
+<script src="/js/core.js"></script><script src="/js/api.js"></script><script src="/js/ui.js"></script><script src="/js/modules/notifications.js"></script>
+<script src="/js/modules/usuarios.js"></script>
+</body>
+</html>

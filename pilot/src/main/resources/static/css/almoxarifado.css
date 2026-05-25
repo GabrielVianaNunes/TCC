@@ -1,0 +1,115 @@
+﻿/* ============================================================
+   ALMOXARIFADO
+   ============================================================ */
+.almo-kpi-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4); margin-bottom: var(--space-4);
+}
+.almo-kpi {
+  background: var(--color-surface); border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg); padding: var(--space-4) var(--space-5);
+  display: flex; flex-direction: column; gap: var(--space-1);
+}
+.almo-kpi--danger { border-color: rgba(239,68,68,0.45); }
+.almo-kpi__label { font-size: 11px; font-weight: var(--font-weight-bold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+.almo-kpi__value { font-size: 2rem; font-weight: var(--font-weight-bold); color: var(--text-primary); line-height: 1.1; }
+.almo-filters { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; }
+.almo-item-nome { font-weight: var(--font-weight-medium); color: var(--text-primary); }
+.almo-item-obs  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.almo-qty       { font-weight: var(--font-weight-semibold); font-size: var(--font-size-base); }
+.almo-qty--critico { color: var(--color-danger); }
+.almo-qty--aviso   { color: #d97706; }
+.almo-qty-min      { color: var(--text-muted); font-size: var(--font-size-sm); }
+.almo-row--critico            { background: rgba(239,68,68,0.04); }
+.almo-row--critico:hover      { background: rgba(239,68,68,0.08) !important; }
+.almo-cat-badge {
+  display: inline-block; padding: 2px 8px;
+  border-radius: var(--border-radius-full);
+  font-size: 11px; font-weight: var(--font-weight-medium);
+  white-space: nowrap; background: var(--color-surface-hover);
+  color: var(--text-secondary); border: 1px solid var(--border-color);
+}
+.almo-cat--ponteiras   { background: rgba(59,130,246,0.10);  color: #3b82f6; border-color: rgba(59,130,246,0.25); }
+.almo-cat--limpeza     { background: rgba(16,185,129,0.10);  color: #10b981; border-color: rgba(16,185,129,0.25); }
+.almo-cat--ferramentas { background: rgba(245,158,11,0.10);  color: #d97706; border-color: rgba(245,158,11,0.25); }
+.almo-cat--metrologia  { background: rgba(139,92,246,0.10);  color: #8b5cf6; border-color: rgba(139,92,246,0.25); }
+.almo-cat--engmec      { background: rgba(249,115,22,0.10);  color: #ea580c; border-color: rgba(249,115,22,0.25); }
+.almo-cat--epi         { background: rgba(239,68,68,0.10);   color: #dc2626; border-color: rgba(239,68,68,0.25);  }
+.almo-cat--papelaria   { background: rgba(100,116,139,0.10); color: #64748b; border-color: rgba(100,116,139,0.25);}
+.badge--ok {
+  display:inline-block; padding: 2px 8px; white-space:nowrap;
+  border-radius: var(--border-radius-full); font-size: 11px; font-weight: var(--font-weight-semibold);
+  background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.3);
+}
+.badge--aviso {
+  display:inline-block; padding: 2px 8px; white-space:nowrap;
+  border-radius: var(--border-radius-full); font-size: 11px; font-weight: var(--font-weight-semibold);
+  background: rgba(245,158,11,0.12); color: #d97706; border: 1px solid rgba(245,158,11,0.3);
+}
+.badge--critico {
+  display:inline-block; padding: 2px 8px; white-space:nowrap;
+  border-radius: var(--border-radius-full); font-size: 11px; font-weight: var(--font-weight-semibold);
+  background: rgba(239,68,68,0.12); color: #dc2626; border: 1px solid rgba(239,68,68,0.3);
+}
+.almo-actions { display: flex; gap: var(--space-1); align-items: center; }
+.almo-btn--delete:hover { color: var(--color-danger) !important; }
+.almo-mov-item-nome {
+  font-weight: var(--font-weight-semibold); color: var(--text-primary);
+  font-size: var(--font-size-base); margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-hover); border-radius: var(--border-radius-md);
+  border-left: 3px solid var(--color-primary);
+}
+.almo-radio-btn {
+  display: flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-4); border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md); cursor: pointer;
+  font-weight: var(--font-weight-medium); transition: var(--transition-fast);
+  -webkit-user-select: none; user-select: none;
+}
+.almo-radio-btn:has(input:checked) { border-color: var(--color-primary); background: rgba(0,51,160,0.08); color: var(--color-primary); }
+.almo-radio-btn input { margin: 0; cursor: pointer; }
+.form-hint { display: block; font-size: 12px; color: var(--text-muted); margin-top: var(--space-1); }
+.almo-item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+.almo-item-grid--full { grid-column: 1 / -1; }
+@media (max-width: 900px) { .almo-kpi-strip { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) {
+  .almo-kpi-strip { grid-template-columns: 1fr 1fr; }
+  .almo-filters { flex-direction: column; align-items: stretch; }
+  .almo-item-grid { grid-template-columns: 1fr; }
+  .almo-item-grid--full { grid-column: 1; }
+}
+
+/* ── Barra de progresso inline de estoque ── */
+.almo-stock-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--color-neutral-bg);
+  border-radius: var(--border-radius-full);
+  overflow: hidden;
+  margin-top: 5px;
+}
+.almo-stock-bar__fill {
+  height: 100%;
+  border-radius: var(--border-radius-full);
+  transition: width 0.4s ease;
+  min-width: 2px;
+}
+
+/* ── Botão de reabastecimento rápido ── */
+.almo-btn--restock {
+  animation: pulse-danger 1.8s ease-in-out infinite;
+}
+@keyframes pulse-danger {
+  0%, 100% { opacity: 1;    transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(1.08); }
+}
+
+/* ── Sort headers ── */
+#tabelaItens th[data-sort] { -webkit-user-select: none; user-select: none; }
+#tabelaItens th[data-sort]:hover { color: var(--text-primary); }
+#tabelaItens th.sort-asc,
+#tabelaItens th.sort-desc  { color: var(--color-primary); }
+
+/* ── Modal overlay + dialog ── */
+/* All modal overlays use .modal-overlay from components.css for blur and background */

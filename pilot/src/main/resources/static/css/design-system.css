@@ -1,0 +1,237 @@
+/* ============================================================
+   ZEISS-PILOT — DESIGN SYSTEM
+   Industrial Metrology Platform · SENAI-Zeiss
+   ISO 17025 / ISO 9001 Visual Identity
+   ============================================================ */
+
+/* ── Google Fonts Import ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ── CSS Custom Properties (Design Tokens) ── */
+:root {
+  /* ── BRAND COLORS ── */
+  --color-primary:        #0033A0;   /* Zeiss institutional blue */
+  --color-primary-dark:   #002280;
+  --color-primary-light:  #1652C8;
+  --color-primary-50:     #EEF2FB;
+  --color-accent:         #00A3E0;   /* Zeiss light blue */
+  --color-accent-dark:    #0082B3;
+
+  /* ── SEMANTIC STATUS COLORS ── */
+  --color-success:        #16A34A;
+  --color-success-light:  #22C55E;
+  --color-success-bg:     #F0FDF4;
+  --color-success-border: #BBF7D0;
+
+  --color-warning:        #D97706;
+  --color-warning-light:  #F59E0B;
+  --color-warning-bg:     #FFFBEB;
+  --color-warning-border: #FDE68A;
+
+  --color-danger:         #DC2626;
+  --color-danger-light:   #EF4444;
+  --color-danger-bg:      #FEF2F2;
+  --color-danger-border:  #FECACA;
+
+  --color-info:           #2563EB;
+  --color-info-light:     #3B82F6;
+  --color-info-bg:        #EFF6FF;
+  --color-info-border:    #BFDBFE;
+
+  --color-neutral:        #64748B;
+  --color-neutral-bg:     #F1F5F9;
+  --color-neutral-border: #E2E8F0;
+
+  /* ── SURFACE & BACKGROUND ── */
+  --color-bg:             #F0F4F8;
+  --color-bg-alt:         #E8EDF4;
+  --color-surface:        #FFFFFF;
+  --color-surface-hover:  #F8FAFC;
+  --color-surface-alt:    #F4F7FB;
+  --color-overlay:        rgba(10, 22, 40, 0.55);
+
+  /* ── TEXT HIERARCHY ── */
+  --text-primary:         #0F172A;
+  --text-secondary:       #475569;
+  --text-muted:           #94A3B8;
+  --text-inverse:         #FFFFFF;
+  --text-link:            #2563EB;
+  --text-link-hover:      #1D4ED8;
+
+  /* ── BORDER ── */
+  --border-color:         #E2E8F0;
+  --border-hover:         #CBD5E1;
+  --border-focus:         #0033A0;
+  --border-width:         1px;
+  --border-radius-xs:     4px;
+  --border-radius-sm:     6px;
+  --border-radius-md:     10px;
+  --border-radius-lg:     14px;
+  --border-radius-xl:     20px;
+  --border-radius-full:   9999px;
+
+  /* ── SIDEBAR ── */
+  --sidebar-bg:           #0A1628;
+  --sidebar-bg-hover:     #101f38;
+  --sidebar-separator:    #1E2E47;
+  --sidebar-text:         #94A3B8;
+  --sidebar-text-active:  #FFFFFF;
+  --sidebar-active-bg:    rgba(0, 163, 224, 0.14);
+  --sidebar-active-border:#00A3E0;
+  --sidebar-width:        260px;
+  --sidebar-collapsed:    88px;
+  --topbar-height:        64px;
+
+  /* ── SHADOWS ── */
+  --shadow-xs:  0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg:  0 10px 30px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.06);
+  --shadow-xl:  0 20px 50px rgba(0,0,0,0.14);
+  --shadow-card: 0 2px 8px rgba(0, 51, 160, 0.06);
+
+  /* ── TYPOGRAPHY ── */
+  --font-family:        'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-size-xs:       0.75rem;     /* 12px */
+  --font-size-sm:       0.8125rem;   /* 13px */
+  --font-size-base:     0.875rem;    /* 14px */
+  --font-size-md:       1rem;        /* 16px */
+  --font-size-lg:       1.125rem;    /* 18px */
+  --font-size-xl:       1.25rem;     /* 20px */
+  --font-size-2xl:      1.5rem;      /* 24px */
+  --font-size-3xl:      1.875rem;    /* 30px */
+  --font-size-4xl:      2.25rem;     /* 36px */
+
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+  --font-weight-extrabold:800;
+
+  --line-height-tight:  1.25;
+  --line-height-snug:   1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed:1.625;
+
+  /* ── SPACING SCALE ── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ── TRANSITIONS ── */
+  --transition-fast:    all 0.15s ease;
+  --transition-base:    all 0.2s ease;
+  --transition-slow:    all 0.35s ease;
+
+  /* ── Z-INDEX ── */
+  --z-base:     1;
+  --z-dropdown: 100;
+  --z-sidebar:  200;
+  --z-topbar:   300;
+  --z-modal:    400;
+  --z-toast:    500;
+  --z-tooltip:  600;
+}
+
+/* ── DARK MODE OVERRIDES (optional toggle) ── */
+[data-theme="dark"] {
+  /* Surfaces & BG */
+  --color-bg:             #0D1117;
+  --color-bg-alt:         #161B22;
+  --color-surface:        #1C2333;
+  --color-surface-hover:  #242C3E;
+  --color-surface-alt:    #161B22;
+  --color-primary-50:     rgba(0, 51, 160, 0.18);
+
+  /* Borders */
+  --border-color:         #2D3748;
+  --border-hover:         #3D4F68;
+
+  /* Text */
+  --text-primary:         #F0F6FC;
+  --text-secondary:       #8B949E;
+  --text-muted:           #484F58;
+  --text-link:            #60A5FA;
+  --text-link-hover:      #93C5FD;
+
+  /* Shadows */
+  --shadow-card:          0 2px 8px rgba(0,0,0,0.30);
+  --shadow-md:            0 4px 12px rgba(0,0,0,0.25);
+
+  /* Status backgrounds — translucent on dark */
+  --color-success-bg:     rgba(22,163,74,0.12);
+  --color-success-border: rgba(22,163,74,0.28);
+  --color-warning-bg:     rgba(217,119,6,0.12);
+  --color-warning-border: rgba(217,119,6,0.28);
+  --color-danger-bg:      rgba(220,38,38,0.12);
+  --color-danger-border:  rgba(220,38,38,0.28);
+  --color-info-bg:        rgba(37,99,235,0.12);
+  --color-info-border:    rgba(37,99,235,0.28);
+  --color-neutral-bg:     #1C2333;
+  --color-neutral-border: #2D3748;
+}
+
+/* ── RESET & BASE ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--text-link);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+a:hover { color: var(--text-link-hover); }
+
+img { display: block; max-width: 100%; }
+
+ul, ol { list-style: none; }
+
+button {
+  font-family: var(--font-family);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+}
+
+/* ── SCROLLBAR STYLE ── */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: var(--color-bg); }
+::-webkit-scrollbar-thumb  { background: var(--border-hover); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }

@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Amostras — SENAI · Zeiss Metrologia</title>
+  <meta name="_csrf"        th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <script>!function(){var t=localStorage.getItem("zp-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.style.background=t==="dark"?"#0D1117":"#F0F4F8";}();</script>
+  <link rel="stylesheet" href="/css/design-system.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/amostras.css" />
+  <link rel="icon" href="/img/zeiss-logo.png" type="image/png" />
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <img class="sidebar__brand-logo" src="/img/CentroMetrologia-logo.png" alt="Logo" />
+      <div class="sidebar__brand-text">
+        <span class="sidebar__brand-title">ZEISS·PILOT</span>
+        <span class="sidebar__brand-subtitle">Metrologia SENAI</span>
+      </div>
+    </div>
+        <div class="sidebar__nav" id="sidebarNav">
+      <span class="sidebar__section-label">Principal</span>
+      <a href="/" class="sidebar__nav-item" title="Dashboard">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <span class="sidebar__section-label">Atendimento</span>
+      <a href="/servicos" class="sidebar__nav-item" title="Serviços (OS)">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="sidebar__nav-label">Serviços (OS)</span>
+      </a>
+      <a href="/amostras" class="sidebar__nav-item active" title="Amostras">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
+        <span class="sidebar__nav-label">Amostras</span>
+      </a>
+      <a href="/visitas-tecnicas" class="sidebar__nav-item" title="Visitas Técnicas">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"/></svg>
+        <span class="sidebar__nav-label">Visitas Técnicas</span>
+      </a>
+      <span class="sidebar__section-label">Gestão</span>
+      <a href="/projetos" class="sidebar__nav-item" title="Projetos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        <span class="sidebar__nav-label">Projetos</span>
+      </a>
+      <a href="/eventos/listar" class="sidebar__nav-item" title="Eventos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+        <span class="sidebar__nav-label">Eventos</span>
+      </a>
+      <a href="/editais/lista" class="sidebar__nav-item" title="Editais">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span class="sidebar__nav-label">Editais</span>
+      </a>
+      <a href="/documentos" class="sidebar__nav-item" title="Documentos PDF">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>
+        <span class="sidebar__nav-label">Documentos PDF</span>
+      </a>
+      <span class="sidebar__section-label">Laboratório</span>
+      <a href="/maquinas" class="sidebar__nav-item" title="Máquinas">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        <span class="sidebar__nav-label">Máquinas</span>
+      </a>
+      <a href="/almoxarifado" class="sidebar__nav-item" title="Almoxarifado">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        <span class="sidebar__nav-label">Almoxarifado</span>
+      </a>
+      <a href="/verificacao-ambiental" class="sidebar__nav-item" title="Verificação CEM">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="sidebar__nav-label">Verificação CEM</span>
+      </a>
+      <span class="sidebar__section-label">Relatórios</span>
+      <a href="/servicos/relatorio-servicos" class="sidebar__nav-item" title="Relatório Serviços">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span class="sidebar__nav-label">Relatório Serviços</span>
+      </a>
+      <a href="/eventos/dashboard" class="sidebar__nav-item" title="Dashboard Eventos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span class="sidebar__nav-label">Dashboard Eventos</span>
+      </a>
+      <span class="sidebar__section-label">Qualidade</span>
+      <a href="/avaliacao" class="sidebar__nav-item" title="Avaliação">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span class="sidebar__nav-label">Avaliação</span>
+      </a>
+      <a href="/dashboard-avaliacao" class="sidebar__nav-item" title="Dashboard Avaliações">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <span class="sidebar__nav-label">Dashboard Avaliações</span>
+      </a>
+      <a href="/qrcode-avaliacao" class="sidebar__nav-item" title="QR Code Avaliação">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h4"/><path d="M17 14v4"/></svg>
+        <span class="sidebar__nav-label">QR Code Avaliação</span>
+      </a>
+      <span class="sidebar__section-label">Estagiários</span>
+      <a href="/kanban-estagiarios" class="sidebar__nav-item" title="Kanban de Atividades">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="5" height="15" rx="1"/></svg>
+        <span class="sidebar__nav-label">Kanban Atividades</span>
+      </a>
+      <a href="/dashboard-estagiarios" class="sidebar__nav-item" title="Dashboard Estagiários">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <span class="sidebar__nav-label">Dashboard Estagiários</span>
+      </a>
+      <span class="sidebar__section-label">Administração</span>
+      <a href="/usuarios" class="sidebar__nav-item" title="Usuários">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="sidebar__nav-label">Usuários</span>
+      </a>
+    </div>
+
+    <button class="sidebar__toggle" id="sidebarToggle">&#x276E;</button>
+  </nav>
+
+  <div class="app-main">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar__left">
+        <button class="topbar__hamburger" id="mobileMenuBtn" aria-label="Abrir menu de navegação">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <span class="topbar__breadcrumb">
+          <a href="/">ZEISS·PILOT</a>
+          <span class="topbar__breadcrumb-separator">›</span>
+          <span style="color:var(--text-primary)">Amostras</span>
+        </span>
+      </div>
+      <div class="topbar__right">
+        <button class="topbar__icon-btn" id="themeToggle" title="Alternar tema">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+        </button>
+        <div class="topbar__divider"></div>
+        <div class="topbar__user-wrap" id="userMenuWrap">
+          <div class="topbar__user" id="userMenuBtn" role="button" tabindex="0" aria-label="Menu do usuário" aria-haspopup="true">
+            <div class="topbar__user-avatar">U</div>
+            <span class="topbar__user-name" th:text="${#authentication?.name}">Usuário</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="topbar__dropdown">
+            <div class="topbar__dropdown-user">
+              <div class="topbar__dropdown-avatar" id="dropdownAvatar">U</div>
+              <div>
+                <div class="topbar__dropdown-name" id="dropdownName">Usuário</div>
+                <div class="topbar__dropdown-role" id="dropdownRole"></div>
+              </div>
+            </div>
+            <div class="topbar__dropdown-divider"></div>
+            <a href="/usuarios" class="topbar__dropdown-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Gerenciar Usuários
+            </a>
+            <div class="topbar__dropdown-divider"></div>
+            <button class="topbar__dropdown-item topbar__dropdown-item--danger" id="logoutBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Sair
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content-area">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header__left">
+          <h1 class="page-header__title">Amostras de Clientes</h1>
+          <p class="page-header__subtitle">Custódia de peças enviadas por clientes para serviços de medição</p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn btn-secondary" id="btnExportCSV" title="Exportar tabela para CSV">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Exportar CSV
+          </button>
+          <button class="btn btn-primary" id="btnNovaAmostra">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nova Amostra
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Strip -->
+      <div class="amos-kpi-strip" id="kpiStrip">
+        <div class="amos-kpi">
+          <span class="amos-kpi__label">Total de Amostras</span>
+          <span class="amos-kpi__value" id="kpiTotal">—</span>
+        </div>
+        <div class="amos-kpi">
+          <span class="amos-kpi__label">Em Custódia</span>
+          <span class="amos-kpi__value" id="kpiCustodia" style="color:var(--color-primary)">—</span>
+        </div>
+        <div class="amos-kpi amos-kpi--warn">
+          <span class="amos-kpi__label">Devolução Vencendo</span>
+          <span class="amos-kpi__value" id="kpiVencendo" style="color:#d97706">—</span>
+        </div>
+        <div class="amos-kpi">
+          <span class="amos-kpi__label">Devolvidas</span>
+          <span class="amos-kpi__value" id="kpiDevolvidas" style="color:var(--color-success)">—</span>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="card" style="margin-bottom:var(--space-4)">
+        <div class="card__body" style="padding:var(--space-3) var(--space-4)">
+          <div class="amos-filters">
+            <div class="search-bar" style="flex:1;min-width:200px">
+              <svg class="search-bar__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input class="search-bar__input" type="text" id="searchInput" placeholder="Buscar cliente, descrição ou OS..." />
+            </div>
+            <select class="filter-toolbar__select" id="filterStatus" style="min-width:160px">
+              <option value="">Todos os status</option>
+              <option value="Em custódia">Em custódia</option>
+              <option value="Vencendo">Vencendo</option>
+              <option value="Devolvida">Devolvida</option>
+              <option value="Extraviada">Extraviada</option>
+            </select>
+            <button class="btn btn-ghost" id="btnLimparFiltros" title="Limpar filtros">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela -->
+      <div class="card">
+        <div class="card__header">
+          <h3 class="card__title">Registro de Amostras</h3>
+          <span class="text-muted" id="countLabel" style="font-size:var(--font-size-sm)"></span>
+        </div>
+        <div class="card__body" style="padding:0">
+          <table class="table" id="tabelaAmostras">
+            <thead>
+              <tr>
+                <th data-sort="cliente">Cliente</th>
+                <th data-sort="servicoRef">OS / Referência</th>
+                <th data-sort="quantidade" style="text-align:right">Qtd.</th>
+                <th data-sort="dataEntrada">Entrada</th>
+                <th data-sort="dataDevPrevista">Dev. Prevista</th>
+                <th data-sort="status">Status</th>
+                <th style="width:200px">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyAmostras">
+              <tr><td colspan="7" class="table__empty">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /content-area -->
+  </div><!-- /app-main -->
+</div><!-- /app-shell -->
+
+<!-- ══ Modal: Nova / Editar Amostra — Formulário completo CEM Rev 00 ══ -->
+<div class="modal" id="modalAmostra">
+  <div class="modal__dialog modal__dialog--wide">
+    <div class="modal__header">
+      <div>
+        <h3 class="modal__title" id="modalAmostraTitle">Novo Recebimento de Peças</h3>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">FO-xxx · CEM Rev 00</div>
+      </div>
+      <button class="modal__close" id="btnFecharModalAmostra">&times;</button>
+    </div>
+
+    <!-- Stepper -->
+    <div class="amos-stepper" id="amosStepper">
+      <div class="amos-step amos-step--active" data-step="1">
+        <div class="amos-step__dot">1</div>
+        <div class="amos-step__label">Identificação</div>
+      </div>
+      <div class="amos-step" data-step="2">
+        <div class="amos-step__dot">2</div>
+        <div class="amos-step__label">Serviços</div>
+      </div>
+      <div class="amos-step" data-step="3">
+        <div class="amos-step__dot">3</div>
+        <div class="amos-step__label">Condição & Fotos</div>
+      </div>
+      <div class="amos-step" data-step="4">
+        <div class="amos-step__dot">4</div>
+        <div class="amos-step__label">Rastreabilidade</div>
+      </div>
+      <div class="amos-step" data-step="5">
+        <div class="amos-step__dot">5</div>
+        <div class="amos-step__label">Divergências</div>
+      </div>
+      <div class="amos-step" data-step="6">
+        <div class="amos-step__dot">6</div>
+        <div class="amos-step__label">Conclusão</div>
+      </div>
+    </div>
+
+    <div class="modal__body modal__body--scroll">
+
+      <!-- ─── Step 1: Identificação do Recebimento + Peça ─── -->
+      <div class="amos-step-panel amos-step-panel--active" id="stepPanel1">
+
+        <p class="amos-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          1. Identificação do Recebimento
+        </p>
+        <div class="amos-form-grid">
+          <div class="form-group">
+            <label class="form-label form-label--required">Data do Recebimento</label>
+            <input class="form-control" type="date" id="amostraDataEntrada" />
+          </div>
+          <div class="form-group">
+            <label class="form-label form-label--required">Horário do Recebimento</label>
+            <input class="form-control" type="time" id="amostraHorario" />
+          </div>
+          <div class="form-group">
+            <label class="form-label form-label--required">Recebido Por</label>
+            <input class="form-control" type="text" id="amostraResponsavel" placeholder="Nome do técnico responsável" maxlength="80" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Forma de Recebimento</label>
+            <select class="form-control" id="amostraFormaRecebimento">
+              <option value="">Selecione...</option>
+              <option value="Pessoalmente">Pessoalmente</option>
+              <option value="Entregadora">Entregadora</option>
+              <option value="Correios">Correios</option>
+              <option value="Motoboy">Motoboy</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label form-label--required">Cliente / Empresa</label>
+            <input class="form-control" type="text" id="amostraCliente" placeholder="Ex: Bosch do Brasil" maxlength="120" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Responsável pelo Envio</label>
+            <input class="form-control" type="text" id="amostraRespEnvio" placeholder="Nome do contato do cliente" maxlength="100" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefone / E-mail do Responsável</label>
+            <input class="form-control" type="text" id="amostraTelEmail" placeholder="(xx) 9xxxx-xxxx ou email@..." maxlength="120" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nº da Proposta / Orçamento / OS</label>
+            <input class="form-control" type="text" id="amostraServico" placeholder="Ex: OS-2026-047" maxlength="60" />
+          </div>
+          <div class="form-group amos-form-grid--full">
+            <label class="form-label">Observações do Recebimento</label>
+            <textarea class="form-control" id="amostraObsRecebimento" rows="2" maxlength="400" placeholder="Anotações gerais sobre o ato do recebimento..." style="resize:vertical"></textarea>
+          </div>
+        </div>
+
+        <p class="amos-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+          2. Identificação da Peça / Item Recebido
+        </p>
+        <div class="amos-form-grid">
+          <div class="form-group">
+            <label class="form-label">Código Interno CEM</label>
+            <input class="form-control" type="text" id="amostraCodigoCEM" placeholder="Ex: CEM-2026-001" maxlength="40" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Código do Cliente / TAG / Part Number</label>
+            <input class="form-control" type="text" id="amostraCodigoCliente" placeholder="Ex: PN-AB-1234" maxlength="60" />
+          </div>
+          <div class="form-group amos-form-grid--full">
+            <label class="form-label form-label--required">Nome / Descrição da Peça</label>
+            <input class="form-control" type="text" id="amostraDesc" placeholder="Ex: Peças usinadas para medição dimensional" maxlength="200" />
+          </div>
+          <div class="form-group">
+            <label class="form-label form-label--required">Quantidade</label>
+            <input class="form-control" type="number" id="amostraQtd" min="1" step="1" placeholder="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label form-label--required">Unidade</label>
+            <input class="form-control" type="text" id="amostraUnidade" placeholder="Ex: un, pç, kg" maxlength="20" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Devolução Prevista</label>
+            <input class="form-control" type="date" id="amostraDataDevPrev" />
+          </div>
+          <div class="form-group" style="display:flex;flex-direction:column;gap:var(--space-2)">
+            <label class="form-label">Documentação Técnica</label>
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-sm)">
+              <input type="checkbox" id="amostraTemDesenho" style="accent-color:var(--color-primary)" /> Há desenho técnico?
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-sm)">
+              <input type="checkbox" id="amostraTemCAD" style="accent-color:var(--color-primary)" /> Há CAD / modelo 3D?
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-sm)">
+              <input type="checkbox" id="amostraTemTolerancia" style="accent-color:var(--color-primary)" /> Há especificação de tolerância?
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-sm)">
+              <input type="checkbox" id="amostraTemInstrucao" style="accent-color:var(--color-primary)" /> Há instrução especial de manuseio?
+            </label>
+          </div>
+          <div class="form-group amos-form-grid--full">
+            <label class="form-label">Observações Técnicas da Peça</label>
+            <textarea class="form-control" id="amostraObsTecnicas" rows="2" maxlength="400" placeholder="Características especiais, fragilidade, requisitos de manuseio..." style="resize:vertical"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Step 2: Serviço Solicitado ─── -->
+      <div class="amos-step-panel" id="stepPanel2">
+        <p class="amos-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+          3. Serviço Solicitado
+        </p>
+        <div class="amos-servicos-grid" id="amosServicosGrid">
+          <label class="amos-servico-item"><input type="checkbox" name="servicos" value="Medição dimensional" /> Medição dimensional</label>
+          <label class="amos-servico-item"><input type="checkbox" name="servicos" value="Digitalização 3D" /> Digitalização 3D</label>
+          <label class="amos-servico-item"><input type="checkbox" name="servicos" value="Engenharia reversa" /> Engenharia reversa</label>
+          <label class="amos-servico-item"><input type="checkbox" name="servicos" value="Comparação peça x CAD" /> Comparação peça x CAD</label>
+          <label class="amos-servico-item"><input type="checkbox" name="servicos" value="Tomografia / Raio X Bosello" /> Tomografia / Raio X Bosello</label>
+          <label class="amos-servico-item"><input type="checkbox" name="servicos" value="Análise de falha" /> Análise de falha</label>
+          <label class="amos-servico-item"><input type="checkbox" name="servicos" value="Inspeção visual" /> Inspeção visual</label>
+          <label class="amos-servico-item"><input type="checkbox" name="servicos" value="Validação dimensional ZEISS" /> Validação dimensional ZEISS</label>
+          <label class="amos-servico-item"><input type="checkbox" name="servicos" value="Elaboração de relatório técnico" /> Elaboração de relatório técnico</label>
+          <label class="amos-servico-item"><input type="checkbox" name="servicos" value="Criação de biblioteca digital" /> Criação de biblioteca digital</label>
+        </div>
+        <div class="form-group" style="margin-top:var(--space-4)">
+          <label class="form-label">Objetivo Informado pelo Cliente</label>
+          <textarea class="form-control" id="amostraObjetivoCliente" rows="3" maxlength="500" placeholder="Descreva o objetivo do cliente com os serviços solicitados..." style="resize:vertical"></textarea>
+        </div>
+      </div>
+
+      <!-- ─── Step 3: Condição da Peça + Registro Fotográfico ─── -->
+      <div class="amos-step-panel" id="stepPanel3">
+        <p class="amos-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          4. Condição da Peça no Recebimento
+        </p>
+        <div class="amos-checklist">
+          <div class="amos-check-row">
+            <span class="amos-check-label">Peça recebida conforme descrição do cliente</span>
+            <select class="form-control amos-check-select" id="cond1"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option><option value="N/A">N/A</option></select>
+          </div>
+          <div class="amos-check-row">
+            <span class="amos-check-label">Quantidade recebida conforme informado</span>
+            <select class="form-control amos-check-select" id="cond2"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option><option value="N/A">N/A</option></select>
+          </div>
+          <div class="amos-check-row">
+            <span class="amos-check-label">Embalagem íntegra</span>
+            <select class="form-control amos-check-select" id="cond3"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option><option value="N/A">N/A</option></select>
+          </div>
+          <div class="amos-check-row">
+            <span class="amos-check-label">Peça sem dano aparente de transporte</span>
+            <select class="form-control amos-check-select" id="cond4"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option><option value="N/A">N/A</option></select>
+          </div>
+          <div class="amos-check-row">
+            <span class="amos-check-label">Peça limpa / adequada para manuseio</span>
+            <select class="form-control amos-check-select" id="cond5"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option><option value="N/A">N/A</option></select>
+          </div>
+          <div class="amos-check-row">
+            <span class="amos-check-label">Peça sem risco de contaminação ao laboratório</span>
+            <select class="form-control amos-check-select" id="cond6"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option><option value="N/A">N/A</option></select>
+          </div>
+          <div class="amos-check-row">
+            <span class="amos-check-label">Identificação do cliente preservada</span>
+            <select class="form-control amos-check-select" id="cond7"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option><option value="N/A">N/A</option></select>
+          </div>
+          <div class="amos-check-row">
+            <span class="amos-check-label">Documentos técnicos recebidos</span>
+            <select class="form-control amos-check-select" id="cond8"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option><option value="N/A">N/A</option></select>
+          </div>
+          <div class="amos-check-row">
+            <span class="amos-check-label">Condição permite execução do serviço</span>
+            <select class="form-control amos-check-select" id="cond9"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option><option value="N/A">N/A</option></select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:var(--space-4)">
+          <label class="form-label">Observação sobre condição</label>
+          <textarea class="form-control" id="amostraObsCondicao" rows="2" maxlength="400" placeholder="Descreva detalhes de não conformidades observadas..." style="resize:vertical"></textarea>
+        </div>
+
+        <p class="amos-section-title" style="margin-top:var(--space-5)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          5. Registro Fotográfico
+        </p>
+        <div class="amos-checklist">
+          <div class="amos-check-row">
+            <span class="amos-check-label">Foto da embalagem</span>
+            <select class="form-control amos-check-select" id="foto1"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option></select>
+          </div>
+          <div class="amos-check-row">
+            <span class="amos-check-label">Foto da peça antes do manuseio</span>
+            <select class="form-control amos-check-select" id="foto2"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option></select>
+          </div>
+          <div class="amos-check-row">
+            <span class="amos-check-label">Foto de etiqueta / TAG / identificação</span>
+            <select class="form-control amos-check-select" id="foto3"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option></select>
+          </div>
+          <div class="amos-check-row">
+            <span class="amos-check-label">Foto de danos, avarias ou irregularidades</span>
+            <select class="form-control amos-check-select" id="foto4"><option value="">—</option><option value="SIM">SIM</option><option value="NÃO">NÃO</option></select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:var(--space-3)">
+          <label class="form-label">Caminho da pasta com fotos / evidências</label>
+          <input class="form-control" type="text" id="amostraPathFotos" placeholder="Ex: \\servidor\CEM\fotos\2026\OS-047" maxlength="300" />
+        </div>
+      </div>
+
+      <!-- ─── Step 4: Rastreabilidade e Armazenamento ─── -->
+      <div class="amos-step-panel" id="stepPanel4">
+        <p class="amos-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          6. Identificação, Rastreabilidade e Armazenamento
+        </p>
+        <div class="amos-form-grid">
+          <div class="form-group">
+            <label class="form-label">Código Interno Atribuído</label>
+            <input class="form-control" type="text" id="amostraCodigoAtribuido" placeholder="Ex: REC-2026-001" maxlength="40" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Forma de Identificação Aplicada</label>
+            <input class="form-control" type="text" id="amostraFormaIdentificacao" placeholder="Ex: Etiqueta adesiva, gravação, tag..." maxlength="100" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Local de Armazenamento Inicial</label>
+            <input class="form-control" type="text" id="amostraLocalArmazenamento" placeholder="Ex: Prateleira A3, Sala de custódia..." maxlength="100" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Responsável pelo Armazenamento</label>
+            <input class="form-control" type="text" id="amostraRespArmazenamento" placeholder="Nome do responsável" maxlength="80" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Necessita Condição Ambiental Específica?</label>
+            <select class="form-control" id="amostraCondicaoAmbiental">
+              <option value="">Selecione...</option>
+              <option value="Não">Não</option>
+              <option value="Sim">Sim</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Condição Requerida</label>
+            <input class="form-control" type="text" id="amostraCondicaoRequerida" placeholder="Ex: Temperatura controlada, sem umidade..." maxlength="150" />
+          </div>
+          <div class="form-group" style="display:flex;flex-direction:column;gap:var(--space-2)">
+            <label class="form-label">Características Especiais</label>
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-sm)">
+              <input type="checkbox" id="amostraFragil" style="accent-color:var(--color-primary)" /> Peça frágil
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-sm)">
+              <input type="checkbox" id="amostraCortante" style="accent-color:var(--color-primary)" /> Peça cortante / pesada / com risco
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-sm)">
+              <input type="checkbox" id="amostraEmbalagemEspecial" style="accent-color:var(--color-primary)" /> Necessita embalagem especial
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-sm)">
+              <input type="checkbox" id="amostraIdentifPreservada" style="accent-color:var(--color-primary)" /> Identificação preservada durante a permanência
+            </label>
+          </div>
+          <div class="form-group amos-form-grid--full">
+            <label class="form-label">Observações de Preservação / Armazenamento</label>
+            <textarea class="form-control" id="amostraObsArmazenamento" rows="2" maxlength="400" placeholder="Cuidados especiais, restrições de empilhamento..." style="resize:vertical"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Step 5: Divergências ─── -->
+      <div class="amos-step-panel" id="stepPanel5">
+        <p class="amos-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          7. Divergências Identificadas no Recebimento
+        </p>
+        <div class="amos-form-grid">
+          <div class="form-group">
+            <label class="form-label">Houve Alguma Divergência?</label>
+            <select class="form-control" id="amostraHouveDivergencia">
+              <option value="">Selecione...</option>
+              <option value="Não">Não</option>
+              <option value="Sim">Sim</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tipo Principal de Divergência</label>
+            <select class="form-control" id="amostraTipoDivergencia">
+              <option value="">Selecione...</option>
+              <option value="Quantidade incorreta">Quantidade incorreta</option>
+              <option value="Dano de transporte">Dano de transporte</option>
+              <option value="Peça errada">Peça errada</option>
+              <option value="Documentação ausente">Documentação ausente</option>
+              <option value="Embalagem danificada">Embalagem danificada</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+          <div class="form-group amos-form-grid--full">
+            <label class="form-label">Descrição da Divergência</label>
+            <textarea class="form-control" id="amostraDescDivergencia" rows="2" maxlength="500" placeholder="Descreva detalhadamente a divergência identificada..." style="resize:vertical"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Impacta o Resultado Técnico?</label>
+            <select class="form-control" id="amostraImpactoTecnico">
+              <option value="">Selecione...</option>
+              <option value="Não">Não</option>
+              <option value="Sim">Sim</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Responsável Técnico Consultado</label>
+            <input class="form-control" type="text" id="amostraRespTecnico" placeholder="Nome do técnico consultado" maxlength="80" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Decisão Técnica</label>
+            <select class="form-control" id="amostraDecisaoTecnica">
+              <option value="">Selecione...</option>
+              <option value="Aceito com ressalva">Aceito com ressalva</option>
+              <option value="Aceito normalmente">Aceito normalmente</option>
+              <option value="Aguardando decisão">Aguardando decisão</option>
+              <option value="Devolver ao cliente">Devolver ao cliente</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Abrir Registro de Não Conformidade?</label>
+            <select class="form-control" id="amostraAbrirNC">
+              <option value="">Selecione...</option>
+              <option value="Não">Não</option>
+              <option value="Sim">Sim</option>
+            </select>
+          </div>
+          <div class="form-group amos-form-grid--full">
+            <label class="form-label">Justificativa / Ações Definidas</label>
+            <textarea class="form-control" id="amostraJustificativa" rows="2" maxlength="500" placeholder="Ações corretivas ou preventivas acordadas..." style="resize:vertical"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Step 6: Comunicação, Devolução e Assinaturas ─── -->
+      <div class="amos-step-panel" id="stepPanel6">
+        <p class="amos-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.22 2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.17 6.17l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>
+          8. Comunicação com o Cliente e Aceite
+        </p>
+        <div class="amos-form-grid">
+          <div class="form-group">
+            <label class="form-label">Cliente Comunicado?</label>
+            <select class="form-control" id="amostraClienteComunicado">
+              <option value="">Selecione...</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Forma de Comunicação</label>
+            <select class="form-control" id="amostraFormaComunicacao">
+              <option value="">Selecione...</option>
+              <option value="E-mail">E-mail</option>
+              <option value="Telefone">Telefone</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Presencial">Presencial</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data da Comunicação</label>
+            <input class="form-control" type="date" id="amostraDataComunicacao" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Responsável pelo Contato</label>
+            <input class="form-control" type="text" id="amostraRespContato" placeholder="Nome do responsável" maxlength="80" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Autorizou Continuidade com Ressalva?</label>
+            <select class="form-control" id="amostraAutorizouRessalva">
+              <option value="">Selecione...</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+              <option value="N/A">N/A</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Classificação do Recebimento</label>
+            <select class="form-control" id="amostraClassificacao">
+              <option value="">Selecione...</option>
+              <option value="Aceito">Aceito</option>
+              <option value="Aceito com ressalva">Aceito com ressalva</option>
+              <option value="Recusado">Recusado</option>
+            </select>
+          </div>
+          <div class="form-group amos-form-grid--full">
+            <label class="form-label">Orientação / Justificativa do Aceite</label>
+            <textarea class="form-control" id="amostraJustificativaAceite" rows="2" maxlength="400" placeholder="Orientação recebida do cliente ou justificativa do aceite com ressalva..." style="resize:vertical"></textarea>
+          </div>
+        </div>
+
+        <p class="amos-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 00-4-4H4"/></svg>
+          9. Devolução, Retenção ou Destinação da Peça
+        </p>
+        <div class="amos-form-grid">
+          <div class="form-group">
+            <label class="form-label">A Peça Será Devolvida ao Cliente?</label>
+            <select class="form-control" id="amostraSeraDevolvida">
+              <option value="">Selecione...</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">A Peça Será Retida Temporariamente?</label>
+            <select class="form-control" id="amostraSeraRetida">
+              <option value="">Selecione...</option>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Forma de Devolução</label>
+            <select class="form-control" id="amostraFormaDevolucao">
+              <option value="">Selecione...</option>
+              <option value="Retirada pelo cliente">Retirada pelo cliente</option>
+              <option value="Entregadora">Entregadora</option>
+              <option value="Correios">Correios</option>
+              <option value="Motoboy">Motoboy</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Responsável pela Devolução</label>
+            <input class="form-control" type="text" id="amostraRespDevolucao" placeholder="Nome do responsável" maxlength="80" />
+          </div>
+          <div class="form-group amos-form-grid--full">
+            <label class="form-label">Observações de Devolução / Retenção</label>
+            <textarea class="form-control" id="amostraObsDevolucao" rows="2" maxlength="400" placeholder="Pendências, condições de entrega, acordos com o cliente..." style="resize:vertical"></textarea>
+          </div>
+        </div>
+
+        <p class="amos-section-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          10. Responsáveis
+        </p>
+        <div class="amos-form-grid">
+          <div class="form-group">
+            <label class="form-label">Responsável pelo Recebimento</label>
+            <input class="form-control" type="text" id="amostraAssRecebimento" placeholder="Nome completo" maxlength="80" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data</label>
+            <input class="form-control" type="date" id="amostraAssRecebimentoData" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Responsável Técnico</label>
+            <input class="form-control" type="text" id="amostraAssTecnico" placeholder="Nome completo" maxlength="80" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data</label>
+            <input class="form-control" type="date" id="amostraAssTecnicoData" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Aprovação / Coordenação</label>
+            <input class="form-control" type="text" id="amostraAssAprovacao" placeholder="Nome completo" maxlength="80" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data</label>
+            <input class="form-control" type="date" id="amostraAssAprovacaoData" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Observações Gerais</label>
+          <textarea class="form-control" id="amostraObs" rows="2" maxlength="400" placeholder="Observações finais sobre o recebimento..." style="resize:vertical"></textarea>
+        </div>
+      </div>
+
+    </div><!-- /modal__body -->
+
+    <!-- Stepper navigation -->
+    <div class="amos-step-nav">
+      <button class="btn btn-secondary" id="btnStepAnterior" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Anterior
+      </button>
+      <span class="amos-step-counter" id="amosStepCounter">Etapa 1 de 6</span>
+      <div style="display:flex;gap:var(--space-2)">
+        <button class="btn btn-secondary" id="btnCancelarAmostra">Cancelar</button>
+        <button class="btn btn-primary" id="btnStepProximo">
+          Próximo
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button class="btn btn-primary" id="btnSalvarAmostra" style="display:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Salvar Registro
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ Modal: Registrar Devolução ══ -->
+<div class="modal" id="modalDevolucao">
+  <div class="modal__dialog" style="max-width:460px">
+    <div class="modal__header">
+      <h3 class="modal__title">Registrar Devolução</h3>
+      <button class="modal__close" id="btnFecharModalDev">&times;</button>
+    </div>
+    <div class="modal__body">
+      <div class="amos-info-box" id="devInfoBox"></div>
+      <div class="form-group">
+        <label class="form-label form-label--required">Data de Devolução</label>
+        <input class="form-control" type="date" id="devData" />
+      </div>
+      <div class="form-group">
+        <label class="form-label form-label--required">Responsável pela Devolução</label>
+        <input class="form-control" type="text" id="devResponsavel" placeholder="Quem entregou / recebeu" maxlength="80" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Observações</label>
+        <textarea class="form-control" id="devObs" rows="2" placeholder="Condição na devolução, pendências..." maxlength="300" style="resize:vertical"></textarea>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" id="btnCancelarDev">Cancelar</button>
+      <button class="btn btn-primary" id="btnConfirmarDev">Confirmar Devolução</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Modal: Anexar Termo Assinado ══ -->
+<div class="modal" id="modalAnexo">
+  <div class="modal__dialog" style="max-width:460px">
+    <div class="modal__header">
+      <h3 class="modal__title">Anexar Termo Assinado</h3>
+      <button class="modal__close" id="btnFecharModalAnexo">&times;</button>
+    </div>
+    <div class="modal__body">
+      <div class="amos-info-box" id="anexoInfoBox"></div>
+      <div class="form-group">
+        <label class="form-label form-label--required">Arquivo do Termo Assinado (PDF)</label>
+        <input class="form-control" type="file" id="anexoArquivo" accept=".pdf,.jpg,.jpeg,.png" />
+        <span class="form-hint">Formatos aceitos: PDF, JPG, PNG</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Observação</label>
+        <input class="form-control" type="text" id="anexoObs" placeholder="Ex: Termo assinado pelo cliente em 25/03/2026" maxlength="200" />
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" id="btnCancelarAnexo">Cancelar</button>
+      <button class="btn btn-primary" id="btnConfirmarAnexo">Salvar Anexo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Modal: Confirmar Exclusão ══ -->
+<div class="modal" id="modalDelete">
+  <div class="modal__dialog" style="max-width:440px">
+    <div class="modal__header">
+      <h3 class="modal__title">Excluir Amostra</h3>
+      <button class="modal__close" id="btnFecharModalDelete">&times;</button>
+    </div>
+    <div class="modal__body">
+      <p>Tem certeza que deseja excluir o registro de <strong id="deleteAmostraDesc"></strong>? Esta ação não pode ser desfeita.</p>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" id="btnCancelarDelete">Cancelar</button>
+      <button class="btn btn-danger" id="btnConfirmarDelete">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- Termo de Custódia (só aparece na impressão) -->
+<div class="amos-termo-print" id="termoPrint"></div>
+
+<!-- Toast -->
+<div id="toastContainer"></div>
+
+<script src="/js/i18n.js"></script>
+<script src="/js/core.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/ui.js"></script>
+<script src="/js/modules/notifications.js"></script>
+<script src="/js/modules/amostras.js"></script>
+</body>
+</html>

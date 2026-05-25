@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "PilotApplication",
+            "request": "launch",
+            "mainClass": "com.zeiss.pilot.PilotApplication",
+            "projectName": "com.zeiss-pilot"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-PilotApplication<pilot>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.zeiss.pilot.PilotApplication",
+            "projectName": "pilot",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

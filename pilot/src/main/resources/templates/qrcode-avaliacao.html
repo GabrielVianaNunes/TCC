@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QR Code — Avaliação SENAI ZEISS</title>
+  <link rel="icon" href="/img/zeiss-logo.png" type="image/png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f8;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 24px;
+    }
+
+    .qr-page {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+      padding: 40px 48px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Logos */
+    .qr-logos {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; margin-bottom: 28px;
+    }
+    .qr-logos img { height: 40px; object-fit: contain; }
+    .qr-logos .divider {
+      width: 1px; height: 36px; background: #d1d5db;
+    }
+
+    /* Title */
+    .qr-title {
+      font-size: 1.15rem; font-weight: 700;
+      color: #111827; margin-bottom: 4px;
+    }
+    .qr-subtitle {
+      font-size: 0.85rem; color: #6b7280; margin-bottom: 28px;
+    }
+
+    /* QR container */
+    .qr-box {
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 2px solid #e5e7eb; border-radius: 12px;
+      padding: 16px; margin-bottom: 20px;
+      background: #fff;
+    }
+    #qrImg { display: block; border-radius: 4px; width: 240px; height: 240px; }
+
+    /* URL display */
+    .qr-url {
+      font-size: 0.78rem; color: #6b7280;
+      background: #f3f4f6; border-radius: 8px;
+      padding: 8px 16px; margin-bottom: 28px;
+      word-break: break-all;
+    }
+    .qr-url strong { color: #374151; }
+
+    /* Instruções */
+    .qr-instrucoes {
+      font-size: 0.85rem; color: #6b7280;
+      line-height: 1.6; margin-bottom: 28px;
+    }
+    .qr-instrucoes strong { color: #374151; }
+
+    /* Botões */
+    .qr-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 22px; border-radius: 8px; font-size: 0.9rem;
+      font-weight: 600; cursor: pointer; text-decoration: none;
+      border: none; transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: #0033a0; color: #fff; }
+
+    /* Footer */
+    .qr-footer {
+      margin-top: 32px; font-size: 0.75rem; color: #9ca3af; text-align: center;
+    }
+
+    /* Print */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .qr-page { box-shadow: none; border-radius: 0; padding: 32px; max-width: 100%; }
+      .qr-actions, .qr-footer { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="qr-page" id="qrPage">
+
+  <div class="qr-logos">
+    <img src="/img/CentroMetrologia-logo.png" alt="Centro de Metrologia" />
+    <div class="divider"></div>
+    <img src="/img/SENAI_2024-negativada.png" alt="SENAI"
+         style="filter:invert(1) brightness(0.2)" />
+    <div class="divider"></div>
+    <img src="/img/zeiss-logo.png" alt="Zeiss" />
+  </div>
+
+  <div class="qr-title" data-i18n="Avalie nosso atendimento">Avalie nosso atendimento</div>
+  <div class="qr-subtitle" data-i18n="Centro de Excelência em Metrologia SENAI ZEISS">Centro de Excelência em Metrologia SENAI ZEISS</div>
+
+  <div class="qr-box">
+    <img id="qrImg" alt="QR Code" />
+  </div>
+
+
+</div>
+
+<div class="qr-footer" data-i18n="ZEISS·PILOT — Sistema de Gestão Metrologia SENAI">ZEISS·PILOT — Sistema de Gestão Metrologia SENAI</div>
+
+<script src="/js/i18n.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script>
+  (function () {
+    const formUrl = window.location.origin + '/avaliacao?pub=1';
+
+    // Gera QR como data URL e coloca em <img> (mais confiável que canvas direto)
+    QRCode.toDataURL(
+      formUrl,
+      {
+        width: 240,
+        margin: 1,
+        color: { dark: '#001f6b', light: '#ffffff' },
+        errorCorrectionLevel: 'M',
+      },
+      function (err, dataUrl) {
+        if (err) { console.error(err); return; }
+        const img = document.getElementById('qrImg');
+        img.src = dataUrl;
+
+        // Botão download usa a mesma data URL
+        document.getElementById('btnDownload').addEventListener('click', function () {
+          const link = document.createElement('a');
+          link.download = 'qrcode-avaliacao-senai-zeiss.png';
+          link.href = dataUrl;
+          link.click();
+        });
+      }
+    );
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login — SENAI · Zeiss Metrologia</title>
+  <link rel="stylesheet" href="/css/design-system.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/login.css" />
+  <link rel="icon" href="/img/zeiss-logo.png" type="image/png" />
+</head>
+<body>
+
+<div class="login-page">
+
+  <!-- ════ LEFT ─ Brand Panel ════ -->
+  <aside class="login-brand">
+    <div class="login-brand__logos">
+      <img class="login-brand__logo login-brand__logo--zeiss" src="/img/Logo-Zeiss-Coop-Transparent.png" alt="Zeiss" />
+      <img class="login-brand__logo" src="/img/senai-azul.png" alt="SENAI" />
+    </div>
+
+    <div class="login-brand__middle">
+      <div class="login-brand__tag">
+        <span>●</span> Sistema Operacional
+      </div>
+      <h1 class="login-brand__title">
+        Gestão de<br><span>Metrologia</span><br>SENAI · Zeiss
+      </h1>
+      <p class="login-brand__desc">
+        Plataforma integrada de controle operacional para o laboratório 
+        de metrologia, alinhada às normas ISO 17025 e ISO 9001.
+      </p>
+
+      <div class="login-brand__features">
+        <div class="login-brand__feature">
+          <span class="login-brand__feature-dot"></span>
+          7 módulos de gestão operacional
+        </div>
+        <div class="login-brand__feature">
+          <span class="login-brand__feature-dot"></span>
+          Rastreabilidade e controle de qualidade
+        </div>
+        <div class="login-brand__feature">
+          <span class="login-brand__feature-dot"></span>
+          Dashboards executivos em tempo real
+        </div>
+        <div class="login-brand__feature">
+          <span class="login-brand__feature-dot"></span>
+          Gestão de documentos e calibrações
+        </div>
+      </div>
+    </div>
+
+    <div class="login-brand__footer">
+      R. Armogaste José da Silveira, 612 · Setor Centro Oeste · Goiânia - GO · 74560-550
+    </div>
+  </aside>
+
+  <!-- ════ RIGHT ─ Form Panel ════ -->
+  <main class="login-form-panel">
+    <div class="login-box">
+
+      <div class="login-box__header">
+        <p class="login-box__pretitle">Acesso Seguro</p>
+        <h2 class="login-box__title">Bem-vindo</h2>
+        <p class="login-box__subtitle">Insira suas credenciais para acessar o sistema.</p>
+      </div>
+
+      <form class="login-form" method="POST" th:action="@{/login}">
+
+        <!-- Feedback messages -->
+        <div id="feedbackError" class="login-feedback login-feedback--error" style="display:none">
+          <strong>Credenciais inválidas.</strong> Verifique seu e-mail e senha e tente novamente.
+        </div>
+        <div id="feedbackLogout" class="login-feedback login-feedback--success" style="display:none;position:relative;overflow:hidden;padding-bottom:10px">
+          <span>&#10003; Logout realizado com sucesso.</span>
+          <div id="feedbackLogoutBar" style="position:absolute;bottom:0;left:0;height:3px;width:100%;background:rgba(34,197,94,0.5);transform-origin:left;border-radius:0 0 var(--border-radius-md) var(--border-radius-md)"></div>
+        </div>
+        <script>
+          (function(){
+            var p = new URLSearchParams(window.location.search);
+            function showFeedback(el, autoDismiss) {
+              el.style.display = '';
+              el.style.opacity = '0';
+              el.style.transform = 'translateY(-8px)';
+              el.style.transition = 'opacity 0.35s ease, transform 0.35s ease, max-height 0.4s ease, padding 0.4s ease, margin 0.4s ease';
+              requestAnimationFrame(function(){
+                requestAnimationFrame(function(){
+                  el.style.opacity = '1';
+                  el.style.transform = 'translateY(0)';
+                });
+              });
+              if (autoDismiss) {
+                setTimeout(function(){
+                  el.style.opacity = '0';
+                  el.style.transform = 'translateY(-6px)';
+                  el.style.maxHeight = el.offsetHeight + 'px';
+                  setTimeout(function(){
+                    el.style.maxHeight = '0';
+                    el.style.padding = '0';
+                    el.style.margin = '0';
+                    el.style.overflow = 'hidden';
+                  }, 50);
+                  setTimeout(function(){ el.style.display = 'none'; }, 500);
+                }, autoDismiss);
+              }
+            }
+            if(p.has('error'))  showFeedback(document.getElementById('feedbackError'),  0);
+            if(p.has('logout')) {
+              showFeedback(document.getElementById('feedbackLogout'), 4000);
+              var bar = document.getElementById('feedbackLogoutBar');
+              if (bar) {
+                bar.style.transition = 'transform 4s linear';
+                requestAnimationFrame(function(){ requestAnimationFrame(function(){
+                  bar.style.transform = 'scaleX(0)';
+                }); });
+              }
+            }
+          })();
+        </script>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label" for="username">E-mail institucional</label>
+          <div class="login-input-wrap">
+            <svg class="login-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <input class="login-input" type="email" id="username" name="username"
+                   placeholder="seu@email.com" autocomplete="email" required />
+          </div>
+          <div class="login-field-error" id="errEmail"></div>
+        </div>
+
+        <!-- Senha -->
+        <div class="form-group">
+          <label class="form-label" for="password">Senha</label>
+          <div class="login-input-wrap">
+            <svg class="login-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+            <input class="login-input" type="password" id="password" name="password"
+                   placeholder="••••••••" autocomplete="current-password" required />
+            <button type="button" class="login-eye" id="btnTogglePass" title="Mostrar/ocultar senha" aria-label="Mostrar senha">
+              <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <div class="login-field-error" id="errPassword"></div>
+        </div>
+
+
+        <button class="login-submit" type="submit" id="btnSubmit">
+          <span class="login-submit__text">Entrar no Sistema</span>
+          <span class="login-submit__spinner" style="display:none">
+            <svg class="login-spinner-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+              <path d="M12 2a10 10 0 0 1 10 10"/>
+            </svg>
+            Entrando…
+          </span>
+        </button>
+      </form>
+
+      <!-- ISO Badges -->
+      <div class="login-box__iso">
+        <span class="login-box__iso-badge">ISO 17025</span>
+        <span class="login-box__iso-badge">ISO 9001</span>
+        <span style="font-size:var(--font-size-xs);color:var(--text-muted);margin-left:auto">
+          SENAI-GO · CNPJ 03.783.850/0018-40
+        </span>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="/js/i18n.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var _t = function (k) { return (window.I18n && window.I18n.t(k)) || k; };
+
+  /* ── Entrance animation ── */
+  var box = document.querySelector('.login-box');
+  if (box) {
+    box.style.opacity = '0';
+    box.style.transform = 'translateY(20px)';
+    setTimeout(function () {
+      box.style.transition = 'opacity .45s ease, transform .45s ease';
+      box.style.opacity = '1';
+      box.style.transform = 'translateY(0)';
+    }, 60);
+  }
+
+  /* ── Show / hide password ── */
+  var passInput = document.getElementById('password');
+  var eyeBtn    = document.getElementById('btnTogglePass');
+  var eyeIcon   = document.getElementById('eyeIcon');
+
+  var EYE_OPEN   = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  var EYE_CLOSED = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
+
+  if (eyeBtn && passInput) {
+    eyeBtn.addEventListener('click', function () {
+      var showing = passInput.type === 'text';
+      passInput.type = showing ? 'password' : 'text';
+      eyeIcon.innerHTML = showing ? EYE_OPEN : EYE_CLOSED;
+      eyeBtn.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Ocultar senha');
+      passInput.focus();
+    });
+  }
+
+  /* ── Validation helpers ── */
+  function setFieldError(inputId, errId, msg) {
+    var inp = document.getElementById(inputId);
+    var err = document.getElementById(errId);
+    if (inp) inp.classList.toggle('login-input--error', !!msg);
+    if (err) { err.textContent = msg; err.style.display = msg ? '' : 'none'; }
+  }
+  function clearErrors() {
+    setFieldError('username', 'errEmail', '');
+    setFieldError('password', 'errPassword', '');
+    document.getElementById('feedbackError').style.display = 'none';
+  }
+
+  /* ── Submit — valida campos e deixa o form submeter ao Spring Security ── */
+  var form      = document.querySelector('.login-form');
+  var btnSubmit = document.getElementById('btnSubmit');
+
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      clearErrors();
+
+      var email = document.getElementById('username').value.trim();
+      var pass  = document.getElementById('password').value;
+      var valid = true;
+
+      if (!email) {
+        e.preventDefault();
+        setFieldError('username', 'errEmail', _t('Informe seu e-mail institucional.'));
+        valid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        e.preventDefault();
+        setFieldError('username', 'errEmail', _t('Formato de e-mail inválido.'));
+        valid = false;
+      }
+
+      if (!pass) {
+        e.preventDefault();
+        setFieldError('password', 'errPassword', _t('Informe sua senha.'));
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      /* Loading state enquanto aguarda resposta do servidor */
+      btnSubmit.disabled = true;
+      document.querySelector('.login-submit__text').style.display = 'none';
+      document.querySelector('.login-submit__spinner').style.display = 'inline-flex';
+    });
+  }
+
+  /* ── Clear errors on input ── */
+  var usernameEl = document.getElementById('username');
+  var passwordEl = document.getElementById('password');
+  if (usernameEl) usernameEl.addEventListener('input', clearErrors);
+  if (passwordEl) passwordEl.addEventListener('input', clearErrors);
+})();
+</script>
+
+</body>
+</html>

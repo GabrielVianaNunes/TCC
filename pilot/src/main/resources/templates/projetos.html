@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projetos — SENAI · Zeiss Metrologia</title>
+  <meta name="_csrf"        th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <script>!function(){var t=localStorage.getItem("zp-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.style.background=t==="dark"?"#0D1117":"#F0F4F8";}();</script>
+  <link rel="stylesheet" href="/css/design-system.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="icon" href="/img/zeiss-logo.png" type="image/png" />
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <img class="sidebar__brand-logo" src="/img/CentroMetrologia-logo.png" alt="Logo" />
+      <div class="sidebar__brand-text">
+        <span class="sidebar__brand-title">ZEISS·PILOT</span>
+        <span class="sidebar__brand-subtitle">Metrologia SENAI</span>
+      </div>
+    </div>
+        <div class="sidebar__nav" id="sidebarNav">
+      <span class="sidebar__section-label">Principal</span>
+      <a href="/" class="sidebar__nav-item" title="Dashboard">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <span class="sidebar__section-label">Atendimento</span>
+      <a href="/servicos" class="sidebar__nav-item" title="Serviços (OS)">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="sidebar__nav-label">Serviços (OS)</span>
+      </a>
+      <a href="/amostras" class="sidebar__nav-item" title="Amostras">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
+        <span class="sidebar__nav-label">Amostras</span>
+      </a>
+      <a href="/visitas-tecnicas" class="sidebar__nav-item" title="Visitas Técnicas">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"/></svg>
+        <span class="sidebar__nav-label">Visitas Técnicas</span>
+      </a>
+      <span class="sidebar__section-label">Gestão</span>
+      <a href="/projetos" class="sidebar__nav-item active" title="Projetos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        <span class="sidebar__nav-label">Projetos</span>
+      </a>
+      <a href="/eventos/listar" class="sidebar__nav-item" title="Eventos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+        <span class="sidebar__nav-label">Eventos</span>
+      </a>
+      <a href="/editais/lista" class="sidebar__nav-item" title="Editais">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span class="sidebar__nav-label">Editais</span>
+      </a>
+      <a href="/documentos" class="sidebar__nav-item" title="Documentos PDF">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>
+        <span class="sidebar__nav-label">Documentos PDF</span>
+      </a>
+      <span class="sidebar__section-label">Laboratório</span>
+      <a href="/maquinas" class="sidebar__nav-item" title="Máquinas">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        <span class="sidebar__nav-label">Máquinas</span>
+      </a>
+      <a href="/almoxarifado" class="sidebar__nav-item" title="Almoxarifado">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        <span class="sidebar__nav-label">Almoxarifado</span>
+      </a>
+      <a href="/verificacao-ambiental" class="sidebar__nav-item" title="Verificação CEM">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="sidebar__nav-label">Verificação CEM</span>
+      </a>
+      <span class="sidebar__section-label">Relatórios</span>
+      <a href="/servicos/relatorio-servicos" class="sidebar__nav-item" title="Relatório Serviços">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span class="sidebar__nav-label">Relatório Serviços</span>
+      </a>
+      <a href="/eventos/dashboard" class="sidebar__nav-item" title="Dashboard Eventos">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span class="sidebar__nav-label">Dashboard Eventos</span>
+      </a>
+      <span class="sidebar__section-label">Qualidade</span>
+      <a href="/avaliacao" class="sidebar__nav-item" title="Avaliação">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span class="sidebar__nav-label">Avaliação</span>
+      </a>
+      <a href="/dashboard-avaliacao" class="sidebar__nav-item" title="Dashboard Avaliações">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <span class="sidebar__nav-label">Dashboard Avaliações</span>
+      </a>
+      <a href="/qrcode-avaliacao" class="sidebar__nav-item" title="QR Code Avaliação">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h4"/><path d="M17 14v4"/></svg>
+        <span class="sidebar__nav-label">QR Code Avaliação</span>
+      </a>
+      <span class="sidebar__section-label">Estagiários</span>
+      <a href="/kanban-estagiarios" class="sidebar__nav-item" title="Kanban de Atividades">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="5" height="15" rx="1"/></svg>
+        <span class="sidebar__nav-label">Kanban Atividades</span>
+      </a>
+      <a href="/dashboard-estagiarios" class="sidebar__nav-item" title="Dashboard Estagiários">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <span class="sidebar__nav-label">Dashboard Estagiários</span>
+      </a>
+      <span class="sidebar__section-label">Administração</span>
+      <a href="/usuarios" class="sidebar__nav-item" title="Usuários">
+        <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="sidebar__nav-label">Usuários</span>
+      </a>
+    </div>
+
+    <button class="sidebar__toggle" id="sidebarToggle">&#x276E;</button>
+  </nav>
+
+  <div class="app-main">
+    <header class="topbar">
+      <div class="topbar__left">
+        <button class="topbar__hamburger" id="mobileMenuBtn" aria-label="Abrir menu de navegação">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <span class="topbar__breadcrumb">
+          <a href="/">ZEISS·PILOT</a><span class="topbar__breadcrumb-separator">›</span>
+          <span style="color:var(--text-primary)">Projetos</span>
+        </span>
+      </div>
+      <div class="topbar__right">
+        <button class="topbar__icon-btn" id="themeToggle" title="Alternar tema">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+        </button>
+        <div class="topbar__divider"></div>
+        <div class="topbar__user-wrap" id="userMenuWrap"><div class="topbar__user" id="userMenuBtn" role="button" tabindex="0" aria-label="Menu do usuário" aria-haspopup="true"><div class="topbar__user-avatar">U</div><span class="topbar__user-name" th:text="${#authentication?.name}">Usuário</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)"><polyline points="6 9 12 15 18 9"/></svg></div>          <div class="topbar__dropdown">
+            <div class="topbar__dropdown-user">
+              <div class="topbar__dropdown-avatar" id="dropdownAvatar">U</div>
+              <div>
+                <div class="topbar__dropdown-name" id="dropdownName">Usuário</div>
+                <div class="topbar__dropdown-role" id="dropdownRole"></div>
+              </div>
+            </div>
+            <div class="topbar__dropdown-divider"></div>
+            <a href="/usuarios" class="topbar__dropdown-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Gerenciar Usuários
+            </a>
+            <div class="topbar__dropdown-divider"></div>
+            <button class="topbar__dropdown-item topbar__dropdown-item--danger" id="logoutBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Sair
+            </button>
+          </div>
+          </div>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <div class="page-header">
+        <div class="page-header__left">
+          <h1 class="page-header__title">Projetos</h1>
+          <p class="page-header__subtitle">Portfólio de projetos e acompanhamento de execução</p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn btn-primary" id="btnAbrirModal">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Novo Projeto
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-toolbar">
+        <div class="search-bar">
+          <svg class="search-bar__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="form-control search-bar__input" type="text" id="barraPesquisa" placeholder="Buscar projeto..." />
+        </div>
+        <div class="filter-toolbar__group">
+          <label>Status:</label>
+          <select class="filter-toolbar__select" id="filtroStatus">
+            <option value="">Todos</option>
+            <option>A iniciar</option><option>Pendente autorização</option>
+            <option>Em andamento</option><option>Atrasada</option>
+            <option>Concluído</option><option>Descontinuado</option>
+          </select>
+        </div>
+        <div class="filter-toolbar__group">
+          <label>Prioridade:</label>
+          <select class="filter-toolbar__select" id="filtroPrioridade">
+            <option value="">Todas</option>
+            <option>Alta</option><option>Média</option><option>Baixa</option>
+          </select>
+        </div>
+        <div class="filter-toolbar__group">
+          <label>Responsável:</label>
+          <select class="filter-toolbar__select" id="filtroResponsavel"><option value="">Todos</option></select>
+        </div>
+        <div class="filter-toolbar__spacer"></div>
+        <button class="btn btn-ghost btn-sm" id="btnLimparFiltros">Limpar</button>
+      </div>
+
+      <div class="table-container" style="border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg);border-top:none">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Projeto</th><th>Responsável</th><th>Prioridade</th>
+              <th class="perm-financial">Custo Previsto</th><th class="perm-financial">Retorno Previsto</th><th>Status</th>
+              <th>Prev. Início</th><th>Prev. Término</th><th>Finalização Real</th>
+              <th class="actions-cell">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaProjetos"></tbody>
+        </table>
+      </div>
+
+      <div class="pagination" id="paginacaoContainer">
+        <span class="pagination__info" id="paginacaoInfo">–</span>
+        <button class="pagination__btn" id="btnAnterior" disabled>‹ Anterior</button>
+        <span class="pagination__btn active" id="paginaAtual">1</span>
+        <button class="pagination__btn" id="btnProximo">Próxima ›</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modalProjeto">
+  <div class="modal__dialog" style="max-width:680px">
+    <div class="modal__header">
+      <h3 class="modal__title" id="tituloModal">Novo Projeto</h3>
+      <button class="modal__close" data-modal-close="modalProjeto">&times;</button>
+    </div>
+    <div class="modal__body">
+      <form id="formProjeto">
+        <input type="hidden" id="projetoId" />
+        <div class="form-group">
+          <label class="form-label form-label--required">Nome do Projeto</label>
+          <input class="form-control" id="nomeProjeto" required />
+        </div>
+        <div class="form-grid form-grid--2col">
+          <div class="form-group">
+            <label class="form-label">Responsável</label>
+            <select class="form-control" id="responsavelId"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Prioridade</label>
+            <select class="form-control" id="prioridade">
+              <option>Alta</option><option>Média</option><option>Baixa</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Objetivo</label>
+          <textarea class="form-control" id="objetivo" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Atividades</label>
+          <textarea class="form-control" id="atividades" rows="2"></textarea>
+        </div>
+        <div class="form-grid form-grid--2col">
+          <div class="form-group">
+            <label class="form-label">Custo Anual Previsto (R$)</label>
+            <input class="form-control" id="custoAnualPrevisto" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Retorno Previsto (R$)</label>
+            <input class="form-control" id="retornoPrevisto" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-control" id="status">
+            <option>A iniciar</option><option>Pendente autorização</option>
+            <option>Em andamento</option><option>Atrasada</option>
+            <option>Concluído</option><option>Descontinuado</option>
+          </select>
+        </div>
+        <div class="form-grid form-grid--2col">
+          <div class="form-group"><label class="form-label">Previsão de Início</label><input class="form-control" type="date" id="previsaoInicio" /></div>
+          <div class="form-group"><label class="form-label">Previsão de Término</label><input class="form-control" type="date" id="previsaoTermino" /></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data Real de Finalização</label>
+          <input class="form-control" type="date" id="dataRealFinalizacao" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Observação</label>
+          <textarea class="form-control" id="observacao" rows="2"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-danger" id="btnExcluirProjeto" style="display:none;margin-right:auto">Excluir Projeto</button>
+      <button class="btn btn-secondary" data-modal-close="modalProjeto">Cancelar</button>
+      <button class="btn btn-primary" id="btnSalvarProjeto">Salvar Projeto</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/i18n.js"></script>
+<script src="/js/core.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/ui.js"></script><script src="/js/modules/notifications.js"></script>
+<script src="/js/modules/projetos.js"></script>
+</body>
+</html>

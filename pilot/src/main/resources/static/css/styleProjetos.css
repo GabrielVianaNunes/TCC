@@ -1,0 +1,514 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+  } 
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .container-geral {
+    flex: 1;
+  }
+  
+  /* Cabeçalho */
+  .cabecalho {
+    background-color: #fff;
+    width: 100%;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  .logo {
+    width: 170px;
+  }
+  
+  /* Rodapé */
+  .rodape {
+    background: #fff;
+    color: rgb(28, 9, 201);
+    padding: 20px;
+    text-align: center;
+    font-size: 0.6rem;
+    width: 100%;
+    border-top: 1px solid #ddd;
+    animation: fadeInRodape 1.5s ease-in;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.2);
+  }
+
+.rodape h3 {
+    margin-bottom: 10px;
+  }
+  
+  .logo-pequena {
+    width: 180px;
+    height: auto;
+    margin-top: 10px;
+  }
+  
+  /* Ajuste das Imagens no Header */
+  #imgTopo {
+    width: 200px;
+    height: auto;
+  }
+  
+  #imgSenai {
+    width: 150px;
+    height: auto;
+    position: absolute; 
+    top: 40px;
+    right: 10px;
+  }
+  
+  /* Responsividade */
+  @media screen and (max-width: 768px) {
+    .modal-content {
+      width: 95%;
+    }
+  
+    .container {
+      max-width: 90%;
+    }
+  
+    #imgTopo,
+    #imgSenai {
+      width: 100px;
+    }
+  }
+
+  .container {
+    margin-top: 160px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 200px;
+    padding: 20px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  
+  th, td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  /* Tabela Projetos - Aparência aprimorada */
+table#tabelaProjetos {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: left;
+    font-size: 0.95rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.07);
+    margin-bottom: 40px;
+  }
+  
+  #tabelaProjetos thead {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  #tabelaProjetos thead th {
+    padding: 14px 16px;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  #tabelaProjetos tbody tr {
+    transition: background-color 0.3s ease;
+  }
+  
+  #tabelaProjetos tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  #tabelaProjetos tbody tr:hover {
+    background-color: #f0f8ff;
+  }
+  
+  /* Zebra Striping */
+  #tabelaProjetos tbody tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+  
+  
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 30px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    /* 🔽 Ajuste importante */
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  
+  .fechar {
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  form label {
+    display: block;
+    margin-top: 12px;
+    font-weight: bold;
+  }
+  
+  form input, form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: none; /* ❌ impede o redimensionamento manual */
+    height: 100px; /* ✅ altura inicial */
+    max-height: 160px; /* ✅ limite superior */
+    overflow-y: auto; /* ✅ ativa barra de rolagem interna se necessário */
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+  }
+  
+  form button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  form button[type="submit"]:hover {
+    background-color: #003d80;
+  }
+  
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .btn-cadastrar {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .btn-cadastrar:hover {
+    background-color: #004494;
+    transform: scale(1.02);
+  }
+  
+  .filtros {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 15px 20px;
+    max-width: 1100px;
+    margin: 0 auto 30px auto; 
+    background-color: #eaf4ff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }  
+
+  .filtros .limpar {
+    margin-left: auto;
+    padding: 8px;
+    background-color: #babbbc;
+    color: white;
+  }
+  
+  .filtros .limpar:hover {
+    background-color: #9b9b9b;
+  }  
+  
+  .filtros label {
+    font-weight: 200;
+    margin-right: 4px;
+    font-size: 15px;
+    color: #333;
+  }
+  
+  .filtros select {
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    min-width: 170px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .filtros select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+  }  
+  
+  .paginacao-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 30px 0;
+  flex-wrap: wrap;
+}
+
+.paginacao {
+  padding: 6px 8px;
+  font-size: 0.85rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.paginacao:hover:not(:disabled) {
+  background-color: #004494;
+  transform: scale(1.03);
+}
+
+.paginacao:disabled {
+  background-color: #8b8a8a9c;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+#paginacaoInfo {
+  font-weight: bold;
+}
+
+#paginaAtual {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #007bff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+  
+  /* === Botão de Edição/Configuração de Projeto === */
+/* From Uiverse.io by vinodjangid07 */
+.setting-btn {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: #007bff;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0px 0px 0px 2px rgb(212, 209, 255);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.setting-btn:hover {
+  background-color: #2244ad;
+  transform: scale(1.05);
+}
+
+.setting-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(100, 100, 255, 0.3);
+}
+
+.bar {
+  width: 25%;
+  height: 2px;
+  background-color: rgb(229, 229, 229);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 2px;
+}
+
+.bar::before {
+  content: "";
+  width: 2px;
+  height: 2px;
+  background-color: rgb(126, 117, 255);
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid white;
+  transition: all 0.3s;
+  box-shadow: 0px 0px 5px white;
+}
+
+.bar1::before {
+  transform: translateX(-4px);
+}
+.bar2::before {
+  transform: translateX(4px);
+}
+
+.setting-btn:hover .bar1::before {
+  transform: translateX(4px);
+}
+.setting-btn:hover .bar2::before {
+  transform: translateX(-4px);
+}
+
+.valor-pequeno {
+  font-size: 0.85rem;
+  color: #333;
+}
+
+/* Estilos exclusivos para o botão de busca animado */
+.pesquisa-container {
+  position: relative;
+  box-sizing: border-box;
+  width: fit-content;
+  margin: 0 auto 20px auto;
+}
+
+.pesquisa-box {
+  position: relative;
+  width: 230px;
+  height: 30px;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  border-radius: 160px;
+  background-color: #e6e6e6;
+  transition: all 0.3s ease;
+}
+
+.pesquisa-checkbox {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 17px;
+  top: 10px;
+  z-index: 9;
+  cursor: pointer;
+  appearance: none;
+}
+
+.pesquisa-checkbox:checked ~ .pesquisa-box {
+  width: 50px;
+}
+
+.pesquisa-checkbox:checked ~ .pesquisa-box .pesquisa-input {
+  width: 0;
+  height: 0px;
+}
+
+.pesquisa-checkbox:checked ~ .pesquisa-box .pesquisa-icon-container {
+  padding-right: 8px;
+}
+
+.pesquisa-input {
+  height: 100%;
+  width: 170px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding-bottom: 2px;
+  padding-left: 10px;
+  font-size: 17px;
+  color: rgb(10, 10, 10);
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.pesquisa-input::placeholder {
+  color: rgba(0, 0, 0, 0.776);
+}
+
+.pesquisa-icon-container {
+  padding-top: 5px;
+  width: fit-content;
+  transition: all 0.3s ease;
+}
+
+.pesquisa-icon {
+  fill: rgb(0, 0, 0);
+  font-size: 1.3em;
+}

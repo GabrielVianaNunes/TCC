@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>404 — Página não encontrada · ZEISS·PILOT</title>
+  <link rel="stylesheet" href="/css/design-system.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="icon" href="/img/zeiss-logo.png" type="image/png" />
+  <style>
+    .error-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--space-8) var(--space-6);
+      background: var(--color-bg);
+    }
+    .error-code {
+      font-size: clamp(6rem, 20vw, 12rem);
+      font-weight: var(--font-weight-bold);
+      line-height: 1;
+      background: linear-gradient(135deg, var(--color-primary) 0%, #00A3E0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: var(--space-4);
+      user-select: none;
+    }
+    .error-title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+    }
+    .error-desc {
+      font-size: var(--font-size-base);
+      color: var(--text-secondary);
+      max-width: 420px;
+      line-height: var(--line-height-relaxed);
+      margin-bottom: var(--space-8);
+    }
+    .error-actions {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .error-brand {
+      position: absolute;
+      top: var(--space-6);
+      left: var(--space-6);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      text-decoration: none;
+    }
+    .error-brand__logo {
+      height: 32px;
+      width: auto;
+    }
+    .error-brand__name {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+    .error-illustration {
+      width: min(240px, 60vw);
+      margin-bottom: var(--space-6);
+      opacity: .85;
+    }
+    @media (prefers-color-scheme: dark) {
+      .error-illustration { opacity: .6; }
+    }
+  </style>
+</head>
+<body>
+<div style="position:relative">
+  <a href="/" class="error-brand">
+    <img class="error-brand__logo" src="/img/CentroMetrologia-logo.png" alt="ZEISS·PILOT" onerror="this.style.display='none'" />
+    <span class="error-brand__name">ZEISS·PILOT</span>
+  </a>
+</div>
+
+<main class="error-shell">
+  <!-- Simple inline SVG illustration -->
+  <svg class="error-illustration" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="20" y="40" width="200" height="130" rx="10" fill="var(--color-surface)" stroke="var(--border-color)" stroke-width="2"/>
+    <rect x="20" y="40" width="200" height="32" rx="10" fill="var(--color-primary)" opacity=".12"/>
+    <circle cx="40" cy="56" r="6" fill="var(--color-danger)" opacity=".7"/>
+    <circle cx="58" cy="56" r="6" fill="var(--color-warning)" opacity=".7"/>
+    <circle cx="76" cy="56" r="6" fill="var(--color-success)" opacity=".7"/>
+    <rect x="40" y="90" width="160" height="10" rx="5" fill="var(--border-color)"/>
+    <rect x="40" y="110" width="120" height="10" rx="5" fill="var(--border-color)"/>
+    <rect x="40" y="130" width="80" height="10" rx="5" fill="var(--border-color)"/>
+    <circle cx="185" cy="125" r="30" fill="var(--color-danger-bg)" stroke="var(--color-danger)" stroke-width="2"/>
+    <line x1="175" y1="115" x2="195" y2="135" stroke="var(--color-danger)" stroke-width="3" stroke-linecap="round"/>
+    <line x1="195" y1="115" x2="175" y2="135" stroke="var(--color-danger)" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+
+  <div class="error-code">404</div>
+  <h1 class="error-title">Página não encontrada</h1>
+  <p class="error-desc">
+    A página que você está procurando não existe, foi movida ou você não tem permissão para acessá-la.
+  </p>
+  <div class="error-actions">
+    <a href="/" class="btn btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Ir ao Dashboard
+    </a>
+    <button class="btn btn-secondary" onclick="history.back()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px"><polyline points="15 18 9 12 15 6"/></svg>
+      Voltar
+    </button>
+  </div>
+</main>
+
+<script src="/js/i18n.js"></script>
+<script src="/js/core.js"></script>
+<script>
+  // Apply saved theme before paint
+  (function() {
+    const t = localStorage.getItem('zp-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+</body>
+</html>
