@@ -121,4 +121,5 @@ public class MaquinaController {
         service.deletarAgendamento(id);
         return ResponseEntity.noContent().build();
     }
+
 }

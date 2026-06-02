@@ -613,7 +613,7 @@
     Modal.open('modalDevolucao');
   }
 
-  function confirmarDevolucao() {
+  async function confirmarDevolucao() {
     const data        = val('devData');
     const responsavel = val('devResponsavel');
     const obs         = val('devObs');

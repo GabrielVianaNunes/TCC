@@ -20,14 +20,14 @@ let manutFilter   = 'todos';
 /* ══════════════════════════════════════════
    SVG ICONS PER MACHINE TYPE
 ══════════════════════════════════════════ */
-function getMachineImage(id) {
+function getMachineImage(modelo) {
   const map = {
-    1: '/img/zeiss-duramax-htg.jpg',
-    3: '/img/zeiss-o-inspect-product-picture.jpg',
-    4: '/img/zeiss-bosello-max_1920_1920.jpg',
-    5: '/img/zeiss-prismo-standard.jpg',
+    'Duramax HTG':    '/img/zeiss-duramax-htg.jpg',
+    'O-Inspect':      '/img/zeiss-o-inspect-product-picture.jpg',
+    'Bosello MAX':    '/img/zeiss-bosello-max_1920_1920.jpg',
+    'Prismo Standard':'/img/zeiss-prismo-standard.jpg',
   };
-  return map[id] || '';
+  return map[modelo] || '';
 }
 
 function getMachineIcon(modelo) {
@@ -192,7 +192,7 @@ function renderDetailHeader() {
 
   header.innerHTML = `
     <div class="machine-detail__logo no-img" id="detailLogo">
-      <img src="${getMachineImage(m.id)}" alt="${m.nome}"
+      <img src="${getMachineImage(m.modelo)}" alt="${m.nome}"
            onload="document.getElementById('detailLogo').classList.remove('no-img')"
            onerror="document.getElementById('detailLogo').classList.add('no-img');this.style.display='none'">
       <div class="machine-detail__logo-placeholder">${getMachineIcon(m.modelo)}</div>
@@ -1013,6 +1013,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   renderMachineNav();
   if (allMachines.length) await selectMachine(allMachines[0].id);
+
+  // Page-level tab switching (CMM ↔ Scanners 3D)
+  document.querySelectorAll('.maq-page-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.maq-page-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.maq-page-section').forEach(s => s.style.display = 'none');
+      btn.classList.add('active');
+      const section = document.getElementById('section-' + btn.dataset.section);
+      if (section) section.style.display = '';
+    });
+  });
 
   // Tab switching
   document.querySelectorAll('#machineDetail .detail-tab').forEach(btn => {
