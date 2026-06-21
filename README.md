@@ -121,7 +121,7 @@ docs/             # documentação adicional
 Projeto desenvolvido por:
 
 - João Vítor Mamede
-- Gabriel Viana Nunes
 - Thiago Matheus Pinheiro
+- Gabriel Viana Nunes
 
 O remote principal de desenvolvimento é `integration` (não `origin`). Commits seguem o padrão [Conventional Commits](https://www.conventionalcommits.org/) (`feat`, `fix`, `refactor`, `chore`, `docs`), com mensagens descritivas sobre o que mudou e por quê.
