@@ -2,7 +2,6 @@ package com.zeiss.pilot.controller;
 
 import com.zeiss.pilot.dto.NotaEstagiarioDTO;
 import com.zeiss.pilot.service.NotaEstagiarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +11,11 @@ import java.util.List;
 @RequestMapping("/api/notas-estagiarios")
 public class NotaEstagiarioController {
 
-    @Autowired
-    private NotaEstagiarioService service;
+    private final NotaEstagiarioService service;
+
+    public NotaEstagiarioController(NotaEstagiarioService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<NotaEstagiarioDTO>> listar(

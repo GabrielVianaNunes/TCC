@@ -2,7 +2,6 @@ package com.zeiss.pilot.controller;
 
 import com.zeiss.pilot.dto.KanbanCardDTO;
 import com.zeiss.pilot.service.KanbanCardService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +11,11 @@ import java.util.List;
 @RequestMapping("/api/kanban-cards")
 public class KanbanCardController {
 
-    @Autowired
-    private KanbanCardService service;
+    private final KanbanCardService service;
+
+    public KanbanCardController(KanbanCardService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<KanbanCardDTO>> listar(

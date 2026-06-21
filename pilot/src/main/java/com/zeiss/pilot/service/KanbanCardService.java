@@ -3,7 +3,6 @@ package com.zeiss.pilot.service;
 import com.zeiss.pilot.dto.KanbanCardDTO;
 import com.zeiss.pilot.entity.KanbanCard;
 import com.zeiss.pilot.repository.KanbanCardRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.stream.Collectors;
 @Service
 public class KanbanCardService {
 
-    @Autowired
-    private KanbanCardRepository repository;
+    private final KanbanCardRepository repository;
+
+    public KanbanCardService(KanbanCardRepository repository) {
+        this.repository = repository;
+    }
 
     public List<KanbanCardDTO> listar() {
         return repository.findAll().stream()

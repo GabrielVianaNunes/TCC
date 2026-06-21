@@ -40,8 +40,8 @@
     filtered = allItems.filter(v => {
       const matchQ = !q ||
         (v.responsavel || '').toLowerCase().includes(q) ||
-        (v.empresa || '').toLowerCase().includes(q) ||
-        (v.local || '').toLowerCase().includes(q);
+        (v.empresaInstituicao || '').toLowerCase().includes(q) ||
+        (v.localVisita || '').toLowerCase().includes(q);
       const matchR = fr === '' || String(!!v.visitaRealizada) === fr;
       return matchQ && matchR;
     });
@@ -66,11 +66,11 @@
     tbody.innerHTML = page.map(v => `
       <tr>
         <td>${v.responsavel || '—'}</td>
-        <td><strong>${v.empresa || '—'}</strong></td>
+        <td><strong>${v.empresaInstituicao || '—'}</strong></td>
         <td>${v.dataSolicitada ? ZP.Fmt.date(v.dataSolicitada) : '—'}</td>
         <td>${v.dataAgendada ? ZP.Fmt.date(v.dataAgendada) : '—'}</td>
-        <td>${v.local || '—'}</td>
-        <td>${v.quantidade || '—'}</td>
+        <td>${v.localVisita || '—'}</td>
+        <td>${v.quantidadeVisitantes || '—'}</td>
         <td>${v.telefones || '—'}</td>
         <td>${StatusBadge.visita(v.visitaRealizada)}</td>
         <td class="actions-cell">
@@ -94,11 +94,11 @@
       const v = await Api.get(`${API_URL}/${id}`);
       document.getElementById('visitaId').value = v.id;
       document.getElementById('responsavel').value = v.responsavel || '';
-      document.getElementById('empresa').value = v.empresa || '';
+      document.getElementById('empresa').value = v.empresaInstituicao || '';
       document.getElementById('dataSolicitada').value = v.dataSolicitada ? v.dataSolicitada.substring(0, 10) : '';
       document.getElementById('dataAgendada').value = v.dataAgendada ? v.dataAgendada.substring(0, 10) : '';
-      document.getElementById('local').value = v.local || '';
-      document.getElementById('quantidade').value = v.quantidade || '';
+      document.getElementById('local').value = v.localVisita || '';
+      document.getElementById('quantidade').value = v.quantidadeVisitantes || '';
       document.getElementById('telefones').value = v.telefones || '';
       document.getElementById('visitaRealizada').value = String(!!v.visitaRealizada);
       document.getElementById('observacao').value = v.observacao || '';
@@ -113,11 +113,11 @@
     const id = document.getElementById('visitaId').value;
     const body = {
       responsavel: document.getElementById('responsavel').value,
-      empresa: document.getElementById('empresa').value,
+      empresaInstituicao: document.getElementById('empresa').value,
       dataSolicitada: document.getElementById('dataSolicitada').value || null,
       dataAgendada: document.getElementById('dataAgendada').value || null,
-      local: document.getElementById('local').value,
-      quantidade: document.getElementById('quantidade').value
+      localVisita: document.getElementById('local').value,
+      quantidadeVisitantes: document.getElementById('quantidade').value
         ? parseInt(document.getElementById('quantidade').value) : null,
       telefones: document.getElementById('telefones').value,
       visitaRealizada: document.getElementById('visitaRealizada').value === 'true',

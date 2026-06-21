@@ -3,7 +3,6 @@ package com.zeiss.pilot.service;
 import com.zeiss.pilot.dto.EstagiarioDTO;
 import com.zeiss.pilot.entity.Estagiario;
 import com.zeiss.pilot.repository.EstagiarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.stream.Collectors;
 @Service
 public class EstagiarioService {
 
-    @Autowired
-    private EstagiarioRepository repository;
+    private final EstagiarioRepository repository;
+
+    public EstagiarioService(EstagiarioRepository repository) {
+        this.repository = repository;
+    }
 
     public List<EstagiarioDTO> listar() {
         return repository.findAll().stream()

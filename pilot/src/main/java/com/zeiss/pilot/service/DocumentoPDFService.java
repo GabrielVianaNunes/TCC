@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -35,13 +34,16 @@ import com.zeiss.pilot.repository.PastaDocumentoRepository;
 @Service
 public class DocumentoPDFService {
 
-    @Autowired
-    private DocumentoPDFRepository documentoRepository;
+    private final DocumentoPDFRepository documentoRepository;
 
-    @Autowired
-    private PastaDocumentoRepository pastaRepository;
+    private final PastaDocumentoRepository pastaRepository;
 
     private final String PASTA_BASE = "C:/PDFs";
+
+    public DocumentoPDFService(DocumentoPDFRepository documentoRepository, PastaDocumentoRepository pastaRepository) {
+        this.documentoRepository = documentoRepository;
+        this.pastaRepository = pastaRepository;
+    }
 
     @Transactional
     public DocumentoPDFDTO salvarArquivo(MultipartFile file,
@@ -49,10 +51,6 @@ public class DocumentoPDFService {
                                          Usuario usuario,
                                          Long pastaId,          // opcional (compat)
                                          Long subpastaId) throws IOException {
-
-        if (subpastaId == null) {
-            throw new IllegalArgumentException("subpastaId é obrigatório para o upload de documentos.");
-        }
 
         // --- armazenamento físico ---
         Long usuarioId = usuario.getId();
@@ -68,17 +66,6 @@ public class DocumentoPDFService {
         Path caminho = Paths.get(caminhoFinal);
         Files.copy(file.getInputStream(), caminho, StandardCopyOption.REPLACE_EXISTING);
 
-        // --- vínculos lógicos ---
-        PastaDocumento subpasta = pastaRepository.findById(subpastaId)
-                .orElseThrow(() -> new IllegalArgumentException("Subpasta não encontrada com ID: " + subpastaId));
-
-        // Se o caller informou pastaId, valide a relação (subpasta -> pastaPai)
-        if (pastaId != null) {
-            if (subpasta.getPastaPai() == null || !subpasta.getPastaPai().getId().equals(pastaId)) {
-                throw new IllegalArgumentException("Subpasta não pertence à pasta informada.");
-            }
-        }
-
         DocumentoPDF doc = new DocumentoPDF();
         doc.setNomeArquivo(nomeArquivo);
         doc.setCaminhoArquivo(caminhoFinal);
@@ -87,18 +74,34 @@ public class DocumentoPDFService {
         doc.setStatus(calcularStatus(dataExpiracao));
         doc.setUsuario(usuario);
 
-        // 🔗 associando corretamente à SUBPASTA (antes estava setando 'pasta')
-        doc.setSubpasta(subpasta);
+        // Vínculo com subpasta — opcional (uploads institucionais não têm subpasta)
+        if (subpastaId != null) {
+            PastaDocumento subpasta = pastaRepository.findById(subpastaId)
+                    .orElseThrow(() -> new IllegalArgumentException("Subpasta não encontrada com ID: " + subpastaId));
+            if (pastaId != null && (subpasta.getPastaPai() == null || !subpasta.getPastaPai().getId().equals(pastaId))) {
+                throw new IllegalArgumentException("Subpasta não pertence à pasta informada.");
+            }
+            doc.setSubpasta(subpasta);
+        }
 
         DocumentoPDF salvo = documentoRepository.save(doc);
         return toDTO(salvo);
+    }
+
+    public List<DocumentoPDFDTO> listarTodos() {
+        return documentoRepository.findAll()
+                .stream()
+                .map(doc -> {
+                    doc.setStatus(calcularStatus(doc.getDataExpiracao()));
+                    return toDTO(doc);
+                })
+                .collect(Collectors.toList());
     }
 
     public List<DocumentoPDFDTO> listarPorUsuario(Long usuarioId) {
         return documentoRepository.findByUsuarioId(usuarioId)
                 .stream()
                 .map(doc -> {
-                    // ✅ recalcula o status antes de retornar
                     doc.setStatus(calcularStatus(doc.getDataExpiracao()));
                     return toDTO(doc);
                 })
@@ -147,6 +150,7 @@ public class DocumentoPDFService {
         dto.setNomeArquivo(doc.getNomeArquivo());
         dto.setCaminhoArquivo(doc.getCaminhoArquivo());
         dto.setDataExpiracao(doc.getDataExpiracao());
+        dto.setDataUpload(doc.getDataUpload());
         dto.setStatus(doc.getStatus());
 
         // Usuário

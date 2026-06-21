@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -31,11 +30,14 @@ import com.zeiss.pilot.service.UsuarioService;
 @RequestMapping("/api/documentos")
 public class DocumentoPDFController {
 
-    @Autowired
-    private DocumentoPDFService service;
+    private final DocumentoPDFService service;
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+
+    public DocumentoPDFController(DocumentoPDFService service, UsuarioService usuarioService) {
+        this.service = service;
+        this.usuarioService = usuarioService;
+    }
 
     /**
      * Upload de documento:
@@ -82,10 +84,8 @@ public class DocumentoPDFController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DocumentoPDFDTO>> listarMeusDocumentosSemPaginacao() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario usuario = usuarioService.buscarPorEmail(email);
-        return ResponseEntity.ok(service.listarPorUsuario(usuario.getId()));
+    public ResponseEntity<List<DocumentoPDFDTO>> listar() {
+        return ResponseEntity.ok(service.listarTodos());
     }
 
     @DeleteMapping("/{id}")

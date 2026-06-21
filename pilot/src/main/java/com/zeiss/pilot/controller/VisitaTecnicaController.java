@@ -36,6 +36,14 @@ public class VisitaTecnicaController {
         return ResponseEntity.ok(dtos);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<VisitaTecnicaDTO> buscarVisita(@PathVariable Long id) {
+        return service.buscarPorId(id)
+                       .map(VisitaTecnicaDTO::fromEntity)
+                       .map(ResponseEntity::ok)
+                       .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<VisitaTecnicaDTO> salvarVisita(@RequestBody VisitaTecnicaDTO dto) {
         VisitaTecnica entidade = dto.toEntity();

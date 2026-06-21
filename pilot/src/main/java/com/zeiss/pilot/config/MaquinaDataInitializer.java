@@ -3,14 +3,16 @@ package com.zeiss.pilot.config;
 import com.zeiss.pilot.entity.Maquina;
 import com.zeiss.pilot.repository.MaquinaRepository;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MaquinaDataInitializer {
 
-    @Autowired
-    private MaquinaRepository maquinaRepository;
+    private final MaquinaRepository maquinaRepository;
+
+    public MaquinaDataInitializer(MaquinaRepository maquinaRepository) {
+        this.maquinaRepository = maquinaRepository;
+    }
 
     @PostConstruct
     public void initMachines() {

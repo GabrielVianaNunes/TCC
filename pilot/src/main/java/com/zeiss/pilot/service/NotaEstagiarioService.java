@@ -1,19 +1,21 @@
 package com.zeiss.pilot.service;
 
-import com.zeiss.pilot.dto.NotaEstagiarioDTO;
-import com.zeiss.pilot.entity.NotaEstagiario;
-import com.zeiss.pilot.repository.NotaEstagiarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.zeiss.pilot.dto.NotaEstagiarioDTO;
+import com.zeiss.pilot.repository.NotaEstagiarioRepository;
 
 @Service
 public class NotaEstagiarioService {
 
-    @Autowired
-    private NotaEstagiarioRepository repository;
+    private final NotaEstagiarioRepository repository;
+
+    public NotaEstagiarioService(NotaEstagiarioRepository repository) {
+        this.repository = repository;
+    }
 
     public List<NotaEstagiarioDTO> listar() {
         return repository.findAll().stream()

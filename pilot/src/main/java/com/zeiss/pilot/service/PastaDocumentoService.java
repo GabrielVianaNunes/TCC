@@ -3,7 +3,6 @@ package com.zeiss.pilot.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zeiss.pilot.entity.PastaDocumento;
@@ -15,8 +14,11 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class PastaDocumentoService {
 
-    @Autowired
-    private PastaDocumentoRepository repo;
+    private final PastaDocumentoRepository repo;
+
+    public PastaDocumentoService(PastaDocumentoRepository repo) {
+        this.repo = repo;
+    }
 
     public List<PastaDocumento> listarRaiz() {
         return repo.findByPastaPaiIsNull();

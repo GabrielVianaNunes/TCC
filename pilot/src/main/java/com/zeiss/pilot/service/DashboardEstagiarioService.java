@@ -1,5 +1,12 @@
 package com.zeiss.pilot.service;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
 import com.zeiss.pilot.dto.DashboardEstagiarioDTO;
 import com.zeiss.pilot.dto.DashboardEstagiarioDTO.EstagiarioMetricasDTO;
 import com.zeiss.pilot.dto.DashboardEstagiarioDTO.TotaisDTO;
@@ -9,26 +16,21 @@ import com.zeiss.pilot.entity.NotaEstagiario;
 import com.zeiss.pilot.repository.EstagiarioRepository;
 import com.zeiss.pilot.repository.KanbanCardRepository;
 import com.zeiss.pilot.repository.NotaEstagiarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class DashboardEstagiarioService {
 
-    @Autowired
-    private EstagiarioRepository estagiarioRepository;
+    private final EstagiarioRepository estagiarioRepository;
 
-    @Autowired
-    private KanbanCardRepository kanbanRepository;
+    private final KanbanCardRepository kanbanRepository;
 
-    @Autowired
-    private NotaEstagiarioRepository notaRepository;
+    private final NotaEstagiarioRepository notaRepository;
+
+    public DashboardEstagiarioService(EstagiarioRepository estagiarioRepository, KanbanCardRepository kanbanRepository, NotaEstagiarioRepository notaRepository) {
+        this.estagiarioRepository = estagiarioRepository;
+        this.kanbanRepository = kanbanRepository;
+        this.notaRepository = notaRepository;
+    }
 
     public DashboardEstagiarioDTO getDashboard() {
         List<Estagiario> estagiarios = estagiarioRepository.findByAtivoTrue();

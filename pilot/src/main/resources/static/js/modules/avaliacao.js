@@ -97,8 +97,7 @@
     btn.disabled = true;
     btn.textContent = _t('Enviando...');
 
-    saveLocal(payload);
-    try { await Api.post(API, payload); } catch { /* non-fatal */ }
+    try { await Api.post(API, payload); } catch { saveLocal(payload); }
 
     // Show success
     document.getElementById('formArea').style.display = 'none';

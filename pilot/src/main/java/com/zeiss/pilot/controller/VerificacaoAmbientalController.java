@@ -2,7 +2,6 @@ package com.zeiss.pilot.controller;
 
 import com.zeiss.pilot.dto.VerificacaoAmbientalDTO;
 import com.zeiss.pilot.service.VerificacaoAmbientalService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +11,11 @@ import java.util.List;
 @RequestMapping("/api/verificacoes-ambientais")
 public class VerificacaoAmbientalController {
 
-    @Autowired
-    private VerificacaoAmbientalService service;
+    private final VerificacaoAmbientalService service;
+
+    public VerificacaoAmbientalController(VerificacaoAmbientalService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<VerificacaoAmbientalDTO>> listar() {

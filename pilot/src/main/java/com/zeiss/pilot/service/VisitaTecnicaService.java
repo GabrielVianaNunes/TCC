@@ -3,7 +3,6 @@ package com.zeiss.pilot.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zeiss.pilot.dto.VisitaTecnicaDTO;
@@ -13,8 +12,11 @@ import com.zeiss.pilot.repository.VisitaTecnicaRepository;
 @Service
 public class VisitaTecnicaService {
 
-    @Autowired
-    private VisitaTecnicaRepository repository;
+    private final VisitaTecnicaRepository repository;
+
+    public VisitaTecnicaService(VisitaTecnicaRepository repository) {
+        this.repository = repository;
+    }
 
     public List<VisitaTecnica> listarVisitas() {
         return repository.findAll();

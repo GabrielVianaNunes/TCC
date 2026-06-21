@@ -1,20 +1,5 @@
 package com.zeiss.pilot.service;
 
-import com.zeiss.pilot.dto.DocumentoMaquinaDTO;
-import com.zeiss.pilot.entity.DocumentoMaquina;
-import com.zeiss.pilot.entity.Maquina;
-import com.zeiss.pilot.repository.DocumentoMaquinaRepository;
-import com.zeiss.pilot.repository.MaquinaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,16 +10,38 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.zeiss.pilot.dto.DocumentoMaquinaDTO;
+import com.zeiss.pilot.entity.DocumentoMaquina;
+import com.zeiss.pilot.entity.Maquina;
+import com.zeiss.pilot.repository.DocumentoMaquinaRepository;
+import com.zeiss.pilot.repository.MaquinaRepository;
+
 @Service
 public class DocumentoMaquinaService {
 
-    @Autowired
-    private DocumentoMaquinaRepository repository;
+    private static final Logger log = LoggerFactory.getLogger(DocumentoMaquinaService.class);
 
-    @Autowired
-    private MaquinaRepository maquinaRepository;
+    private final DocumentoMaquinaRepository repository;
+
+    private final MaquinaRepository maquinaRepository;
 
     private static final String BASE_PATH = "C:/PDFs/Maquina";
+
+    public DocumentoMaquinaService(DocumentoMaquinaRepository repository, MaquinaRepository maquinaRepository) {
+        this.repository = repository;
+        this.maquinaRepository = maquinaRepository;
+    }
 
     @Transactional
     public DocumentoMaquinaDTO upload(MultipartFile file, Long maquinaId,
@@ -77,7 +84,7 @@ public class DocumentoMaquinaService {
             try {
                 Files.deleteIfExists(Paths.get(doc.getCaminhoArquivo()));
             } catch (IOException e) {
-                e.printStackTrace();
+                log.warn("Falha ao excluir arquivo físico do documento {} ({})", id, doc.getCaminhoArquivo(), e);
             }
             repository.deleteById(id);
         });

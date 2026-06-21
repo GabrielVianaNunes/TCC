@@ -4,7 +4,6 @@ import com.zeiss.pilot.dto.RelatorioMensalDTO;
 import com.zeiss.pilot.dto.ServicoDTO;
 import com.zeiss.pilot.entity.Servico;
 import com.zeiss.pilot.repository.ServicoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -15,8 +14,11 @@ import java.util.List;
 @Service
 public class ServicoService {
 
-    @Autowired
-    private ServicoRepository servicoRepository;
+    private final ServicoRepository servicoRepository;
+
+    public ServicoService(ServicoRepository servicoRepository) {
+        this.servicoRepository = servicoRepository;
+    }
 
     public Page<ServicoDTO> listarPaginado(int page, int size, String query, String status) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dataCriacao"));

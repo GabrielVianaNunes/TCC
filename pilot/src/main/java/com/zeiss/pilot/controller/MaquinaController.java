@@ -5,7 +5,6 @@ import com.zeiss.pilot.dto.ManutencaoMaquinaDTO;
 import com.zeiss.pilot.dto.MaquinaDTO;
 import com.zeiss.pilot.dto.SessaoMaquinaDTO;
 import com.zeiss.pilot.service.MaquinaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +14,11 @@ import java.util.List;
 @RequestMapping("/api/maquinas")
 public class MaquinaController {
 
-    @Autowired
-    private MaquinaService service;
+    private final MaquinaService service;
+
+    public MaquinaController(MaquinaService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<MaquinaDTO>> listar() {

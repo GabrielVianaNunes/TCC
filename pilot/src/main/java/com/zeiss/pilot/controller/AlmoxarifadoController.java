@@ -3,7 +3,6 @@ package com.zeiss.pilot.controller;
 import com.zeiss.pilot.dto.ItemAlmoxarifadoDTO;
 import com.zeiss.pilot.dto.MovimentacaoAlmoxarifadoDTO;
 import com.zeiss.pilot.service.AlmoxarifadoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +12,11 @@ import java.util.List;
 @RequestMapping("/api/almoxarifado")
 public class AlmoxarifadoController {
 
-    @Autowired
-    private AlmoxarifadoService service;
+    private final AlmoxarifadoService service;
+
+    public AlmoxarifadoController(AlmoxarifadoService service) {
+        this.service = service;
+    }
 
     @GetMapping("/itens")
     public ResponseEntity<List<ItemAlmoxarifadoDTO>> listarItens() {

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,8 +23,11 @@ import com.zeiss.pilot.service.PastaDocumentoService;
 @RequestMapping("/api/pastas")
 public class PastaDocumentoController {
 
-    @Autowired
-    private PastaDocumentoService service;
+    private final PastaDocumentoService service;
+
+    public PastaDocumentoController(PastaDocumentoService service) {
+        this.service = service;
+    }
 
     private PastaDocumentoDTO toDTO(PastaDocumento p) {
         PastaDocumentoDTO dto = new PastaDocumentoDTO();

@@ -1,12 +1,14 @@
 package com.zeiss.pilot.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class DocumentoPDFDTO {
     private Long id;
     private String nomeArquivo;
     private String caminhoArquivo;
     private LocalDate dataExpiracao;
+    private LocalDateTime dataUpload;
     private String status;
 
     private Long usuarioId;
@@ -31,6 +33,9 @@ public class DocumentoPDFDTO {
 
     public LocalDate getDataExpiracao() { return dataExpiracao; }
     public void setDataExpiracao(LocalDate dataExpiracao) { this.dataExpiracao = dataExpiracao; }
+
+    public LocalDateTime getDataUpload() { return dataUpload; }
+    public void setDataUpload(LocalDateTime dataUpload) { this.dataUpload = dataUpload; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

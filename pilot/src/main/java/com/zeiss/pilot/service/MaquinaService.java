@@ -12,7 +12,6 @@ import com.zeiss.pilot.repository.AgendamentoMaquinaRepository;
 import com.zeiss.pilot.repository.MaquinaRepository;
 import com.zeiss.pilot.repository.ManutencaoMaquinaRepository;
 import com.zeiss.pilot.repository.SessaoMaquinaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,14 +20,17 @@ import java.util.stream.Collectors;
 @Service
 public class MaquinaService {
 
-    @Autowired
-    private MaquinaRepository maquinaRepository;
-    @Autowired
-    private SessaoMaquinaRepository sessaoRepository;
-    @Autowired
-    private ManutencaoMaquinaRepository manutencaoRepository;
-    @Autowired
-    private AgendamentoMaquinaRepository agendamentoRepository;
+    private final MaquinaRepository maquinaRepository;
+    private final SessaoMaquinaRepository sessaoRepository;
+    private final ManutencaoMaquinaRepository manutencaoRepository;
+    private final AgendamentoMaquinaRepository agendamentoRepository;
+
+    public MaquinaService(MaquinaRepository maquinaRepository, SessaoMaquinaRepository sessaoRepository, ManutencaoMaquinaRepository manutencaoRepository, AgendamentoMaquinaRepository agendamentoRepository) {
+        this.maquinaRepository = maquinaRepository;
+        this.sessaoRepository = sessaoRepository;
+        this.manutencaoRepository = manutencaoRepository;
+        this.agendamentoRepository = agendamentoRepository;
+    }
 
     public List<MaquinaDTO> listar() {
         return maquinaRepository.findAll().stream()

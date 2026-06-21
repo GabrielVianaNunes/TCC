@@ -6,7 +6,6 @@ import com.zeiss.pilot.entity.ItemAlmoxarifado;
 import com.zeiss.pilot.entity.MovimentacaoAlmoxarifado;
 import com.zeiss.pilot.repository.ItemAlmoxarifadoRepository;
 import com.zeiss.pilot.repository.MovimentacaoAlmoxarifadoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,11 +14,14 @@ import java.util.stream.Collectors;
 @Service
 public class AlmoxarifadoService {
 
-    @Autowired
-    private ItemAlmoxarifadoRepository itemRepository;
+    private final ItemAlmoxarifadoRepository itemRepository;
 
-    @Autowired
-    private MovimentacaoAlmoxarifadoRepository movimentacaoRepository;
+    private final MovimentacaoAlmoxarifadoRepository movimentacaoRepository;
+
+    public AlmoxarifadoService(ItemAlmoxarifadoRepository itemRepository, MovimentacaoAlmoxarifadoRepository movimentacaoRepository) {
+        this.itemRepository = itemRepository;
+        this.movimentacaoRepository = movimentacaoRepository;
+    }
 
     public List<ItemAlmoxarifadoDTO> listarItens() {
         return itemRepository.findAll().stream()

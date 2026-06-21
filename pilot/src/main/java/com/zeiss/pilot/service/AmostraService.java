@@ -3,7 +3,6 @@ package com.zeiss.pilot.service;
 import com.zeiss.pilot.dto.AmostraDTO;
 import com.zeiss.pilot.entity.Amostra;
 import com.zeiss.pilot.repository.AmostraRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -15,8 +14,11 @@ import java.util.Map;
 @Service
 public class AmostraService {
 
-    @Autowired
-    private AmostraRepository repository;
+    private final AmostraRepository repository;
+
+    public AmostraService(AmostraRepository repository) {
+        this.repository = repository;
+    }
 
     public Page<AmostraDTO> listarPaginado(int page, int size, String query, String status) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dataEntrada"));

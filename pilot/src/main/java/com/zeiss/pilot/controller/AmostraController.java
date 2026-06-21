@@ -2,7 +2,6 @@ package com.zeiss.pilot.controller;
 
 import com.zeiss.pilot.dto.AmostraDTO;
 import com.zeiss.pilot.service.AmostraService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,11 @@ import java.util.Map;
 @RequestMapping("/api/amostras")
 public class AmostraController {
 
-    @Autowired
-    private AmostraService service;
+    private final AmostraService service;
+
+    public AmostraController(AmostraService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<Page<AmostraDTO>> listar(
