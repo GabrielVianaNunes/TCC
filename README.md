@@ -1,6 +1,23 @@
 # Zeiss-Pilot — CEM SENAI Zeiss
 
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4-brightgreen)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-database-blue)
+![License](https://img.shields.io/badge/license-see%20LICENSE-lightgrey)
+
 Sistema de gestão para o Centro de Excelência em Metrologia (CEM) do SENAI Zeiss: controle de máquinas e calibrações, amostras, almoxarifado, estagiários, visitas técnicas, eventos, documentos e avaliações de satisfação (NPS).
+
+## Sumário
+
+- [Stack](#stack)
+- [Pré-requisitos](#pré-requisitos)
+- [Configuração](#configuração)
+- [Executando](#executando)
+- [Build](#build)
+- [Módulos principais](#módulos-principais)
+- [Segurança](#segurança)
+- [Estrutura do repositório](#estrutura-do-repositório)
+- [Contribuindo](#contribuindo)
 
 ## Stack
 
@@ -98,3 +115,13 @@ pilot/
     static/       # JS, CSS e assets
 docs/             # documentação adicional
 ```
+
+## Contribuindo
+
+Projeto desenvolvido por:
+
+- João Vítor Mamede
+- Gabriel Viana Nunes
+- Thiago Matheus Pinheiro
+
+O remote principal de desenvolvimento é `integration` (não `origin`). Commits seguem o padrão [Conventional Commits](https://www.conventionalcommits.org/) (`feat`, `fix`, `refactor`, `chore`, `docs`), com mensagens descritivas sobre o que mudou e por quê.
