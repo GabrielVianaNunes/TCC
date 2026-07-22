@@ -18,6 +18,7 @@ Sistema de gestão para o Centro de Excelência em Metrologia (CEM) do SENAI Zei
 - [Segurança](#segurança)
 - [Estrutura do repositório](#estrutura-do-repositório)
 - [Contribuindo](#contribuindo)
+- [Regras do projeto](CONTRIBUTING.md)
 
 ## Stack
 
@@ -131,3 +132,5 @@ Projeto desenvolvido por:
 - Gabriel Viana Nunes
 
 O repositório de desenvolvimento é `origin` ([GabrielVianaNunes/TCC](https://github.com/GabrielVianaNunes/TCC)). Commits seguem o padrão [Conventional Commits](https://www.conventionalcommits.org/) (`feat`, `fix`, `refactor`, `chore`, `docs`), com mensagens descritivas sobre o que mudou e por quê.
+
+Antes de contribuir, veja [CONTRIBUTING.md](CONTRIBUTING.md) para as regras de git/segurança e as convenções de código adotadas no projeto.
