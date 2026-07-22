@@ -1,0 +1,24 @@
+spring.application.name=pilot
+
+spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/senai_zeiss}
+spring.datasource.username=${DB_USERNAME:postgres}
+spring.datasource.password=${DB_PASSWORD:changeme}
+spring.datasource.driverClassName=org.postgresql.Driver
+
+server.port=${SERVER_PORT:8090}
+
+spring.thymeleaf.prefix=classpath:/templates/
+spring.thymeleaf.suffix=.html
+spring.thymeleaf.mode=HTML
+spring.thymeleaf.encoding=UTF-8
+spring.thymeleaf.cache=false
+
+# Tamanho máximo do arquivo individual
+spring.servlet.multipart.max-file-size=10MB
+
+# Tamanho máximo da requisição (útil se enviar múltiplos arquivos ou campos juntos)
+spring.servlet.multipart.max-request-size=10MB
+
+logging.level.org.springframework.security=DEBUG
+
+spring.jpa.hibernate.ddl-auto=update

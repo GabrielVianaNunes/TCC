@@ -40,13 +40,19 @@ Sistema de gestão para o Centro de Excelência em Metrologia (CEM) do SENAI Zei
    CREATE DATABASE senai_zeiss;
    ```
 
-2. As credenciais do banco são lidas de variáveis de ambiente, com fallback para valores padrão de desenvolvimento local definidos em `application.properties`:
+2. `application.properties` contém credenciais locais e **não é versionado** (está no `.gitignore`). Copie o template e ajuste os valores:
+
+   ```bash
+   cp pilot/src/main/resources/application.properties.example pilot/src/main/resources/application.properties
+   ```
+
+   As credenciais do banco são lidas de variáveis de ambiente, com fallback para valores padrão de desenvolvimento local:
 
    | Variável | Padrão (dev local) |
    |---|---|
    | `DB_URL` | `jdbc:postgresql://localhost:5432/senai_zeiss` |
    | `DB_USERNAME` | `postgres` |
-   | `DB_PASSWORD` | *(senha de desenvolvimento)* |
+   | `DB_PASSWORD` | *(defina a sua — não há senha real versionada)* |
    | `SERVER_PORT` | `8090` |
 
    Para sobrescrever, defina as variáveis antes de iniciar a aplicação:
