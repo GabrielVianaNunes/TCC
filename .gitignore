@@ -1,0 +1,7 @@
+# graphify (grafo de conhecimento local + integração com Claude Code)
+graphify-out/
+.claude/
+CLAUDE.md
+
+# Documento de status interno (não é entregável do projeto)
+PROJECT_STATUS.md
