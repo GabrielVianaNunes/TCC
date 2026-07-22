@@ -124,4 +124,4 @@ Projeto desenvolvido por:
 - Thiago Matheus Pinheiro
 - Gabriel Viana Nunes
 
-O remote principal de desenvolvimento é `integration` (não `origin`). Commits seguem o padrão [Conventional Commits](https://www.conventionalcommits.org/) (`feat`, `fix`, `refactor`, `chore`, `docs`), com mensagens descritivas sobre o que mudou e por quê.
+O repositório de desenvolvimento é `origin` ([GabrielVianaNunes/TCC](https://github.com/GabrielVianaNunes/TCC)). Commits seguem o padrão [Conventional Commits](https://www.conventionalcommits.org/) (`feat`, `fix`, `refactor`, `chore`, `docs`), com mensagens descritivas sobre o que mudou e por quê.
