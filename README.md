@@ -68,6 +68,15 @@ Sistema de gestão para o Centro de Excelência em Metrologia (CEM) do SENAI Zei
 
 3. A aplicação sobe por padrão na porta `8090`.
 
+### Primeiro acesso
+
+Na primeira subida da aplicação com um banco vazio (nenhum usuário com papel `ADMIN` cadastrado), um usuário `admin@zeiss.com` com papel `ADMIN` é criado automaticamente:
+
+- Se a variável `ADMIN_BOOTSTRAP_PASSWORD` estiver definida, essa é a senha do admin.
+- Se não estiver definida, uma senha aleatória é gerada e impressa **uma única vez** no log de inicialização — copie-a dali para o primeiro login.
+
+Isso só acontece se nenhum usuário com papel `ADMIN` já existir no banco; reiniciar a aplicação depois do primeiro admin criado não gera um novo.
+
 ## Executando
 
 ```bash
