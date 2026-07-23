@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.zeiss.pilot.entity.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Optional<Usuario> findByEmail(String email);  
+    Optional<Usuario> findByEmail(String email);
+    boolean existsByRoleIgnoreCase(String role);
 }
