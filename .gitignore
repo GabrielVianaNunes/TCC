@@ -1,3 +1,8 @@
+# Artefatos locais de ferramental/acompanhamento — nunca vão para o GitHub.
+# Regra geral (ver CONTRIBUTING.md): qualquer coisa que seja informação de
+# segurança/sigilosa, ou que seja ferramental/acompanhamento interno sem
+# valor como entregável do projeto, entra aqui.
+
 # graphify (grafo de conhecimento local + integração com Claude Code)
 graphify-out/
 .claude/
@@ -5,3 +10,8 @@ CLAUDE.md
 
 # Documento de status interno (não é entregável do projeto)
 PROJECT_STATUS.md
+
+# Specs e planos de implementação gerados durante o desenvolvimento
+# assistido por IA (superpowers) — histórico de processo, não documentação
+# do produto; podem conter caminhos/nomes pessoais de quem está codando.
+docs/superpowers/

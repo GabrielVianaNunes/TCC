@@ -30,7 +30,14 @@ docs: atualiza README com passo de configuração do banco
 
 ### O que fica fora do repositório (`.gitignore` da raiz)
 
-`graphify-out/`, `.claude/`, `CLAUDE.md` e `PROJECT_STATUS.md` são artefatos de ferramental e acompanhamento interno (grafo de conhecimento, configuração de assistente de IA, documento de status), não entregáveis do projeto — por isso ficam só na máquina de quem está desenvolvendo, nunca no GitHub.
+**Regra geral:** qualquer coisa que seja informação de segurança/sigilosa (credenciais, dados pessoais), ou que seja ferramental/acompanhamento interno do desenvolvimento sem valor como entregável do projeto, entra no `.gitignore` — nunca vai para o GitHub, mesmo que pareça inofensivo.
+
+Hoje isso cobre:
+- `graphify-out/`, `.claude/`, `CLAUDE.md` — grafo de conhecimento e configuração de assistente de IA.
+- `PROJECT_STATUS.md` — documento de acompanhamento interno, não entregável do projeto.
+- `docs/superpowers/` — specs e planos de implementação gerados durante desenvolvimento assistido por IA; são histórico de processo (podem conter caminhos/nomes pessoais de quem codou), não documentação do produto.
+
+Ao criar um arquivo novo, pergunte: "isso é algo que o orientador/banca/qualquer pessoa clonando o repo precisa ver?" Se a resposta for não, ele vai no `.gitignore`. Na dúvida, trate como sigiloso/desnecessário até decidir o contrário — é mais fácil versionar depois do que remover do histórico já publicado (ver seção "Credenciais nunca são versionadas" acima sobre o custo de corrigir isso depois).
 
 ## Convenções de código do backend
 
