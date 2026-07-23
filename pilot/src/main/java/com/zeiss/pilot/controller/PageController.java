@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.zeiss.pilot.repository.UsuarioRepository;
 
@@ -74,8 +75,16 @@ public class PageController {
         return "lista-editais";
     }
 
-    @GetMapping("/detalhes-edital")
-    public String paginaDetalhesEdital() {
+    @GetMapping({"/detalhes-edital", "/editais/{id}"})
+    public String paginaDetalhesEdital(@PathVariable(required = false) Long id, Model model) {
+        java.util.Map<String, Object> edital = new java.util.HashMap<>();
+        edital.put("id", id);
+        edital.put("nomeEdital", "");
+        edital.put("status", "");
+        edital.put("instituicaoFornecedora", "");
+        edital.put("instituicaoParceira", null);
+        edital.put("valor", null);
+        model.addAttribute("edital", edital);
         return "detalhes-edital";
     }
 
