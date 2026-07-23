@@ -79,6 +79,10 @@ Erros são centralizados em `GlobalExceptionHandler` (`@RestControllerAdvice`). 
 
 Regras de autorização ficam centralizadas em `SecurityConfig` (matchers por rota/verbo), não espalhadas em `@PreAuthorize` por controller, exceto quando o próprio endpoint precisa (ex.: upload de documento). Rotas públicas (sem login) são exceção documentada e explícita — hoje são `/login`, `/avaliacao`, `/qrcode-avaliacao` e `POST /api/avaliacoes`, para permitir o fluxo de avaliação via QR code sem autenticação. Qualquer nova rota pública precisa de justificativa equivalente.
 
+### Migrações de banco
+
+Toda mudança de schema (nova tabela, nova coluna, alteração de tipo) precisa de uma migração Flyway em `pilot/src/main/resources/db/migration/`, nomeada `V{N}__descricao_em_snake_case.sql` — nunca edite uma migração já aplicada, sempre crie uma nova. `ddl-auto=validate` vai barrar a subida da aplicação se uma entidade não bater com o schema, então crie a migração antes de mudar a entidade correspondente.
+
 ### Frontend
 
 Páginas novas seguem o padrão modular já estabelecido: um template Thymeleaf em `templates/`, carregando `i18n.js` + `core.js` + `api.js` + `ui.js` + `modules/notifications.js` + um módulo próprio em `static/js/modules/[pagina].js`. Não crie arquivos JS soltos na raiz de `static/js/` (esse era o padrão antigo, já descontinuado — ver `PROJECT_STATUS.md` para a lista de arquivos legados pendentes de remoção).

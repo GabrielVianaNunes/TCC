@@ -77,6 +77,12 @@ Na primeira subida da aplicação com um banco vazio (nenhum usuário com papel 
 
 Isso só acontece se nenhum usuário com papel `ADMIN` já existir no banco; reiniciar a aplicação depois do primeiro admin criado não gera um novo.
 
+### Migrações de banco (Flyway)
+
+O schema é versionado com [Flyway](https://flywaydb.org/) — os arquivos ficam em `pilot/src/main/resources/db/migration/`. `spring.jpa.hibernate.ddl-auto=validate` está configurado para o Hibernate só conferir o schema, nunca alterá-lo.
+
+Para criar uma nova migração, adicione um arquivo `V{N}__descricao_em_snake_case.sql` (incrementando `N` a partir da última migração existente) com o SQL da mudança. Nunca edite uma migração já aplicada — sempre crie uma nova.
+
 ## Executando
 
 ```bash
