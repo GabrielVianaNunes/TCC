@@ -39,10 +39,6 @@ public class DocumentoPDF {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "subpasta_id", nullable = false)
-    private PastaDocumento subpasta;
-
     // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -64,7 +60,4 @@ public class DocumentoPDF {
 
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
-
-    public PastaDocumento getSubpasta() { return subpasta; }
-    public void setSubpasta(PastaDocumento subpasta) { this.subpasta = subpasta; }
 }

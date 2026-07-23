@@ -39,44 +39,19 @@ public class DocumentoPDFController {
         this.usuarioService = usuarioService;
     }
 
-    /**
-     * Upload de documento:
-     * - Front chama /api/documentos/upload (documentos.js)
-     * - subpastaId é obrigatório (amarração correta da listagem por subpasta)
-     * - pastaId é opcional (mantido apenas por compatibilidade, se o service utilizar)
-     */
     @PostMapping("/upload")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<DocumentoPDFDTO> upload(
             @RequestParam("arquivo") MultipartFile arquivo,
-            @RequestParam(value = "subpastaId", required = false) Long subpastaId,
-            @RequestParam("dataExpiracao") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataExpiracao,
-            @RequestParam(value = "pastaId", required = false) Long pastaId
+            @RequestParam("dataExpiracao") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataExpiracao
     ) throws IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         Usuario usuario = usuarioService.buscarPorEmail(email);
 
-        // Mantive a assinatura esperada no service; ajuste se o seu service tiver outro nome/método
-        DocumentoPDFDTO dto = service.salvarArquivo(arquivo, dataExpiracao, usuario, pastaId, subpastaId);
+        DocumentoPDFDTO dto = service.salvarArquivo(arquivo, dataExpiracao, usuario);
         return ResponseEntity.ok(dto);
     }
-
-    /**
-     * (Opcional) Se desejar manter compatibilidade com POST /api/documentos,
-     * descomente este método abaixo e redirecione internamente para /upload:
-     *
-     * @PostMapping
-     * @PreAuthorize("hasRole('ADMIN')")
-     * public ResponseEntity<DocumentoPDFDTO> criarCompat(
-     *         @RequestParam("arquivo") MultipartFile arquivo,
-     *         @RequestParam("subpastaId") Long subpastaId,
-     *         @RequestParam("dataExpiracao") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataExpiracao,
-     *         @RequestParam(value = "pastaId", required = false) Long pastaId
-     * ) throws IOException {
-     *     return upload(arquivo, subpastaId, dataExpiracao, pastaId);
-     * }
-     */
 
     @GetMapping("/usuario/{usuarioId}")
     public List<DocumentoPDFDTO> listarPorUsuario(@PathVariable Long usuarioId) {
@@ -119,16 +94,5 @@ public class DocumentoPDFController {
     @GetMapping("/abrir/{id}")
     public ResponseEntity<Resource> abrirDocumento(@PathVariable Long id) {
         return service.abrirDocumentoComoResource(id);
-    }
-
-    @GetMapping("/subpasta/{idSubpasta}")
-    public Page<DocumentoPDFDTO> listarPorSubpastaComFiltro(
-            @PathVariable Long idSubpasta,
-            @RequestParam(required = false) String nome,
-            @RequestParam(required = false) String status,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size
-    ) {
-        return service.listarPorSubpastaComFiltro(idSubpasta, status, nome, page, size);
     }
 }

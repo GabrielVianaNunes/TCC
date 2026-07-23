@@ -26,31 +26,24 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.zeiss.pilot.dto.DocumentoPDFDTO;
 import com.zeiss.pilot.entity.DocumentoPDF;
-import com.zeiss.pilot.entity.PastaDocumento;
 import com.zeiss.pilot.entity.Usuario;
 import com.zeiss.pilot.repository.DocumentoPDFRepository;
-import com.zeiss.pilot.repository.PastaDocumentoRepository;
 
 @Service
 public class DocumentoPDFService {
 
     private final DocumentoPDFRepository documentoRepository;
 
-    private final PastaDocumentoRepository pastaRepository;
-
     private final String PASTA_BASE = "C:/PDFs";
 
-    public DocumentoPDFService(DocumentoPDFRepository documentoRepository, PastaDocumentoRepository pastaRepository) {
+    public DocumentoPDFService(DocumentoPDFRepository documentoRepository) {
         this.documentoRepository = documentoRepository;
-        this.pastaRepository = pastaRepository;
     }
 
     @Transactional
     public DocumentoPDFDTO salvarArquivo(MultipartFile file,
                                          LocalDate dataExpiracao,
-                                         Usuario usuario,
-                                         Long pastaId,          // opcional (compat)
-                                         Long subpastaId) throws IOException {
+                                         Usuario usuario) throws IOException {
 
         // --- armazenamento físico ---
         Long usuarioId = usuario.getId();
@@ -73,16 +66,6 @@ public class DocumentoPDFService {
         doc.setDataUpload(LocalDateTime.now());
         doc.setStatus(calcularStatus(dataExpiracao));
         doc.setUsuario(usuario);
-
-        // Vínculo com subpasta — opcional (uploads institucionais não têm subpasta)
-        if (subpastaId != null) {
-            PastaDocumento subpasta = pastaRepository.findById(subpastaId)
-                    .orElseThrow(() -> new IllegalArgumentException("Subpasta não encontrada com ID: " + subpastaId));
-            if (pastaId != null && (subpasta.getPastaPai() == null || !subpasta.getPastaPai().getId().equals(pastaId))) {
-                throw new IllegalArgumentException("Subpasta não pertence à pasta informada.");
-            }
-            doc.setSubpasta(subpasta);
-        }
 
         DocumentoPDF salvo = documentoRepository.save(doc);
         return toDTO(salvo);
@@ -126,7 +109,7 @@ public class DocumentoPDFService {
         if (opt.isPresent()) {
             DocumentoPDF doc = opt.get();
             doc.setDataExpiracao(novaData);
-            doc.setStatus(calcularStatus(novaData)); // ✅ recalcula após edição
+            doc.setStatus(calcularStatus(novaData)); // recalcula após edição
             return toDTO(documentoRepository.save(doc));
         }
         return null;
@@ -153,24 +136,11 @@ public class DocumentoPDFService {
         dto.setDataUpload(doc.getDataUpload());
         dto.setStatus(doc.getStatus());
 
-        // Usuário
         if (doc.getUsuario() != null) {
             dto.setUsuarioId(doc.getUsuario().getId());
-            String role = doc.getUsuario().getRole(); // <- é String no seu modelo
+            String role = doc.getUsuario().getRole();
             if (role != null && !role.isBlank()) {
                 dto.setUsuarioRole(normalizeRole(role));
-            }
-        }
-
-        // Subpasta (principal)
-        if (doc.getSubpasta() != null) {
-            dto.setSubpastaId(doc.getSubpasta().getId());
-            dto.setNomeSubpasta(doc.getSubpasta().getNome());
-
-            // Compat: pasta pai
-            if (doc.getSubpasta().getPastaPai() != null) {
-                dto.setPastaId(doc.getSubpasta().getPastaPai().getId());
-                dto.setNomePasta(doc.getSubpasta().getPastaPai().getNome());
             }
         }
         return dto;
@@ -178,11 +148,9 @@ public class DocumentoPDFService {
 
     private String normalizeRole(String role) {
         String r = role.trim().toUpperCase();
-        // normaliza nomes comuns para o padrão ROLE_*
         if (!r.startsWith("ROLE_")) {
             if (r.equals("ADMIN")) r = "ROLE_ADMIN";
             else if (r.equals("USER")) r = "ROLE_USER";
-            // adicione outros mapeamentos se houver (ex.: "GESTOR" -> "ROLE_GESTOR")
         }
         return r;
     }
@@ -255,23 +223,4 @@ public class DocumentoPDFService {
         }
         System.out.println("[AGENDADO] Verificação e atualização de status concluída às 14h.");
     }
-
-    public Page<DocumentoPDFDTO> listarPorSubpastaComFiltro(Long subpastaId, String status, String nome, int page, int size) {
-        Pageable pageable   = PageRequest.of(page, size);
-
-        String statusFiltro = (status == null || status.isBlank()) ? null : status.replace("-", " ");
-        String nomeFiltro   = (nome   == null || nome.isBlank())   ? null : nome;
-
-        Page<DocumentoPDF> documentos = documentoRepository.findBySubpastaComFiltro(subpastaId, statusFiltro, nomeFiltro, pageable);
-
-        return documentos.map(doc -> {
-            String statusRecalculado = calcularStatus(doc.getDataExpiracao());
-            if (doc.getStatus() == null || !statusRecalculado.equalsIgnoreCase(doc.getStatus())) {
-                doc.setStatus(statusRecalculado);
-                documentoRepository.save(doc);
-            }
-            return toDTO(doc);
-        });
-    }
-    
 }

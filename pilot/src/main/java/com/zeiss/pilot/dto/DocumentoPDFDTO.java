@@ -12,14 +12,7 @@ public class DocumentoPDFDTO {
     private String status;
 
     private Long usuarioId;
-    private String usuarioRole; // ✅ usado no front p/ verificar permissões (ADMIN/CLIENTE/STAKEHOLDER)
-
-    private Long subpastaId;    // ✅ vínculo direto com subpasta
-    private String nomeSubpasta;
-
-    // Compatibilidade: pasta principal (pastaPai da subpasta)
-    private Long pastaId;
-    private String nomePasta;
+    private String usuarioRole; // usado no front p/ verificar permissões (ADMIN/CLIENTE/STAKEHOLDER)
 
     // Getters e Setters
     public Long getId() { return id; }
@@ -45,16 +38,4 @@ public class DocumentoPDFDTO {
 
     public String getUsuarioRole() { return usuarioRole; }
     public void setUsuarioRole(String usuarioRole) { this.usuarioRole = usuarioRole; }
-
-    public Long getSubpastaId() { return subpastaId; }
-    public void setSubpastaId(Long subpastaId) { this.subpastaId = subpastaId; }
-
-    public String getNomeSubpasta() { return nomeSubpasta; }
-    public void setNomeSubpasta(String nomeSubpasta) { this.nomeSubpasta = nomeSubpasta; }
-
-    public Long getPastaId() { return pastaId; }
-    public void setPastaId(Long pastaId) { this.pastaId = pastaId; }
-
-    public String getNomePasta() { return nomePasta; }
-    public void setNomePasta(String nomePasta) { this.nomePasta = nomePasta; }
 }
