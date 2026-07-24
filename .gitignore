@@ -15,3 +15,7 @@ PROJECT_STATUS.md
 # assistido por IA (superpowers) — histórico de processo, não documentação
 # do produto; podem conter caminhos/nomes pessoais de quem está codando.
 docs/superpowers/
+
+# Artefatos de execução do fluxo subagent-driven-development (briefs de
+# tarefa, relatórios de subagente, diffs de revisão, ledger de progresso).
+.superpowers/

@@ -35,9 +35,11 @@ docs: atualiza README com passo de configuração do banco
 Hoje isso cobre:
 - `graphify-out/`, `.claude/`, `CLAUDE.md` — grafo de conhecimento e configuração de assistente de IA.
 - `PROJECT_STATUS.md` — documento de acompanhamento interno, não entregável do projeto.
-- `docs/superpowers/` — specs e planos de implementação gerados durante desenvolvimento assistido por IA; são histórico de processo (podem conter caminhos/nomes pessoais de quem codou), não documentação do produto.
+- `docs/superpowers/` — specs e planos de implementação gerados durante desenvolvimento assistido por IA; `.superpowers/sdd/` — artefatos de execução (briefs de tarefa, relatórios de subagente, pacotes de diff de revisão).
 
 Ao criar um arquivo novo, pergunte: "isso é algo que o orientador/banca/qualquer pessoa clonando o repo precisa ver?" Se a resposta for não, ele vai no `.gitignore`. Na dúvida, trate como sigiloso/desnecessário até decidir o contrário — é mais fácil versionar depois do que remover do histórico já publicado (ver seção "Credenciais nunca são versionadas" acima sobre o custo de corrigir isso depois).
+
+**Limpeza de documentos de processo:** specs (`docs/superpowers/specs/`) e planos (`docs/superpowers/plans/`) de uma etapa já concluída e mesclada devem ser apagados depois que o resumo dela entrar no "Histórico" do `PROJECT_STATUS.md` — não vale a pena mantê-los como arquivo à parte, e eles inflam o grafo do `graphify` com nós de ruído (títulos de seção genéricos tipo "Self-review"/"Preocupações"/"Commit" viram nós "isolados" sem relação real com o código). O mesmo vale para `.superpowers/sdd/` — briefs, relatórios de subagente e diffs de revisão são artefatos de execução de uma tarefa específica, não histórico a preservar; apague-os ao final de cada rodada, mantendo só `.superpowers/sdd/progress.md` (o ledger contínuo). Depois de qualquer limpeza desses arquivos, rode `graphify update .` de novo.
 
 ## Convenções de código do backend
 

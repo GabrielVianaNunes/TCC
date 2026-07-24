@@ -7,15 +7,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.zeiss.pilot.repository.UsuarioRepository;
+import com.zeiss.pilot.service.UsuarioService;
 
 @Controller
 public class PageController {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioService usuarioService;
 
-    public PageController(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public PageController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping({"/", "/index"})
@@ -35,8 +35,11 @@ public class PageController {
 
     @GetMapping("/documentos")
     public String paginaDocumentos(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        usuarioRepository.findByEmail(userDetails.getUsername())
-                .ifPresent(u -> model.addAttribute("usuarioId", u.getId()));
+        try {
+            model.addAttribute("usuarioId", usuarioService.buscarPorEmail(userDetails.getUsername()).getId());
+        } catch (RuntimeException ignored) {
+            // usuário autenticado mas ausente no banco — mantém o comportamento anterior de não popular o atributo
+        }
         return "documentos";
     }
 
