@@ -135,6 +135,22 @@ class AmostraServiceIntegrationTest {
     }
 
     @Test
+    void atualizarSubstituiTotalmenteACamposNaoEnviadosViramNull() {
+        AmostraDTO criada = criar("Cliente W", "desc W", "OS-70", "Em custódia", LocalDate.now(), null);
+        assertEquals("OS-70", criada.getServicoRef());
+
+        AmostraDTO novosDados = new AmostraDTO();
+        novosDados.setCliente("Cliente W Atualizado");
+        novosDados.setStatus("Em custódia");
+        // servicoRef propositalmente não enviado
+
+        AmostraDTO atualizada = amostraService.atualizar(criada.getId(), novosDados);
+
+        assertEquals("Cliente W Atualizado", atualizada.getCliente());
+        assertEquals(null, atualizada.getServicoRef());
+    }
+
+    @Test
     void deletarRemoveRegistro() {
         AmostraDTO criada = criar("Cliente Z", "desc Z", "OS-60", "Em custódia", LocalDate.now(), null);
 

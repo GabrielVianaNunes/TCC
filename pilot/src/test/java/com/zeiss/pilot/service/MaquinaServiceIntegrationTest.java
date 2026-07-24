@@ -117,6 +117,22 @@ class MaquinaServiceIntegrationTest {
     }
 
     @Test
+    void atualizarSubstituiTotalmenteCamposNaoEnviadosViramNull() {
+        MaquinaDTO criada = criarMaquina("Máquina Original Full Replace", "TESTE-FULLREPLACE");
+        assertEquals("TESTE-FULLREPLACE", criada.getPatrimonioId());
+
+        MaquinaDTO novosDados = new MaquinaDTO();
+        novosDados.setNome("Máquina Atualizada Full Replace");
+        novosDados.setStatus("Ativa");
+        // patrimonioId propositalmente não enviado
+
+        MaquinaDTO atualizada = maquinaService.atualizar(criada.getId(), novosDados);
+
+        assertEquals("Máquina Atualizada Full Replace", atualizada.getNome());
+        assertEquals(null, atualizada.getPatrimonioId());
+    }
+
+    @Test
     void deletarRemoveRegistro() {
         MaquinaDTO criada = criarMaquina("Máquina Teste Deletar", "TESTE-DELETAR");
 
