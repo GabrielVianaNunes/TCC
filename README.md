@@ -14,6 +14,7 @@ Sistema de gestão para o Centro de Excelência em Metrologia (CEM) do SENAI Zei
 - [Configuração](#configuração)
 - [Executando](#executando)
 - [Build](#build)
+- [Testes](#testes)
 - [Módulos principais](#módulos-principais)
 - [Segurança](#segurança)
 - [Estrutura do repositório](#estrutura-do-repositório)
@@ -64,7 +65,7 @@ Sistema de gestão para o Centro de Excelência em Metrologia (CEM) do SENAI Zei
    export DB_PASSWORD=<sua_senha>
    ```
 
-   > As tabelas são criadas/atualizadas automaticamente na inicialização (`spring.jpa.hibernate.ddl-auto=update`).
+   > O schema é gerenciado por migrações Flyway (`spring.jpa.hibernate.ddl-auto=validate`) — ver seção [Migrações de banco (Flyway)](#migrações-de-banco-flyway) abaixo.
 
 3. A aplicação sobe por padrão na porta `8090`.
 
@@ -100,6 +101,24 @@ cd pilot
 ./mvnw clean package
 java -jar target/pilot-0.0.1-SNAPSHOT.jar
 ```
+
+## Testes
+
+A suíte roda contra um banco Postgres real dedicado (`senai_zeiss_test`), sem mocks — não usa H2 nem outro banco em memória. Antes de rodar os testes pela primeira vez, crie o banco:
+
+```sql
+CREATE DATABASE senai_zeiss_test;
+```
+
+O Flyway migra o schema automaticamente na primeira execução. Rodar a suíte:
+
+```bash
+cd pilot
+./mvnw test          # roda os 54 testes
+./mvnw verify         # roda os testes + checagem de cobertura mínima (JaCoCo)
+```
+
+`mvn verify` falha se a cobertura de linha cair abaixo de **35%** no projeto como um todo ou **30%** no pacote `service` — um piso contra regressão, não uma meta final. Veja [CONTRIBUTING.md](CONTRIBUTING.md#cobertura-de-testes) para os detalhes e a meta de longo prazo.
 
 ## Módulos principais
 
