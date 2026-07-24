@@ -1,6 +1,6 @@
 # Runbook de operação — Zeiss-Pilot
 
-Documento de operação do sistema, pensado tanto para o uso atual quanto para a entrega futura da operação ao time de TI do SENAI. Cobre hoje: backup automatizado e restauração (Etapa 8). Seções de deploy/hospedagem serão adicionadas quando a Etapa 9 for concluída.
+Documento de operação do sistema, pensado tanto para o uso atual quanto para a entrega futura da operação ao time de TI do SENAI. Cobre hoje: backup automatizado e restauração (Etapa 8) e deploy (Etapa 9).
 
 ## Backup automatizado
 
