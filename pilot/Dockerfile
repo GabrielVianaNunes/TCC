@@ -3,6 +3,10 @@ FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /build
 COPY pom.xml .
 COPY src ./src
+# application.properties é local/gitignorado e nunca entra no contexto de build
+# (ver .dockerignore) — a imagem sempre usa o template seguro como base, e a
+# configuração real vem só de variáveis de ambiente em tempo de execução.
+RUN cp src/main/resources/application.properties.example src/main/resources/application.properties
 RUN mvn clean package -DskipTests -B
 
 # ---- Estágio final ----

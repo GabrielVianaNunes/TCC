@@ -3,3 +3,4 @@ target/
 *.md
 docs/
 .vscode/
+src/main/resources/application.properties
