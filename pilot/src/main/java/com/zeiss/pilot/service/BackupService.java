@@ -84,6 +84,7 @@ public class BackupService {
             if (arquivoLocal != null) {
                 try {
                     Files.deleteIfExists(arquivoLocal);
+                    Files.deleteIfExists(arquivoLocal.getParent());
                 } catch (IOException ignored) {
                     // arquivo temporário já removido ou inacessível — não impede o resultado do backup
                 }
