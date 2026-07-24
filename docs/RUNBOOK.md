@@ -66,6 +66,62 @@ Procedimento **validado ao vivo** durante a implementação da Etapa 8 (2026-07-
 
 5. Se for para substituir o banco de produção de verdade (não só testar a restauração), troque a variável `DB_URL`/`DB_NAME` da aplicação para apontar pro banco restaurado (ou renomeie os bancos), e reinicie a aplicação.
 
-## Próximos passos deste runbook
+## Deploy
 
-Seções pendentes, a serem adicionadas quando a Etapa 9 (deploy real) for concluída: como subir a aplicação via Docker, onde ficam os logs em produção, como trocar a senha do admin, e os detalhes específicos da hospedagem escolhida.
+### 1. Provisionar a VM
+
+Crie uma conta e uma instância "Always Free" na [Oracle Cloud](https://www.oracle.com/cloud/free/) (ou hospedagem equivalente que não hiberne por inatividade). Ao criar a instância:
+- Escolha uma imagem Ubuntu LTS.
+- Anote o IP público da instância.
+- Nas regras de rede (Security List / VCN), libere as portas `80` (HTTP) e `443` (HTTPS) para entrada — sem isso o Caddy não consegue servir nada externamente.
+
+### 2. Instalar Docker na VM
+
+Conecte via SSH na VM e rode:
+
+```bash
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
+```
+
+Desconecte e reconecte o SSH para o grupo `docker` ter efeito.
+
+### 3. Clonar o repositório e configurar
+
+```bash
+git clone https://github.com/GabrielVianaNunes/TCC.git
+cd TCC
+cp .env.example .env
+nano .env   # preencha POSTGRES_PASSWORD, ADMIN_BOOTSTRAP_PASSWORD, e as variáveis BACKUP_* quando tiver a conta S3
+```
+
+**Nunca** commite o `.env` preenchido — ele fica só na VM, local.
+
+### 4. Subir a aplicação
+
+```bash
+docker compose up -d --build
+```
+
+Acompanhar os logs:
+
+```bash
+docker compose logs -f app
+```
+
+### 5. Apontar um domínio (quando disponível)
+
+1. No provedor de DNS do seu domínio, crie um registro `A` apontando pro IP público da VM.
+2. Edite `DOMAIN=seu-dominio.com` no `.env` da VM.
+3. Reinicie o Caddy: `docker compose restart caddy` — ele obtém e renova o certificado Let's Encrypt automaticamente a partir daí.
+
+Sem domínio configurado (`DOMAIN=localhost`, o padrão), o Caddy ainda faz upgrade automático pra HTTPS (certificado autoassinado, redirect de `:80` pra `:443`) — confirmado ao vivo na Task 2. A aplicação continua acessível pelo IP da VM, só que via HTTPS com aviso de certificado não confiável no navegador até um domínio real ser configurado.
+
+### 6. Atualizar depois de mudanças no código
+
+```bash
+git pull
+docker compose up -d --build
+```
+
+O `restart: unless-stopped` já configurado garante que a aplicação volta sozinha se a VM reiniciar (ex.: depois de uma atualização de sistema operacional) — não precisa de nenhuma ação manual pra isso.
