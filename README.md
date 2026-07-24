@@ -15,6 +15,7 @@ Sistema de gestão para o Centro de Excelência em Metrologia (CEM) do SENAI Zei
 - [Executando](#executando)
 - [Build](#build)
 - [Testes](#testes)
+- [Backup e restauração](#backup-e-restauração)
 - [Módulos principais](#módulos-principais)
 - [Segurança](#segurança)
 - [Estrutura do repositório](#estrutura-do-repositório)
@@ -114,11 +115,15 @@ O Flyway migra o schema automaticamente na primeira execução. Rodar a suíte:
 
 ```bash
 cd pilot
-./mvnw test          # roda os 54 testes
+./mvnw test          # roda os 60 testes
 ./mvnw verify         # roda os testes + checagem de cobertura mínima (JaCoCo)
 ```
 
 `mvn verify` falha se a cobertura de linha cair abaixo de **35%** no projeto como um todo ou **30%** no pacote `service` — um piso contra regressão, não uma meta final. Veja [CONTRIBUTING.md](CONTRIBUTING.md#cobertura-de-testes) para os detalhes e a meta de longo prazo.
+
+## Backup e restauração
+
+O banco tem backup automatizado diário (`pg_dump -Fc` + upload para storage S3-compatível + retenção configurável), rodando dentro do próprio app — sem depender de cron do host. Configuração e passo a passo de restauração (já validado ao vivo) em [`docs/RUNBOOK.md`](docs/RUNBOOK.md).
 
 ## Módulos principais
 
