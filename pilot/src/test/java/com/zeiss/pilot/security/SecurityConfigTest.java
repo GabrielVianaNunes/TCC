@@ -74,4 +74,25 @@ class SecurityConfigTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", endsWith("/login")));
     }
+
+    @Test
+    void backupSemAutenticacaoRedirecionaParaLogin() throws Exception {
+        mockMvc.perform(post("/api/backup/executar").with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", endsWith("/login")));
+    }
+
+    @Test
+    @WithMockUser(roles = "CLIENTE")
+    void backupAutenticadoSemRoleAdminRetorna403() throws Exception {
+        mockMvc.perform(post("/api/backup/executar").with(csrf()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void backupAutenticadoComRoleAdminNaoBloqueiaAcessoDeSeguranca() throws Exception {
+        mockMvc.perform(post("/api/backup/executar").with(csrf()))
+                .andExpect(status().isServiceUnavailable());
+    }
 }
