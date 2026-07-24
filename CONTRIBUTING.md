@@ -83,6 +83,18 @@ Regras de autorização ficam centralizadas em `SecurityConfig` (matchers por ro
 
 Toda mudança de schema (nova tabela, nova coluna, alteração de tipo) precisa de uma migração Flyway em `pilot/src/main/resources/db/migration/`, nomeada `V{N}__descricao_em_snake_case.sql` — nunca edite uma migração já aplicada, sempre crie uma nova. `ddl-auto=validate` vai barrar a subida da aplicação se uma entidade não bater com o schema, então crie a migração antes de mudar a entidade correspondente.
 
+### Cobertura de testes
+
+O projeto usa JaCoCo (`pilot/pom.xml`) para travar contra regressão de cobertura — `mvn verify` falha se a cobertura de linha cair abaixo de:
+- **35%** no projeto como um todo.
+- **30%** no pacote `com.zeiss.pilot.service` (camada de regra de negócio, por isso tem uma trava própria além da geral).
+
+Esses números são um **piso**, não uma meta — foram calibrados com margem abaixo da cobertura real no momento em que a regra foi criada (~40% geral, ~37% em `service`), só para impedir que a cobertura regrida (ex.: remover um teste sem perceber, ou adicionar bastante código novo sem teste). `mvn test` continua funcionando normalmente sem essa checagem; só `mvn verify` (e portanto qualquer pipeline de CI futuro que rode `verify`) a aplica.
+
+**Meta de longo prazo** (não imposta por ferramenta ainda, é o norte para onde o piso deve subir a cada rodada futura que adicionar testes de service): 70-80% em `service`, 60-70% no projeto como um todo, 50-60% em `controller` (esperado ficar mais baixo — controllers devem ser finos e delegar a lógica para o service).
+
+Todo service ou endpoint novo deveria vir acompanhado de teste — mesmo sem uma meta alta imposta hoje, é assim que o piso sobe organicamente em vez de regredir.
+
 ### Frontend
 
 Páginas novas seguem o padrão modular já estabelecido: um template Thymeleaf em `templates/`, carregando `i18n.js` + `core.js` + `api.js` + `ui.js` + `modules/notifications.js` + um módulo próprio em `static/js/modules/[pagina].js`. Não crie arquivos JS soltos na raiz de `static/js/` (esse era o padrão antigo, já descontinuado — ver `PROJECT_STATUS.md` para a lista de arquivos legados pendentes de remoção).
