@@ -115,7 +115,7 @@ O Flyway migra o schema automaticamente na primeira execução. Rodar a suíte:
 
 ```bash
 cd pilot
-./mvnw test          # roda os 60 testes
+./mvnw test          # roda os 81 testes
 ./mvnw verify         # roda os testes + checagem de cobertura mínima (JaCoCo)
 ```
 
