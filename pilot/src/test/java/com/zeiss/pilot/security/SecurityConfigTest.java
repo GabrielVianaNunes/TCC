@@ -2,11 +2,15 @@ package com.zeiss.pilot.security;
 
 import static org.hamcrest.Matchers.endsWith;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.zeiss.pilot.entity.Usuario;
+import com.zeiss.pilot.repository.UsuarioRepository;
 import com.zeiss.pilot.service.BackupService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,19 @@ class SecurityConfigTest {
 
     @MockitoBean
     private BackupService backupService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    private Long salvarUsuario(String email, String cargo, String role) {
+        Usuario u = new Usuario();
+        u.setNome("Fixture " + email);
+        u.setEmail(email);
+        u.setSenha("x");
+        u.setCargo(cargo);
+        u.setRole(role);
+        return usuarioRepository.save(u).getId();
+    }
 
     @Test
     void usuariosSemAutenticacaoRedirecionaParaLogin() throws Exception {
@@ -99,5 +116,85 @@ class SecurityConfigTest {
     void backupAutenticadoComRoleAdminNaoBloqueiaAcessoDeSeguranca() throws Exception {
         mockMvc.perform(post("/api/backup/executar").with(csrf()))
                 .andExpect(status().isServiceUnavailable());
+    }
+
+    @Test
+    @WithMockUser(username = "gestor.sct@zeiss.com", roles = "GESTOR")
+    void gestorConsegueCriarUsuarioComCargoEstagiario() throws Exception {
+        salvarUsuario("gestor.sct@zeiss.com", "GESTOR", "GESTOR");
+
+        mockMvc.perform(post("/api/usuarios")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\":\"Novo Estagiário\",\"email\":\"novo.estagiario.sct@zeiss.com\",\"senha\":\"senha123\",\"cargo\":\"ESTAGIARIO\"}"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "gestor2.sct@zeiss.com", roles = "GESTOR")
+    void gestorRecebe403AoTentarCriarUsuarioComCargoGestor() throws Exception {
+        salvarUsuario("gestor2.sct@zeiss.com", "GESTOR", "GESTOR");
+
+        mockMvc.perform(post("/api/usuarios")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\":\"Outro Gestor\",\"email\":\"outro.gestor.sct@zeiss.com\",\"senha\":\"senha123\",\"cargo\":\"GESTOR\"}"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "gestor3.sct@zeiss.com", roles = "GESTOR")
+    void gestorConsegueEditarUsuarioQueJaEEstagiario() throws Exception {
+        salvarUsuario("gestor3.sct@zeiss.com", "GESTOR", "GESTOR");
+        Long alvoId = salvarUsuario("estagiario.alvo.sct@zeiss.com", "ESTAGIARIO", "ESTAGIARIO");
+
+        mockMvc.perform(put("/api/usuarios/" + alvoId)
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\":\"Estagiário Editado\",\"email\":\"estagiario.alvo.sct@zeiss.com\",\"cargo\":\"ESTAGIARIO\"}"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "gestor4.sct@zeiss.com", roles = "GESTOR")
+    void gestorRecebe403AoTentarEditarUsuarioQueJaEAdmin() throws Exception {
+        salvarUsuario("gestor4.sct@zeiss.com", "GESTOR", "GESTOR");
+        Long alvoId = salvarUsuario("admin.alvo.sct@zeiss.com", "DIRETOR_CEM", "ADMIN");
+
+        mockMvc.perform(put("/api/usuarios/" + alvoId)
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\":\"Tentativa\",\"email\":\"admin.alvo.sct@zeiss.com\",\"cargo\":\"DIRETOR_CEM\"}"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "gestor5.sct@zeiss.com", roles = "GESTOR")
+    void gestorConsegueExcluirUsuarioQueJaEEstagiario() throws Exception {
+        salvarUsuario("gestor5.sct@zeiss.com", "GESTOR", "GESTOR");
+        Long alvoId = salvarUsuario("estagiario.excluir.sct@zeiss.com", "ESTAGIARIO", "ESTAGIARIO");
+
+        mockMvc.perform(delete("/api/usuarios/" + alvoId).with(csrf()))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(username = "gestor6.sct@zeiss.com", roles = "GESTOR")
+    void gestorRecebe403AoTentarExcluirUsuarioQueJaEAdmin() throws Exception {
+        salvarUsuario("gestor6.sct@zeiss.com", "GESTOR", "GESTOR");
+        Long alvoId = salvarUsuario("admin.excluir.sct@zeiss.com", "DIRETOR_CEM", "ADMIN");
+
+        mockMvc.perform(delete("/api/usuarios/" + alvoId).with(csrf()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CLIENTE")
+    void usuariosPostAutenticadoSemRoleAdminOuGestorRetorna403() throws Exception {
+        mockMvc.perform(post("/api/usuarios")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\":\"X\",\"email\":\"x.sct@zeiss.com\",\"senha\":\"senha123\",\"cargo\":\"ESTAGIARIO\"}"))
+                .andExpect(status().isForbidden());
     }
 }

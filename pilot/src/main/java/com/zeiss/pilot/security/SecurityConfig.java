@@ -25,7 +25,8 @@ public class SecurityConfig {
                     "/login", "/css/**", "/img/**", "/js/**",
                     "/avaliacao", "/qrcode-avaliacao"
                 ).permitAll()
-                .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
+                .requestMatchers("/api/usuarios/admins").hasRole("ADMIN")
+                .requestMatchers("/api/usuarios/**").hasAnyRole("ADMIN", "GESTOR")
                 .requestMatchers(HttpMethod.POST, "/api/avaliacoes").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/documentos/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/eventos").hasRole("ADMIN")
