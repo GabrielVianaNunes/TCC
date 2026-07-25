@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="/css/components.css" />
   <link rel="icon" href="/img/zeiss-logo.png" type="image/png" />
 </head>
-<body>
+<body th:attr="data-papel-usuario-logado=${papelUsuarioLogado}">
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="app-shell">
   <nav class="sidebar" id="sidebar">

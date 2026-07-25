@@ -313,7 +313,7 @@ const Auth = (() => {
 
   const PERMS = {
     ESTAGIARIO:  { delete: false, edit: false, viewFinancial: false, viewEditais: false, viewDocumentos: false, viewUsuarios: false, create: true  },
-    GESTOR:      { delete: true,  edit: true,  viewFinancial: true,  viewEditais: true,  viewDocumentos: true,  viewUsuarios: false, create: true  },
+    GESTOR:      { delete: true,  edit: true,  viewFinancial: true,  viewEditais: true,  viewDocumentos: true,  viewUsuarios: true,  create: true  },
     DIRETOR_CEM: { delete: true,  edit: true,  viewFinancial: true,  viewEditais: true,  viewDocumentos: true,  viewUsuarios: true,  create: true  },
   };
 
@@ -321,13 +321,13 @@ const Auth = (() => {
     '/editais/lista':    ['GESTOR', 'DIRETOR_CEM'],
     '/editais/detalhes': ['GESTOR', 'DIRETOR_CEM'],
     '/documentos':       ['GESTOR', 'DIRETOR_CEM'],
-    '/usuarios':         ['DIRETOR_CEM'],
+    '/usuarios':         ['GESTOR', 'DIRETOR_CEM'],
   };
 
   const NAV_ROLES = {
     '/editais/lista': ['GESTOR', 'DIRETOR_CEM'],
     '/documentos':    ['GESTOR', 'DIRETOR_CEM'],
-    '/usuarios':      ['DIRETOR_CEM'],
+    '/usuarios':      ['GESTOR', 'DIRETOR_CEM'],
   };
 
   const ROLE_COLORS = {

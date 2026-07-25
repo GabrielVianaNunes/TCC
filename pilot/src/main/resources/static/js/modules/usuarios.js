@@ -9,6 +9,13 @@
   const API = '/api/usuarios';
   const PAGE_SIZE = 12;
 
+  const papelLogado = document.body.dataset.papelUsuarioLogado || '';
+  const ehGestor = papelLogado === 'GESTOR';
+
+  function foraDoEscopoDoGestor(cargo) {
+    return ehGestor && (cargo || '').toUpperCase() !== 'ESTAGIARIO';
+  }
+
   let allItems    = [];
   let filtered    = [];
   let currentPage = 0;
@@ -129,6 +136,10 @@
   function editar(id) {
     const u = allItems.find(x => x.id === id);
     if (!u) { Toast.error(_t('Usuário não encontrado.')); return; }
+    if (foraDoEscopoDoGestor(u.cargo)) {
+      Toast.error(_t('Você não tem permissão para editar esse usuário.'));
+      return;
+    }
     document.getElementById('usuarioId').value  = u.id;
     document.getElementById('nome').value        = u.nome || '';
     document.getElementById('email').value       = u.email || '';
@@ -189,6 +200,11 @@
     const current  = allItems.find(u => String(u.id) === String(id));
     if (sessUser && current && sessUser.email === current.email) {
       Toast.error(_t('Você não pode excluir o próprio usuário.'));
+      return;
+    }
+
+    if (foraDoEscopoDoGestor(current?.cargo)) {
+      Toast.error(_t('Você não tem permissão para excluir esse usuário.'));
       return;
     }
 
@@ -335,6 +351,10 @@
   /* ── Init ─────────────────────────────────────────────────── */
   function init() {
     switchTab('dados');
+    if (ehGestor) {
+      document.querySelectorAll('#cargo option[value="GESTOR"], #cargo option[value="DIRETOR_CEM"]')
+        .forEach(o => o.remove());
+    }
     loadUsuarios();
     document.getElementById('btnNovoUsuario').addEventListener('click', abrirModalNovo);
     document.getElementById('btnSalvarUsuario').addEventListener('click', salvar);

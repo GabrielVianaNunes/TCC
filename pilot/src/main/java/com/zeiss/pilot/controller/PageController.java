@@ -29,7 +29,14 @@ public class PageController {
     }
 
     @GetMapping("/usuarios")
-    public String paginaUsuarios() {
+    public String paginaUsuarios(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String papel = "";
+        try {
+            papel = usuarioService.buscarPorEmail(userDetails.getUsername()).getRole();
+        } catch (RuntimeException ignored) {
+            // usuário autenticado mas ausente no banco (ex.: testes com @WithMockUser) — mantém string vazia
+        }
+        model.addAttribute("papelUsuarioLogado", papel);
         return "usuarios";
     }
 
