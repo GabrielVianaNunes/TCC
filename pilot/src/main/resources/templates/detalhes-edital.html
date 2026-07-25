@@ -193,7 +193,7 @@
           <div class="detail-section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem">
             <div class="detail-field__label" style="margin-bottom:0.5rem">Valor do Edital</div>
             <div class="detail-field__value detail-field__value--large" id="editalValor"
-                 th:text="${edital.valor != null} ? ('R$ ' + #numbers.formatDecimal(edital.valor, 1, 3, 'POINT', 2, 'COMMA')) : '—'">R$ 0,00</div>
+                 th:text="${edital.valor != null ? 'R$ ' + #numbers.formatDecimal(edital.valor, 1, 3, 'POINT', 2, 'COMMA') : '—'}">R$ 0,00</div>
           </div>
           <div class="detail-section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem">
             <div class="detail-field__label" style="margin-bottom:0.75rem">Status Atual</div>
