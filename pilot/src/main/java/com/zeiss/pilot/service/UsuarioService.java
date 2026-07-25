@@ -3,6 +3,7 @@ package com.zeiss.pilot.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,11 @@ import com.zeiss.pilot.repository.UsuarioRepository;
 @Service
 public class UsuarioService {
 
+    private static final String CARGO_ESTAGIARIO = "ESTAGIARIO";
+    private static final String CARGO_GESTOR = "GESTOR";
+    private static final String CARGO_DIRETOR_CEM = "DIRETOR_CEM";
+    private static final String ROLE_GESTOR = "GESTOR";
+
     private final UsuarioRepository usuarioRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -22,13 +28,9 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UsuarioDTO criarUsuario(Usuario usuario) {
-        // Derive security role from organizational cargo
-        if (usuario.getCargo() != null && !usuario.getCargo().equalsIgnoreCase("ESTAGIARIO")) {
-            usuario.setRole("ADMIN");
-        } else {
-            usuario.setRole("CLIENTE");
-        }
+    public UsuarioDTO criarUsuario(Usuario usuario, Usuario chamador) {
+        verificarEscopoGestor(chamador, usuario.getCargo());
+        usuario.setRole(derivarRole(usuario.getCargo()));
 
         if (usuario.getSenha() == null || usuario.getSenha().isBlank()) {
             throw new IllegalArgumentException("Senha obrigatória para criar usuário");
@@ -38,7 +40,7 @@ public class UsuarioService {
         Usuario salvo = usuarioRepository.save(usuario);
         return toDTO(salvo);
     }
-    
+
 
     public List<UsuarioDTO> listarUsuarios() {
         return usuarioRepository.findAll()
@@ -47,17 +49,21 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    public UsuarioDTO atualizarUsuario(Long id, Usuario usuarioAtualizado) {
+    public UsuarioDTO atualizarUsuario(Long id, Usuario usuarioAtualizado, Usuario chamador) {
         Usuario existente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        verificarEscopoGestor(chamador, existente.getCargo());
+        if (usuarioAtualizado.getCargo() != null) {
+            verificarEscopoGestor(chamador, usuarioAtualizado.getCargo());
+        }
 
         existente.setNome(usuarioAtualizado.getNome());
         existente.setEmail(usuarioAtualizado.getEmail());
 
         if (usuarioAtualizado.getCargo() != null) {
             existente.setCargo(usuarioAtualizado.getCargo());
-            String derivedRole = "ESTAGIARIO".equalsIgnoreCase(usuarioAtualizado.getCargo()) ? "CLIENTE" : "ADMIN";
-            existente.setRole(derivedRole);
+            existente.setRole(derivarRole(usuarioAtualizado.getCargo()));
         }
 
         if (usuarioAtualizado.getSenha() != null && !usuarioAtualizado.getSenha().isBlank()) {
@@ -68,8 +74,33 @@ public class UsuarioService {
         return toDTO(salvo);
     }
 
-    public void deletarUsuario(Long id) {
+    public void deletarUsuario(Long id, Usuario chamador) {
+        Usuario existente = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        verificarEscopoGestor(chamador, existente.getCargo());
         usuarioRepository.deleteById(id);
+    }
+
+    private String derivarRole(String cargo) {
+        if (CARGO_ESTAGIARIO.equalsIgnoreCase(cargo)) {
+            return "ESTAGIARIO";
+        }
+        if (CARGO_GESTOR.equalsIgnoreCase(cargo)) {
+            return "GESTOR";
+        }
+        if (CARGO_DIRETOR_CEM.equalsIgnoreCase(cargo)) {
+            return "ADMIN";
+        }
+        return "CLIENTE";
+    }
+
+    private void verificarEscopoGestor(Usuario chamador, String cargoAlvo) {
+        if (!ROLE_GESTOR.equalsIgnoreCase(chamador.getRole())) {
+            return;
+        }
+        if (!CARGO_ESTAGIARIO.equalsIgnoreCase(cargoAlvo)) {
+            throw new AccessDeniedException("Gestor só pode gerenciar usuários com cargo Estagiário.");
+        }
     }
 
     private UsuarioDTO toDTO(Usuario usuario) {
@@ -95,11 +126,11 @@ public class UsuarioService {
         return usuarioRepository.findById(id)
                 .map(this::toDTO)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-    }    
+    }
 
     public Usuario buscarPorEmail(String email) {
         return usuarioRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o email: " + email));
-    }    
-    
+    }
+
 }

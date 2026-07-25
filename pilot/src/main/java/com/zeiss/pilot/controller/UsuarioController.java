@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +34,11 @@ public class UsuarioController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    private Usuario usuarioLogado() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return usuarioService.buscarPorEmail(auth.getName());
+    }
+
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> listarUsuarios(@RequestParam(required = false) String role) {
         if (role != null && !role.isEmpty()) {
@@ -52,17 +59,17 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody Usuario usuario) {
-        return ResponseEntity.ok(usuarioService.criarUsuario(usuario));
+        return ResponseEntity.ok(usuarioService.criarUsuario(usuario, usuarioLogado()));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
-        return ResponseEntity.ok(usuarioService.atualizarUsuario(id, usuario));
+        return ResponseEntity.ok(usuarioService.atualizarUsuario(id, usuario, usuarioLogado()));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
-        usuarioService.deletarUsuario(id);
+        usuarioService.deletarUsuario(id, usuarioLogado());
         return ResponseEntity.noContent().build();
     }
 
