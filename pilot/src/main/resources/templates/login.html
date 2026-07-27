@@ -73,6 +73,9 @@
         <div id="feedbackError" class="login-feedback login-feedback--error" style="display:none">
           <strong>Credenciais inválidas.</strong> Verifique seu e-mail e senha e tente novamente.
         </div>
+        <div id="feedbackBloqueado" class="login-feedback login-feedback--error" style="display:none">
+          <strong>Muitas tentativas de login.</strong> Aguarde alguns minutos e tente novamente.
+        </div>
         <div id="feedbackLogout" class="login-feedback login-feedback--success" style="display:none;position:relative;overflow:hidden;padding-bottom:10px">
           <span>&#10003; Logout realizado com sucesso.</span>
           <div id="feedbackLogoutBar" style="position:absolute;bottom:0;left:0;height:3px;width:100%;background:rgba(34,197,94,0.5);transform-origin:left;border-radius:0 0 var(--border-radius-md) var(--border-radius-md)"></div>
@@ -106,7 +109,8 @@
                 }, autoDismiss);
               }
             }
-            if(p.has('error'))  showFeedback(document.getElementById('feedbackError'),  0);
+            if(p.has('bloqueado')) showFeedback(document.getElementById('feedbackBloqueado'), 0);
+            else if(p.has('error'))  showFeedback(document.getElementById('feedbackError'),  0);
             if(p.has('logout')) {
               showFeedback(document.getElementById('feedbackLogout'), 4000);
               var bar = document.getElementById('feedbackLogoutBar');
