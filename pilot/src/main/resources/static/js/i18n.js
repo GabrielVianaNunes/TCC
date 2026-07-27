@@ -250,7 +250,6 @@
     'Realizada':                       { 'pt-BR':'Realizada',                       'en':'Completed',                           'de':'Durchgeführt'                          },
     'Pendente':                        { 'pt-BR':'Pendente',                        'en':'Pending',                             'de':'Ausstehend'                            },
     'OK':                              { 'pt-BR':'OK',                              'en':'OK',                                  'de':'OK'                                    },
-    'Aviso':                           { 'pt-BR':'Aviso',                           'en':'Warning',                             'de':'Warnung'                               },
     'Crítico':                         { 'pt-BR':'Crítico',                         'en':'Critical',                            'de':'Kritisch'                              },
 
     // ── Cargos ──────────────────────────────────────────────────────
@@ -328,7 +327,6 @@
     'Nenhum evento neste dia.':        { 'pt-BR':'Nenhum evento neste dia.',        'en':'No events on this day.',              'de':'Keine Veranstaltungen an diesem Tag.'  },
     'Nenhum evento próximo.':          { 'pt-BR':'Nenhum evento próximo.',          'en':'No upcoming events.',                 'de':'Keine bevorstehenden Veranstaltungen.' },
     'Nenhum documento anexado.':       { 'pt-BR':'Nenhum documento anexado.',       'en':'No documents attached.',              'de':'Keine Dokumente angehängt.'            },
-    'Nenhuma sessão ativa encontrada.':{ 'pt-BR':'Nenhuma sessão ativa encontrada.','en':'No active session found.',            'de':'Keine aktive Sitzung gefunden.'        },
     'Nenhum item para exportar.':      { 'pt-BR':'Nenhum item para exportar.',      'en':'No items to export.',                 'de':'Keine Artikel zum Exportieren.'        },
     'Nenhum / Não aplicável':          { 'pt-BR':'Nenhum / Não aplicável',          'en':'None / Not applicable',               'de':'Keine / Nicht zutreffend'              },
     'Registro removido.':              { 'pt-BR':'Registro removido.',              'en':'Record removed.',                     'de':'Eintrag entfernt.'                     },
@@ -340,11 +338,9 @@
     'Informe o nome do usuário.':        { 'pt-BR':'Informe o nome do usuário.',       'en':'Enter the user name.',                'de':'Benutzernamen eingeben.'               },
     'Informe a data de expiração.':      { 'pt-BR':'Informe a data de expiração.',     'en':'Enter the expiration date.',          'de':'Ablaufdatum eingeben.'                 },
     'Selecione um arquivo PDF.':         { 'pt-BR':'Selecione um arquivo PDF.',        'en':'Select a PDF file.',                  'de':'PDF-Datei auswählen.'                  },
-    'Preencha os campos obrigatórios.':  { 'pt-BR':'Preencha os campos obrigatórios.', 'en':'Fill in all required fields.',        'de':'Füllen Sie alle Pflichtfelder aus.'    },
     'visita(s) encontrada(s)':           { 'pt-BR':'visita(s) encontrada(s)',          'en':'visit(s) found',                      'de':'Besuch/Besuche gefunden'               },
     'Remover este registro de uso?':     { 'pt-BR':'Remover este registro de uso?',    'en':'Remove this usage record?',           'de':'Diesen Nutzungseintrag entfernen?'     },
     'Remover este registro de manutenção?': { 'pt-BR':'Remover este registro de manutenção?', 'en':'Remove this maintenance record?', 'de':'Diesen Wartungseintrag entfernen?' },
-    'Cancelar este agendamento?':        { 'pt-BR':'Cancelar este agendamento?',       'en':'Cancel this appointment?',            'de':'Diesen Termin stornieren?'             },
     'Não foi possível carregar o edital.': { 'pt-BR':'Não foi possível carregar o edital.', 'en':'Could not load the tender.', 'de':'Ausschreibung konnte nicht geladen werden.' },
     'Erro ao salvar edital.':          { 'pt-BR':'Erro ao salvar edital.',           'en':'Error saving tender.',                'de':'Fehler beim Speichern der Ausschreibung.' },
     'Erro ao salvar visita.':          { 'pt-BR':'Erro ao salvar visita.',           'en':'Error saving visit.',                 'de':'Fehler beim Speichern des Besuchs.'    },
@@ -408,14 +404,11 @@
     // ── Tipos de documento ──────────────────────────────────────────
     'Certificado de Treinamento':      { 'pt-BR':'Certificado de Treinamento',      'en':'Training Certificate',                'de':'Schulungszertifikat'                   },
     'Termo de Confidencialidade':      { 'pt-BR':'Termo de Confidencialidade',      'en':'Confidentiality Agreement',           'de':'Vertraulichkeitsvereinbarung'          },
-    'Currículo':                       { 'pt-BR':'Currículo',                       'en':'Resume/CV',                           'de':'Lebenslauf'                            },
     'Formulário de Avaliação':         { 'pt-BR':'Formulário de Avaliação',         'en':'Evaluation Form',                     'de':'Bewertungsformular'                    },
     'Atestado Médico':                 { 'pt-BR':'Atestado Médico',                 'en':'Medical Certificate',                 'de':'Ärztliches Attest'                     },
     'Outro':                           { 'pt-BR':'Outro',                           'en':'Other',                               'de':'Sonstiges'                             },
 
     // ── Tipos de manutenção ─────────────────────────────────────────
-    'Revisão Geral':                   { 'pt-BR':'Revisão Geral',                   'en':'General Overhaul',                    'de':'Generalüberholung'                     },
-    'Revisão de Ponteiras':            { 'pt-BR':'Revisão de Ponteiras',            'en':'Probe Tip Review',                    'de':'Tasterspitenprüfung'                   },
     'Limpeza':                         { 'pt-BR':'Limpeza',                         'en':'Cleaning',                            'de':'Reinigung'                             },
     'Troca de Componente':             { 'pt-BR':'Troca de Componente',             'en':'Component Replacement',               'de':'Komponentenaustausch'                  },
     'Calibração':                      { 'pt-BR':'Calibração',                      'en':'Calibration',                         'de':'Kalibrierung'                          },
@@ -456,7 +449,6 @@
     'Alta':                            { 'pt-BR':'Alta',                            'en':'High',                                'de':'Hoch'                                  },
     'Média':                           { 'pt-BR':'Média',                           'en':'Medium',                              'de':'Mittel'                                },
     'Baixa':                           { 'pt-BR':'Baixa',                           'en':'Low',                                 'de':'Niedrig'                               },
-    'Backlog':                         { 'pt-BR':'Backlog',                         'en':'Backlog',                             'de':'Rückstand'                             },
     'Em Revisão':                      { 'pt-BR':'Em Revisão',                      'en':'In Review',                           'de':'In Überprüfung'                        },
     'Nenhuma tarefa aqui':             { 'pt-BR':'Nenhuma tarefa aqui',             'en':'No tasks here',                       'de':'Keine Aufgaben hier'                   },
     'Mover para Backlog':              { 'pt-BR':'Mover para Backlog',              'en':'Move to Backlog',                     'de':'Nach Rückstand verschieben'            },
@@ -576,7 +568,6 @@
     'Nota salva com sucesso!':         { 'pt-BR':'Nota salva com sucesso!',         'en':'Note saved successfully!',            'de':'Notiz erfolgreich gespeichert!'        },
     'Nota do diretor salva!':          { 'pt-BR':'Nota do diretor salva!',          'en':"Director's note saved!",              'de':'Notiz des Direktors gespeichert!'      },
     'Máquina desligada com sucesso.':  { 'pt-BR':'Máquina desligada com sucesso.',  'en':'Machine turned off successfully.',    'de':'Maschine erfolgreich ausgeschaltet.'   },
-    'Uso registrado com sucesso.':     { 'pt-BR':'Uso registrado com sucesso.',     'en':'Use registered successfully.',        'de':'Nutzung erfolgreich registriert.'      },
     'Manutenção atualizada.':          { 'pt-BR':'Manutenção atualizada.',          'en':'Maintenance updated.',                'de':'Wartung aktualisiert.'                 },
     'Manutenção registrada.':          { 'pt-BR':'Manutenção registrada.',          'en':'Maintenance registered.',             'de':'Wartung registriert.'                  },
     'Manutenção atualizada!':          { 'pt-BR':'Manutenção atualizada!',          'en':'Maintenance updated!',                'de':'Wartung aktualisiert!'                 },
@@ -584,12 +575,10 @@
     'Manutenção excluída.':            { 'pt-BR':'Manutenção excluída.',            'en':'Maintenance deleted.',                'de':'Wartung gelöscht.'                     },
     'Agendamento atualizado.':         { 'pt-BR':'Agendamento atualizado.',         'en':'Appointment updated.',                'de':'Termin aktualisiert.'                  },
     'Agendamento criado.':             { 'pt-BR':'Agendamento criado.',             'en':'Appointment created.',                'de':'Termin erstellt.'                      },
-    'Agendamento cancelado.':          { 'pt-BR':'Agendamento cancelado.',          'en':'Appointment cancelled.',              'de':'Termin storniert.'                     },
     'Tarefa atualizada!':              { 'pt-BR':'Tarefa atualizada!',              'en':'Task updated!',                       'de':'Aufgabe aktualisiert!'                 },
     'Tarefa criada!':                  { 'pt-BR':'Tarefa criada!',                  'en':'Task created!',                      'de':'Aufgabe erstellt!'                     },
     'Tarefa excluída.':                { 'pt-BR':'Tarefa excluída.',                'en':'Task deleted.',                       'de':'Aufgabe gelöscht.'                     },
     'Verificação ambiental registrada com sucesso!': { 'pt-BR':'Verificação ambiental registrada com sucesso!', 'en':'Environmental check registered successfully!', 'de':'Umgebungscheck erfolgreich registriert!' },
-    'Avaliação enviada! Obrigado.':    { 'pt-BR':'Avaliação enviada! Obrigado.',    'en':'Evaluation submitted! Thank you.',    'de':'Bewertung abgesendet! Danke.'          },
     'Retirada registrada com sucesso!':{ 'pt-BR':'Retirada registrada com sucesso!','en':'Withdrawal registered successfully!', 'de':'Entnahme erfolgreich registriert!'     },
 
     // ── Toasts — erro ───────────────────────────────────────────────
@@ -719,38 +708,18 @@
     'btn.back':                        { 'pt-BR':'Voltar',                          'en':'Back',                                'de':'Zurück'                                },
 
     // ── Almoxarifado — status e botões ──────────────────────────────
-    'Crítico':                         { 'pt-BR':'Crítico',                         'en':'Critical',                            'de':'Kritisch'                              },
-    'OK':                              { 'pt-BR':'OK',                              'en':'OK',                                  'de':'OK'                                    },
     'Reabastecimento rápido':          { 'pt-BR':'Reabastecimento rápido',          'en':'Quick restock',                       'de':'Schnelle Auffüllung'                   },
     'Movimentar':                      { 'pt-BR':'Movimentar',                      'en':'Move stock',                          'de':'Lager bewegen'                         },
     'Histórico':                       { 'pt-BR':'Histórico',                       'en':'History',                             'de':'Verlauf'                               },
     'estoque atual:':                  { 'pt-BR':'estoque atual:',                  'en':'current stock:',                      'de':'aktueller Bestand:'                    },
     'Disponível:':                     { 'pt-BR':'Disponível:',                     'en':'Available:',                          'de':'Verfügbar:'                            },
-    'Entrada':                         { 'pt-BR':'Entrada',                         'en':'Entry',                               'de':'Eingang'                               },
-    'Saída':                           { 'pt-BR':'Saída',                           'en':'Exit',                                'de':'Ausgang'                               },
     'registrada! Novo estoque:':       { 'pt-BR':'registrada! Novo estoque:',       'en':'registered! New stock:',              'de':'registriert! Neuer Bestand:'           },
     'Reabastecimento de emergência':   { 'pt-BR':'Reabastecimento de emergência',   'en':'Emergency restock',                   'de':'Notauffüllung'                         },
     'Quantidade insuficiente. Estoque atual:': { 'pt-BR':'Quantidade insuficiente. Estoque atual:', 'en':'Insufficient quantity. Current stock:', 'de':'Unzureichende Menge. Aktueller Bestand:' },
     'itens exportados com sucesso.':   { 'pt-BR':'itens exportados com sucesso.',   'en':'items exported successfully.',        'de':'Artikel erfolgreich exportiert.'       },
-    'registros exportados.':           { 'pt-BR':'registros exportados.',           'en':'records exported.',                   'de':'Datensätze exportiert.'                },
-    'Erro ao carregar dados':          { 'pt-BR':'Erro ao carregar dados',          'en':'Error loading data',                  'de':'Fehler beim Laden der Daten'           },
-    'Verifique a conexão com o servidor.': { 'pt-BR':'Verifique a conexão com o servidor.', 'en':'Check the server connection.', 'de':'Serververbindung prüfen.'              },
     'Verifique sua conexão e tente novamente.': { 'pt-BR':'Verifique sua conexão e tente novamente.', 'en':'Check your connection and try again.', 'de':'Verbindung prüfen und erneut versuchen.' },
-    'Nenhuma amostra encontrada':      { 'pt-BR':'Nenhuma amostra encontrada',      'en':'No samples found',                    'de':'Keine Proben gefunden'                 },
-    'Ajuste os filtros ou cadastre uma nova amostra.': { 'pt-BR':'Ajuste os filtros ou cadastre uma nova amostra.', 'en':'Adjust the filters or register a new sample.', 'de':'Filter anpassen oder neue Probe registrieren.' },
-    'Nenhum edital encontrado':        { 'pt-BR':'Nenhum edital encontrado',        'en':'No tenders found',                    'de':'Keine Ausschreibungen gefunden'        },
-    'Crie um novo edital ou ajuste os filtros.': { 'pt-BR':'Crie um novo edital ou ajuste os filtros.', 'en':'Create a new tender or adjust the filters.', 'de':'Neue Ausschreibung erstellen oder Filter anpassen.' },
-    'Nenhum item para exportar.':      { 'pt-BR':'Nenhum item para exportar.',      'en':'No items to export.',                 'de':'Keine Artikel zum Exportieren.'        },
     'Termo assinado anexado':          { 'pt-BR':'Termo assinado anexado',          'en':'Signed term attached',                'de':'Unterzeichnetes Dokument angehängt'    },
-    'Registrar devolução':             { 'pt-BR':'Registrar devolução',             'en':'Register return',                     'de':'Rückgabe registrieren'                 },
-    'Gerar Termo de Custódia':         { 'pt-BR':'Gerar Termo de Custódia',         'en':'Generate Custody Term',               'de':'Sorgeberechtigungs-Dokument erstellen' },
-    'Anexar termo assinado':           { 'pt-BR':'Anexar termo assinado',           'en':'Attach signed term',                  'de':'Unterzeichnetes Dokument anhängen'     },
-    'Termo de custódia enviado para impressão.': { 'pt-BR':'Termo de custódia enviado para impressão.', 'en':'Custody term sent for printing.', 'de':'Sorgeberechtigungsdokument zum Drucken gesendet.' },
-    'Documento atualizado!':           { 'pt-BR':'Documento atualizado!',           'en':'Document updated!',                   'de':'Dokument aktualisiert!'                },
-    'Documento anexado!':              { 'pt-BR':'Documento anexado!',              'en':'Document attached!',                  'de':'Dokument angehängt!'                   },
-    'Documento removido.':             { 'pt-BR':'Documento removido.',             'en':'Document removed.',                   'de':'Dokument entfernt.'                    },
-    'Projeto excluído.':               { 'pt-BR':'Projeto excluído.',               'en':'Project deleted.',                    'de':'Projekt gelöscht.'                     },
-    'OS excluída com sucesso.':        { 'pt-BR':'OS excluída com sucesso.',        'en':'Work order deleted successfully.',    'de':'Arbeitsauftrag erfolgreich gelöscht.'  },
+    'Termo de custódia enviado para impressão.': { 'pt-BR':'Termo de custódia enviado para impressão.', 'en':'Custody form sent for printing.', 'de':'Verwahrungsformular zum Drucken gesendet.' },
     'Desligar':                        { 'pt-BR':'Desligar',                        'en':'Turn off',                            'de':'Ausschalten'                           },
     'Remover':                         { 'pt-BR':'Remover',                         'en':'Remove',                              'de':'Entfernen'                             },
     'está com estoque crítico':        { 'pt-BR':'está com estoque crítico',        'en':'has critical stock',                  'de':'hat kritischen Bestand'                },
@@ -781,11 +750,10 @@
     'Nenhuma observação registrada.': { 'pt-BR':'Nenhuma observação registrada.', 'en':'No notes registered.',                   'de':'Keine Anmerkungen registriert.'            },
 
     // ── Mensagens de estado vazio (dashboardAvaliacao, dashboardServicos) ──
-    'Sem avaliações no período.':        { 'pt-BR':'Sem avaliações no período.',        'en':'No evaluations in the period.',           'de':'Keine Bewertungen im Zeitraum.'              },
     'Sem dados.':                        { 'pt-BR':'Sem dados.',                        'en':'No data.',                                'de':'Keine Daten.'                                },
     'Nenhum dado para o período selecionado.': { 'pt-BR':'Nenhum dado para o período selecionado.', 'en':'No data for the selected period.', 'de':'Keine Daten für den ausgewählten Zeitraum.' },
     'Nenhuma resposta encontrada':       { 'pt-BR':'Nenhuma resposta encontrada',       'en':'No responses found',                      'de':'Keine Antworten gefunden'                    },
-    'As avaliações aparecerão aqui após o envio do formulário.': { 'pt-BR':'As avaliações aparecerão aqui após o envio do formulário.', 'en':'Evaluations will appear here after form submission.', 'de':'Bewertungen erscheinen hier nach dem Absenden des Formulars.' },
+    'As avaliações aparecerão aqui após o envio do formulário.': { 'pt-BR':'As avaliações aparecerão aqui após o envio do formulário.', 'en':'Evaluations will appear here after the form is submitted.', 'de':'Bewertungen erscheinen hier nach dem Absenden des Formulars.' },
     'Sem movimentações registradas':     { 'pt-BR':'Sem movimentações registradas',     'en':'No movements recorded',                   'de':'Keine Bewegungen aufgezeichnet'              },
     'Movimentações futuras aparecerão aqui.': { 'pt-BR':'Movimentações futuras aparecerão aqui.', 'en':'Future movements will appear here.', 'de':'Zukünftige Bewegungen erscheinen hier.' },
     'Nenhuma manutenção registrada':     { 'pt-BR':'Nenhuma manutenção registrada',     'en':'No maintenance records',                  'de':'Keine Wartungsaufzeichnungen'                },
@@ -846,134 +814,31 @@
     'não encontrado.':                   { 'pt-BR':'não encontrado.',                   'en':'not found.',                              'de':'nicht gefunden.'                             },
 
     // ── CSV headers ─────────────────────────────────────────────────
-    'Nome':                            { 'pt-BR':'Nome',                            'en':'Name',                                'de':'Name'                                  },
-    'Categoria':                       { 'pt-BR':'Categoria',                       'en':'Category',                           'de':'Kategorie'                             },
-    'Localização':                     { 'pt-BR':'Localização',                     'en':'Location',                            'de':'Standort'                              },
-    'Qtd. Atual':                      { 'pt-BR':'Qtd. Atual',                      'en':'Curr. Qty',                           'de':'Akt. Menge'                            },
-    'Estoque Mín.':                    { 'pt-BR':'Estoque Mín.',                    'en':'Min. Stock',                          'de':'Min. Bestand'                          },
-    'Unidade':                         { 'pt-BR':'Unidade',                         'en':'Unit',                                'de':'Einheit'                               },
-    'Observação':                      { 'pt-BR':'Observação',                      'en':'Note',                                'de':'Anmerkung'                             },
 
     // ── Títulos de modal — CRUD ──────────────────────────────────────
-    'Nova Ordem de Serviço':           { 'pt-BR':'Nova Ordem de Serviço',           'en':'New Work Order',                      'de':'Neuer Arbeitsauftrag'                  },
-    'Editar OS':                       { 'pt-BR':'Editar OS',                       'en':'Edit WO',                             'de':'AO bearbeiten'                         },
-    'Nova Amostra':                    { 'pt-BR':'Nova Amostra',                    'en':'New Sample',                          'de':'Neue Probe'                            },
-    'Editar Amostra':                  { 'pt-BR':'Editar Amostra',                  'en':'Edit Sample',                         'de':'Probe bearbeiten'                      },
-    'Novo Evento':                     { 'pt-BR':'Novo Evento',                     'en':'New Event',                           'de':'Neue Veranstaltung'                    },
-    'Editar Evento':                   { 'pt-BR':'Editar Evento',                   'en':'Edit Event',                          'de':'Veranstaltung bearbeiten'              },
-    'Novo Projeto':                    { 'pt-BR':'Novo Projeto',                    'en':'New Project',                         'de':'Neues Projekt'                         },
-    'Novo Edital':                     { 'pt-BR':'Novo Edital',                     'en':'New Tender',                          'de':'Neue Ausschreibung'                    },
-    'Editar Edital':                   { 'pt-BR':'Editar Edital',                   'en':'Edit Tender',                         'de':'Ausschreibung bearbeiten'              },
-    'Novo Usuário':                    { 'pt-BR':'Novo Usuário',                    'en':'New User',                            'de':'Neuer Benutzer'                        },
-    'Editar Usuário':                  { 'pt-BR':'Editar Usuário',                  'en':'Edit User',                           'de':'Benutzer bearbeiten'                   },
-    'Nova Tarefa':                     { 'pt-BR':'Nova Tarefa',                     'en':'New Task',                            'de':'Neue Aufgabe'                          },
-    'Editar Tarefa':                   { 'pt-BR':'Editar Tarefa',                   'en':'Edit Task',                           'de':'Aufgabe bearbeiten'                    },
-    'Agendar Visita Técnica':          { 'pt-BR':'Agendar Visita Técnica',          'en':'Schedule Technical Visit',            'de':'Technischen Besuch planen'             },
-    'Editar Visita Técnica':           { 'pt-BR':'Editar Visita Técnica',           'en':'Edit Technical Visit',                'de':'Technischen Besuch bearbeiten'         },
-    'Editar Item':                     { 'pt-BR':'Editar Item',                     'en':'Edit Item',                           'de':'Artikel bearbeiten'                    },
-    'Novo Item':                       { 'pt-BR':'Novo Item',                       'en':'New Item',                            'de':'Neuer Artikel'                         },
-    'Novo Agendamento':                { 'pt-BR':'Novo Agendamento',                'en':'New Appointment',                     'de':'Neuer Termin'                          },
-    'Editar Agendamento':              { 'pt-BR':'Editar Agendamento',              'en':'Edit Appointment',                    'de':'Termin bearbeiten'                     },
-    'Registrar Ligação':               { 'pt-BR':'Registrar Ligação',               'en':'Register Usage',                      'de':'Nutzung registrieren'                  },
-    'Nova Senha (opcional)':           { 'pt-BR':'Nova Senha (opcional)',            'en':'New Password (optional)',             'de':'Neues Passwort (optional)'             },
 
     // ── Toasts — sucesso CRUD ────────────────────────────────────────
-    'Ordem de Serviço criada com sucesso!':    { 'pt-BR':'Ordem de Serviço criada com sucesso!',    'en':'Work order created successfully!',    'de':'Arbeitsauftrag erfolgreich erstellt!'   },
-    'Ordem de Serviço atualizada com sucesso!':{ 'pt-BR':'Ordem de Serviço atualizada com sucesso!','en':'Work order updated successfully!',    'de':'Arbeitsauftrag erfolgreich aktualisiert!'},
-    'Amostra atualizada.':             { 'pt-BR':'Amostra atualizada.',             'en':'Sample updated.',                     'de':'Probe aktualisiert.'                   },
-    'Evento criado com sucesso!':      { 'pt-BR':'Evento criado com sucesso!',      'en':'Event created successfully!',         'de':'Veranstaltung erfolgreich erstellt!'   },
-    'Evento atualizado com sucesso!':  { 'pt-BR':'Evento atualizado com sucesso!',  'en':'Event updated successfully!',         'de':'Veranstaltung erfolgreich aktualisiert!'},
-    'Evento excluído.':                { 'pt-BR':'Evento excluído.',                'en':'Event deleted.',                      'de':'Veranstaltung gelöscht.'               },
-    'Projeto atualizado!':             { 'pt-BR':'Projeto atualizado!',             'en':'Project updated!',                    'de':'Projekt aktualisiert!'                 },
-    'Projeto criado!':                 { 'pt-BR':'Projeto criado!',                 'en':'Project created!',                    'de':'Projekt erstellt!'                     },
-    'Usuário criado com sucesso!':     { 'pt-BR':'Usuário criado com sucesso!',     'en':'User created successfully!',          'de':'Benutzer erfolgreich erstellt!'        },
-    'Usuário atualizado com sucesso!': { 'pt-BR':'Usuário atualizado com sucesso!', 'en':'User updated successfully!',          'de':'Benutzer erfolgreich aktualisiert!'    },
-    'Usuário excluído.':               { 'pt-BR':'Usuário excluído.',               'en':'User deleted.',                       'de':'Benutzer gelöscht.'                    },
-    'Visita agendada com sucesso!':    { 'pt-BR':'Visita agendada com sucesso!',    'en':'Visit scheduled successfully!',       'de':'Besuch erfolgreich geplant!'           },
-    'Visita atualizada com sucesso!':  { 'pt-BR':'Visita atualizada com sucesso!',  'en':'Visit updated successfully!',         'de':'Besuch erfolgreich aktualisiert!'      },
-    'Visita excluída.':                { 'pt-BR':'Visita excluída.',                'en':'Visit deleted.',                      'de':'Besuch gelöscht.'                      },
-    'Edital atualizado com sucesso!':  { 'pt-BR':'Edital atualizado com sucesso!',  'en':'Tender updated successfully!',        'de':'Ausschreibung erfolgreich aktualisiert!'},
-    'Edital criado com sucesso!':      { 'pt-BR':'Edital criado com sucesso!',      'en':'Tender created successfully!',        'de':'Ausschreibung erfolgreich erstellt!'   },
-    'Tarefa atualizada!':              { 'pt-BR':'Tarefa atualizada!',              'en':'Task updated!',                       'de':'Aufgabe aktualisiert!'                 },
-    'Tarefa criada!':                  { 'pt-BR':'Tarefa criada!',                  'en':'Task created!',                       'de':'Aufgabe erstellt!'                     },
-    'Tarefa excluída.':                { 'pt-BR':'Tarefa excluída.',                'en':'Task deleted.',                       'de':'Aufgabe gelöscht.'                     },
-    'Manutenção registrada!':          { 'pt-BR':'Manutenção registrada!',          'en':'Maintenance registered!',             'de':'Wartung registriert!'                  },
-    'Manutenção registrada.':          { 'pt-BR':'Manutenção registrada.',          'en':'Maintenance registered.',             'de':'Wartung registriert.'                  },
-    'Manutenção atualizada!':          { 'pt-BR':'Manutenção atualizada!',          'en':'Maintenance updated!',                'de':'Wartung aktualisiert!'                 },
-    'Manutenção atualizada.':          { 'pt-BR':'Manutenção atualizada.',          'en':'Maintenance updated.',                'de':'Wartung aktualisiert.'                 },
-    'Manutenção excluída.':            { 'pt-BR':'Manutenção excluída.',            'en':'Maintenance deleted.',                'de':'Wartung gelöscht.'                     },
-    'Agendamento criado.':             { 'pt-BR':'Agendamento criado.',             'en':'Appointment created.',                'de':'Termin erstellt.'                      },
-    'Agendamento atualizado.':         { 'pt-BR':'Agendamento atualizado.',         'en':'Appointment updated.',                'de':'Termin aktualisiert.'                  },
     'Agendamento excluído.':           { 'pt-BR':'Agendamento excluído.',           'en':'Appointment deleted.',                'de':'Termin gelöscht.'                      },
     'Agendamento cancelado.':          { 'pt-BR':'Agendamento cancelado.',          'en':'Appointment cancelled.',              'de':'Termin abgesagt.'                      },
-    'Retirada registrada com sucesso!':{ 'pt-BR':'Retirada registrada com sucesso!','en':'Withdrawal registered successfully!', 'de':'Entnahme erfolgreich registriert!'     },
     'Uso registrado com sucesso.':     { 'pt-BR':'Uso registrado com sucesso.',     'en':'Usage registered successfully.',      'de':'Nutzung erfolgreich registriert.'      },
-    'Devolução registrada com sucesso!':{ 'pt-BR':'Devolução registrada com sucesso!','en':'Return registered successfully!',   'de':'Rückgabe erfolgreich registriert!'     },
-    'Nota do diretor salva!':          { 'pt-BR':'Nota do diretor salva!',          'en':'Director note saved!',                'de':'Direktionsnotiz gespeichert!'          },
-    'Documento enviado com sucesso!':  { 'pt-BR':'Documento enviado com sucesso!',  'en':'Document sent successfully!',         'de':'Dokument erfolgreich gesendet!'        },
-    'Registro excluído.':              { 'pt-BR':'Registro excluído.',              'en':'Record deleted.',                     'de':'Datensatz gelöscht.'                   },
-    'Registro removido.':              { 'pt-BR':'Registro removido.',              'en':'Record removed.',                     'de':'Datensatz entfernt.'                   },
-    'Máquina desligada com sucesso.':  { 'pt-BR':'Máquina desligada com sucesso.',  'en':'Machine turned off successfully.',    'de':'Maschine erfolgreich ausgeschaltet.'   },
-    'Registro atualizado.':            { 'pt-BR':'Registro atualizado.',            'en':'Record updated.',                     'de':'Datensatz aktualisiert.'               },
 
     // ── Toasts — erro CRUD ───────────────────────────────────────────
-    'Erro ao carregar eventos.':       { 'pt-BR':'Erro ao carregar eventos.',       'en':'Error loading events.',               'de':'Fehler beim Laden der Veranstaltungen.' },
     'Erro ao carregar projetos.':      { 'pt-BR':'Erro ao carregar projetos.',      'en':'Error loading projects.',             'de':'Fehler beim Laden der Projekte.'       },
     'Erro ao salvar evento.':          { 'pt-BR':'Erro ao salvar evento.',          'en':'Error saving event.',                 'de':'Fehler beim Speichern der Veranstaltung.'},
-    'Erro ao salvar visita.':          { 'pt-BR':'Erro ao salvar visita.',          'en':'Error saving visit.',                 'de':'Fehler beim Speichern des Besuchs.'    },
-    'Erro ao excluir evento.':         { 'pt-BR':'Erro ao excluir evento.',         'en':'Error deleting event.',               'de':'Fehler beim Löschen der Veranstaltung.'},
-    'Erro ao excluir tarefa.':         { 'pt-BR':'Erro ao excluir tarefa.',         'en':'Error deleting task.',                'de':'Fehler beim Löschen der Aufgabe.'      },
-    'Erro ao salvar tarefa.':          { 'pt-BR':'Erro ao salvar tarefa.',          'en':'Error saving task.',                  'de':'Fehler beim Speichern der Aufgabe.'    },
     'Erro ao enviar documento.':       { 'pt-BR':'Erro ao enviar documento.',       'en':'Error sending document.',             'de':'Fehler beim Senden des Dokuments.'     },
-    'Não foi possível carregar o evento.': { 'pt-BR':'Não foi possível carregar o evento.', 'en':'Could not load the event.', 'de':'Veranstaltung konnte nicht geladen werden.' },
-    'Não foi possível carregar o edital.': { 'pt-BR':'Não foi possível carregar o edital.', 'en':'Could not load the tender.', 'de':'Ausschreibung konnte nicht geladen werden.' },
 
     // ── Validações ───────────────────────────────────────────────────
     'Preencha os campos obrigatórios.':      { 'pt-BR':'Preencha os campos obrigatórios.',      'en':'Please fill in the required fields.',    'de':'Bitte füllen Sie die Pflichtfelder aus.' },
-    'Preencha todos os campos obrigatórios.':{ 'pt-BR':'Preencha todos os campos obrigatórios.','en':'Please fill in all required fields.',     'de':'Bitte alle Pflichtfelder ausfüllen.'    },
-    'Informe a data de expiração.':    { 'pt-BR':'Informe a data de expiração.',    'en':'Enter the expiry date.',              'de':'Ablaufdatum eingeben.'                 },
-    'Informe a data/hora de desligamento.': { 'pt-BR':'Informe a data/hora de desligamento.', 'en':'Enter the shutdown date/time.', 'de':'Abschaltzeitpunkt eingeben.'           },
     'Informe o nome do arquivo.':      { 'pt-BR':'Informe o nome do arquivo.',      'en':'Enter the file name.',                'de':'Dateinamen eingeben.'                  },
-    'Informe o nome do usuário.':      { 'pt-BR':'Informe o nome do usuário.',      'en':'Enter the user name.',                'de':'Benutzernamen eingeben.'               },
-    'Selecione um arquivo PDF.':       { 'pt-BR':'Selecione um arquivo PDF.',       'en':'Select a PDF file.',                  'de':'PDF-Datei auswählen.'                  },
-    'Deixe em branco para manter a senha atual.': { 'pt-BR':'Deixe em branco para manter a senha atual.', 'en':'Leave blank to keep the current password.', 'de':'Leer lassen, um das aktuelle Passwort zu behalten.' },
     'Cancelar este agendamento?':      { 'pt-BR':'Cancelar este agendamento?',      'en':'Cancel this appointment?',            'de':'Diesen Termin absagen?'                },
-    'Remover este registro de manutenção?': { 'pt-BR':'Remover este registro de manutenção?', 'en':'Remove this maintenance record?', 'de':'Diesen Wartungseintrag entfernen?' },
-    'Remover este registro de uso?':   { 'pt-BR':'Remover este registro de uso?',   'en':'Remove this usage record?',           'de':'Diesen Nutzungseintrag entfernen?'     },
 
     // ── Empty states ─────────────────────────────────────────────────
-    'Nenhuma visita encontrada':       { 'pt-BR':'Nenhuma visita encontrada',       'en':'No visits found',                     'de':'Keine Besuche gefunden'                },
-    'Agende uma nova visita ou ajuste os filtros.': { 'pt-BR':'Agende uma nova visita ou ajuste os filtros.', 'en':'Schedule a new visit or adjust the filters.', 'de':'Neuen Besuch planen oder Filter anpassen.' },
-    'Nenhum evento encontrado':        { 'pt-BR':'Nenhum evento encontrado',        'en':'No events found',                     'de':'Keine Veranstaltungen gefunden'        },
-    'Crie um novo evento ou ajuste os filtros.': { 'pt-BR':'Crie um novo evento ou ajuste os filtros.', 'en':'Create a new event or adjust the filters.', 'de':'Neue Veranstaltung erstellen oder Filter anpassen.' },
-    'Nenhum usuário encontrado':       { 'pt-BR':'Nenhum usuário encontrado',       'en':'No users found',                      'de':'Keine Benutzer gefunden'               },
-    'Crie um novo usuário ou ajuste os filtros.': { 'pt-BR':'Crie um novo usuário ou ajuste os filtros.', 'en':'Create a new user or adjust the filters.', 'de':'Neuen Benutzer erstellen oder Filter anpassen.' },
-    'Nenhum documento encontrado':     { 'pt-BR':'Nenhum documento encontrado',     'en':'No documents found',                  'de':'Keine Dokumente gefunden'              },
-    'Envie documentos usando o botão acima.': { 'pt-BR':'Envie documentos usando o botão acima.', 'en':'Upload documents using the button above.', 'de':'Dokumente über die Schaltfläche oben hochladen.' },
-    'Nenhum item encontrado':          { 'pt-BR':'Nenhum item encontrado',          'en':'No items found',                      'de':'Keine Artikel gefunden'                },
-    'Ajuste os filtros ou cadastre um novo item.': { 'pt-BR':'Ajuste os filtros ou cadastre um novo item.', 'en':'Adjust the filters or register a new item.', 'de':'Filter anpassen oder neuen Artikel registrieren.' },
-    'Nenhum registro encontrado':      { 'pt-BR':'Nenhum registro encontrado',      'en':'No records found',                    'de':'Keine Einträge gefunden'               },
-    'Nenhum registro para exportar.':  { 'pt-BR':'Nenhum registro para exportar.',  'en':'No records to export.',               'de':'Keine Einträge zum Exportieren.'       },
     'Nenhum registro de uso encontrado.': { 'pt-BR':'Nenhum registro de uso encontrado.', 'en':'No usage records found.', 'de':'Keine Nutzungseinträge gefunden.'           },
     'Nenhuma sessão ativa encontrada.':{ 'pt-BR':'Nenhuma sessão ativa encontrada.','en':'No active sessions found.',           'de':'Keine aktiven Sitzungen gefunden.'      },
-    'Nenhum evento neste dia.':        { 'pt-BR':'Nenhum evento neste dia.',        'en':'No events on this day.',              'de':'Keine Veranstaltungen an diesem Tag.'   },
-    'Nenhum evento próximo.':          { 'pt-BR':'Nenhum evento próximo.',          'en':'No upcoming events.',                 'de':'Keine bevorstehenden Veranstaltungen.' },
-    'Utilize o botão acima para adicionar um novo item.': { 'pt-BR':'Utilize o botão acima para adicionar um novo item.', 'en':'Use the button above to add a new item.', 'de':'Verwenden Sie die Schaltfläche oben, um einen Artikel hinzuzufügen.' },
 
     // ── Contadores inline ────────────────────────────────────────────
-    'Exibindo':                        { 'pt-BR':'Exibindo',                        'en':'Showing',                             'de':'Anzeige'                               },
-    'de':                              { 'pt-BR':'de',                              'en':'of',                                  'de':'von'                                   },
-    'registro(s)':                     { 'pt-BR':'registro(s)',                     'en':'record(s)',                           'de':'Eintrag/Einträge'                      },
-    'visita(s) encontrada(s)':         { 'pt-BR':'visita(s) encontrada(s)',         'en':'visit(s) found',                      'de':'Besuch/Besuche gefunden'               },
-    'documento(s) encontrado(s)':      { 'pt-BR':'documento(s) encontrado(s)',      'en':'document(s) found',                   'de':'Dokument(e) gefunden'                  },
-    'evento(s) encontrado(s)':         { 'pt-BR':'evento(s) encontrado(s)',         'en':'event(s) found',                      'de':'Veranstaltung(en) gefunden'            },
-    'usuário(s) encontrado(s)':        { 'pt-BR':'usuário(s) encontrado(s)',        'en':'user(s) found',                       'de':'Benutzer gefunden'                     },
-    'projeto(s)':                      { 'pt-BR':'projeto(s)',                      'en':'project(s)',                          'de':'Projekt(e)'                            },
-    'item(s)':                         { 'pt-BR':'item(s)',                         'en':'item(s)',                             'de':'Artikel'                               },
 
     // ── Status Badges ────────────────────────────────────────────────
-    'Realizada':                       { 'pt-BR':'Realizada',                       'en':'Completed',                           'de':'Durchgeführt'                          },
-    'Pendente':                        { 'pt-BR':'Pendente',                        'en':'Pending',                             'de':'Ausstehend'                            },
 
     // ── Máquinas / Scanners ──────────────────────────────────────────
     'Dados do Equipamento':            { 'pt-BR':'Dados do Equipamento',            'en':'Equipment Data',                      'de':'Gerätedaten'                           },
@@ -998,24 +863,17 @@
     'Ligada':                          { 'pt-BR':'Ligada',                          'en':'On',                                  'de':'Eingeschaltet'                         },
     'Desligada':                       { 'pt-BR':'Desligada',                       'en':'Off',                                 'de':'Ausgeschaltet'                         },
     'Ligar':                           { 'pt-BR':'Ligar',                           'en':'Turn on',                             'de':'Einschalten'                           },
-    'Desligar Máquina':                { 'pt-BR':'Desligar Máquina',                'en':'Turn off Machine',                    'de':'Maschine ausschalten'                  },
-    'Em uso':                          { 'pt-BR':'Em uso',                          'en':'In use',                              'de':'In Betrieb'                            },
     'Máquina livre — nenhum usuário no momento': { 'pt-BR':'Máquina livre — nenhum usuário no momento', 'en':'Machine free — no user at the moment', 'de':'Maschine frei — kein Benutzer im Moment' },
 
     // ── Painel de notificações ───────────────────────────────────────
     'Notificações':                    { 'pt-BR':'Notificações',                    'en':'Notifications',                       'de':'Benachrichtigungen'                    },
-    'Limpar':                          { 'pt-BR':'Limpar',                          'en':'Clear',                               'de':'Bereinigen'                            },
 
     // ── Misc ─────────────────────────────────────────────────────────
     'Aviso':                           { 'pt-BR':'Aviso',                           'en':'Notice',                              'de':'Hinweis'                               },
     'Ativos':                          { 'pt-BR':'Ativos',                          'en':'Active',                              'de':'Aktiv'                                 },
-    'Nova OS':                         { 'pt-BR':'Nova OS',                         'en':'New WO',                              'de':'Neuer AO'                              },
     'Dashboards':                      { 'pt-BR':'Dashboards',                      'en':'Dashboards',                          'de':'Dashboards'                            },
-    'Deixe em branco se não tiver prazo de vencimento.': { 'pt-BR':'Deixe em branco se não tiver prazo de vencimento.', 'en':'Leave blank if there is no expiry date.', 'de':'Leer lassen, wenn kein Ablaufdatum vorhanden.' },
 
     // ── Status variants (lowercase — server returns these) ──────────
-    'A iniciar':              { 'pt-BR':'A Iniciar',              'en':'Not Started',               'de':'Noch nicht begonnen'            },
-    'Pendente autorização':   { 'pt-BR':'Pendente Autorização',   'en':'Pending Authorization',     'de':'Genehmigung ausstehend'         },
     'Prestação de contas':    { 'pt-BR':'Prestação de Contas',    'en':'Accountability',            'de':'Rechenschaftspflicht'           },
     'Atrasada':               { 'pt-BR':'Atrasada',               'en':'Delayed',                   'de':'Verzögert'                      },
     'Ativa':                  { 'pt-BR':'Ativa',                  'en':'Active',                    'de':'Aktiv'                          },
@@ -1023,7 +881,6 @@
     'Confirmado':             { 'pt-BR':'Confirmado',             'en':'Confirmed',                 'de':'Bestätigt'                      },
 
     // ── Machine locations ────────────────────────────────────────────
-    'Laboratório':            { 'pt-BR':'Laboratório',            'en':'Laboratory',                'de':'Labor'                          },
     'Em Campo (fora do laboratório)': { 'pt-BR':'Em Campo (fora do laboratório)', 'en':'In Field (outside lab)', 'de':'Im Feld (außerhalb des Labors)' },
 
     // ── Visitas filter options ───────────────────────────────────────
@@ -1040,58 +897,37 @@
     'Metrologia':             { 'pt-BR':'Metrologia',             'en':'Metrology',                 'de':'Metrologie'                     },
     'Papelaria':              { 'pt-BR':'Papelaria',              'en':'Stationery',                'de':'Schreibwaren'                   },
     'Ponteiras':              { 'pt-BR':'Ponteiras',              'en':'Tips / Probes',             'de':'Spitzen / Taster'               },
-    'Crítico':                { 'pt-BR':'Crítico',                'en':'Critical',                  'de':'Kritisch'                       },
     'Estoque Mín.':           { 'pt-BR':'Estoque Mín.',           'en':'Min. Stock',                'de':'Mindestbestand'                 },
 
     // ── Usuários roles & document types ─────────────────────────────
-    'Estagiário':             { 'pt-BR':'Estagiário',             'en':'Intern',                    'de':'Praktikant'                     },
-    'Gestor':                 { 'pt-BR':'Gestor',                 'en':'Manager',                   'de':'Manager'                        },
-    'Diretor do CEM':         { 'pt-BR':'Diretor do CEM',         'en':'CEM Director',              'de':'CEM-Direktor'                   },
-    'Certificado de Treinamento': { 'pt-BR':'Certificado de Treinamento', 'en':'Training Certificate', 'de':'Schulungszertifikat'         },
-    'Termo de Confidencialidade': { 'pt-BR':'Termo de Confidencialidade', 'en':'Confidentiality Agreement', 'de':'Vertraulichkeitsvereinbarung' },
     'Currículo':              { 'pt-BR':'Currículo',              'en':'Resume / CV',               'de':'Lebenslauf'                     },
-    'Atestado Médico':        { 'pt-BR':'Atestado Médico',        'en':'Medical Certificate',       'de':'Ärztliches Attest'              },
-    'Outro':                  { 'pt-BR':'Outro',                  'en':'Other',                     'de':'Sonstige'                       },
     'ISO 17025 — Competência': { 'pt-BR':'ISO 17025 — Competência', 'en':'ISO 17025 — Competence', 'de':'ISO 17025 — Kompetenz'          },
 
     // ── Amostras statuses ────────────────────────────────────────────
-    'Vencendo':               { 'pt-BR':'Vencendo',               'en':'Expiring',                  'de':'Ablaufend'                      },
-    'Extraviada':             { 'pt-BR':'Extraviada',             'en':'Lost',                      'de':'Verloren'                       },
 
     // ── Kanban ───────────────────────────────────────────────────────
-    'Urgente':                { 'pt-BR':'Urgente',                'en':'Urgent',                    'de':'Dringend'                       },
     'Backlog':                { 'pt-BR':'Backlog',                'en':'Backlog',                   'de':'Backlog'                        },
-    'Em Revisão':             { 'pt-BR':'Em Revisão',             'en':'In Review',                 'de':'In Überprüfung'                 },
 
     // ── Missing module strings ───────────────────────────────────────
-    'Apenas arquivos PDF são aceitos.': { 'pt-BR':'Apenas arquivos PDF são aceitos.', 'en':'Only PDF files are accepted.', 'de':'Nur PDF-Dateien werden akzeptiert.' },
-    'Nenhuma sessão ativa encontrada.': { 'pt-BR':'Nenhuma sessão ativa encontrada.', 'en':'No active sessions found.', 'de':'Keine aktiven Sitzungen gefunden.' },
     'Relatório':              { 'pt-BR':'Relatório',              'en':'Report',                    'de':'Bericht'                        },
-    'Nenhuma notificação no momento.':  { 'pt-BR':'Nenhuma notificação no momento.', 'en':'No notifications at this time.', 'de':'Keine Benachrichtigungen.' },
     'documento':              { 'pt-BR':'documento',              'en':'document',                  'de':'Dokument'                       },
     'Editar Manutenção':      { 'pt-BR':'Editar Manutenção',      'en':'Edit Maintenance',          'de':'Wartung bearbeiten'             },
-    'Retirada registrada com sucesso!': { 'pt-BR':'Retirada registrada com sucesso!', 'en':'Withdrawal recorded successfully!', 'de':'Entnahme erfolgreich registriert!' },
     'Nenhum registro de manutenção encontrado.': { 'pt-BR':'Nenhum registro de manutenção encontrado.', 'en':'No maintenance records found.', 'de':'Keine Wartungseinträge gefunden.' },
     'Nenhum agendamento.':    { 'pt-BR':'Nenhum agendamento.',    'en':'No appointments.',          'de':'Keine Termine.'                 },
     'Clique em':              { 'pt-BR':'Clique em',              'en':'Click',                     'de':'Klicken Sie auf'                },
     'para reservar.':         { 'pt-BR':'para reservar.',         'en':'to book.',                  'de':'zum Buchen.'                    },
-    'Novo Agendamento':       { 'pt-BR':'Novo Agendamento',       'en':'New Appointment',           'de':'Neuer Termin'                   },
     'Nenhum registro de uso.': { 'pt-BR':'Nenhum registro de uso.', 'en':'No usage records.',      'de':'Keine Nutzungseinträge.'        },
     'Nenhum registro de manutenção.': { 'pt-BR':'Nenhum registro de manutenção.', 'en':'No maintenance records.', 'de':'Keine Wartungseinträge.' },
 
     // ── Maintenance types (mock server) ─────────────────────────────
     'Revisão Geral':          { 'pt-BR':'Revisão Geral',          'en':'General Review',            'de':'Allgemeine Überprüfung'         },
     'Revisão de Ponteiras':   { 'pt-BR':'Revisão de Ponteiras',   'en':'Probe Tip Review',          'de':'Tasterspitzen-Überprüfung'      },
-    'Limpeza':                { 'pt-BR':'Limpeza',                'en':'Cleaning',                  'de':'Reinigung'                      },
     'Corretiva':              { 'pt-BR':'Corretiva',              'en':'Corrective',                'de':'Korrektiv'                      },
     'Preventiva':             { 'pt-BR':'Preventiva',             'en':'Preventive',                'de':'Vorbeugend'                     },
-    'Calibração':             { 'pt-BR':'Calibração',             'en':'Calibration',               'de':'Kalibrierung'                   },
 
     // ── Stock movement types ─────────────────────────────────────────
     'entrada':                { 'pt-BR':'Entrada',                'en':'Entry',                     'de':'Eingang'                        },
     'saida':                  { 'pt-BR':'Saída',                  'en':'Output',                    'de':'Ausgang'                        },
-    'Entrada':                { 'pt-BR':'Entrada',                'en':'Entry',                     'de':'Eingang'                        },
-    'Saída':                  { 'pt-BR':'Saída',                  'en':'Output',                    'de':'Ausgang'                        },
 
     // ── Scanner types ────────────────────────────────────────────────
     'Scanner 3D Portátil a Laser':    { 'pt-BR':'Scanner 3D Portátil a Laser',    'en':'Portable 3D Laser Scanner',    'de':'Tragbarer 3D-Laserscanner'      },
@@ -1117,7 +953,6 @@
     // ── Formulário verificação ambiental ─────────────────────────────
     'Outra':                                      { 'pt-BR':'Outra',                                      'en':'Other',                                         'de':'Andere'                                            },
     'Nova Verificação':                           { 'pt-BR':'Nova Verificação',                           'en':'New Verification',                              'de':'Neue Verifizierung'                                },
-    'Verificação Ambiental CEM':                  { 'pt-BR':'Verificação Ambiental CEM',                  'en':'CEM Environmental Verification',                'de':'CEM-Umgebungsverifizierung'                        },
     'Lista de verificação das condições ambientais do laboratório de metrologia': { 'pt-BR':'Lista de verificação das condições ambientais do laboratório de metrologia', 'en':'Checklist of environmental conditions of the metrology laboratory', 'de':'Checkliste der Umgebungsbedingungen des Metrologie-Labors' },
     'Lista de Verificação — Condições Ambientais CEM': { 'pt-BR':'Lista de Verificação — Condições Ambientais CEM', 'en':'Checklist — CEM Environmental Conditions', 'de':'Checkliste — CEM-Umgebungsbedingungen'              },
     'Preencha todas as perguntas obrigatórias antes de enviar.': { 'pt-BR':'Preencha todas as perguntas obrigatórias antes de enviar.', 'en':'Fill in all required fields before submitting.', 'de':'Füllen Sie alle Pflichtfelder aus, bevor Sie absenden.' },
@@ -1129,7 +964,6 @@
     'Temperatura atual (°C):':                    { 'pt-BR':'Temperatura atual (°C):',                    'en':'Current temperature (°C):',                     'de':'Aktuelle Temperatur (°C):'                         },
     '(Padrão: 20 ± 2 °C)':                       { 'pt-BR':'(Padrão: 20 ± 2 °C)',                        'en':'(Standard: 20 ± 2 °C)',                         'de':'(Standard: 20 ± 2 °C)'                             },
     'Dentro do padrão':                           { 'pt-BR':'Dentro do padrão',                           'en':'Within standard',                               'de':'Im Normbereich'                                    },
-    'Fora do padrão':                             { 'pt-BR':'Fora do padrão',                             'en':'Outside standard',                              'de':'Außerhalb des Normbereichs'                        },
     'Verificações (7 dias)':                      { 'pt-BR':'Verificações (7 dias)',                      'en':'Verifications (7 days)',                         'de':'Verifizierungen (7 Tage)'                          },
     'Conformes':                                  { 'pt-BR':'Conformes',                                  'en':'Compliant',                                     'de':'Konform'                                           },
     'Não Conformes':                              { 'pt-BR':'Não Conformes',                              'en':'Non-Compliant',                                 'de':'Nicht konform'                                     },
@@ -1185,7 +1019,6 @@
     'Distribuição Mensal':                        { 'pt-BR':'Distribuição Mensal',                        'en':'Monthly Distribution',                          'de':'Monatliche Verteilung'                             },
     'Proporção de eventos por mês':               { 'pt-BR':'Proporção de eventos por mês',               'en':'Proportion of events per month',                'de':'Anteil der Veranstaltungen pro Monat'               },
     'Detalhamento por Mês':                       { 'pt-BR':'Detalhamento por Mês',                       'en':'Breakdown by Month',                            'de':'Aufschlüsselung nach Monat'                        },
-    'Eventos':                                    { 'pt-BR':'Eventos',                                    'en':'Events',                                        'de':'Veranstaltungen'                                   },
 
     // ── Kanban placeholders ──────────────────────────────────────────
     'Buscar tarefa...':                           { 'pt-BR':'Buscar tarefa...',                           'en':'Search task...',                                'de':'Aufgabe suchen...'                                 },
@@ -1196,7 +1029,6 @@
     // ── Dashboards — subtítulos dinâmicos ────────────────────────────
     'Visão geral operacional · Carregando...':    { 'pt-BR':'Visão geral operacional · Carregando...', 'en':'Operational overview · Loading...', 'de':'Betriebsübersicht · Wird geladen...' },
     'Acompanhamento gerencial':                   { 'pt-BR':'Acompanhamento gerencial',               'en':'Management tracking',              'de':'Managementverfolgung'                },
-    'Análise mensal de ordens de serviço — receita e volume': { 'pt-BR':'Análise mensal de ordens de serviço — receita e volume', 'en':'Monthly work order analysis — revenue and volume', 'de':'Monatliche Auftragsanalyse — Umsatz und Volumen' },
     'Distribuição NPS':                           { 'pt-BR':'Distribuição NPS',                       'en':'NPS Distribution',                 'de':'NPS-Verteilung'                      },
     'Distribuição atual do pipeline de OS':       { 'pt-BR':'Distribuição atual do pipeline de OS',   'en':'Current WO pipeline distribution', 'de':'Aktuelle AO-Pipeline-Verteilung'     },
     'Distribuição do portfólio':                  { 'pt-BR':'Distribuição do portfólio',              'en':'Portfolio distribution',           'de':'Portfolio-Verteilung'                },
@@ -1207,57 +1039,27 @@
     'Registros insuficientes para gráfico (mínimo 2).':    { 'pt-BR':'Registros insuficientes para gráfico (mínimo 2).', 'en':'Insufficient records for chart (minimum 2).', 'de':'Zu wenig Einträge für Diagramm (mindestens 2).' },
 
     // ── Status labels (tabelas / badges) ────────────────────────────
-    'Em custódia':               { 'pt-BR':'Em custódia',               'en':'In custody',              'de':'In Verwahrung'              },
-    'Devolvida':                 { 'pt-BR':'Devolvida',                 'en':'Returned',                'de':'Zurückgegeben'              },
-    'Extraviada':                { 'pt-BR':'Extraviada',                'en':'Lost',                    'de':'Verloren'                   },
-    'Vencendo':                  { 'pt-BR':'Vencendo',                  'en':'Overdue',                 'de':'Überfällig'                 },
-    'Ativa':                     { 'pt-BR':'Ativa',                     'en':'Active',                  'de':'Aktiv'                      },
     'Inativa':                   { 'pt-BR':'Inativa',                   'en':'Inactive',                'de':'Inaktiv'                    },
-    'Ligada':                    { 'pt-BR':'Ligada',                    'en':'On',                      'de':'Eingeschaltet'              },
-    'Desligada':                 { 'pt-BR':'Desligada',                 'en':'Off',                     'de':'Ausgeschaltet'              },
-    'Em andamento':              { 'pt-BR':'Em andamento',              'en':'In progress',             'de':'In Bearbeitung'             },
-    'Concluída':                 { 'pt-BR':'Concluída',                 'en':'Completed',               'de':'Abgeschlossen'              },
     'A iniciar':                 { 'pt-BR':'A iniciar',                 'en':'To start',                'de':'Zu beginnen'                },
-    'Agendada':                  { 'pt-BR':'Agendada',                  'en':'Scheduled',               'de':'Geplant'                    },
     'Em uso':                    { 'pt-BR':'Em uso',                    'en':'In use',                  'de':'In Verwendung'              },
     'Pendente autorização':      { 'pt-BR':'Pendente autorização',      'en':'Pending authorization',   'de':'Genehmigung ausstehend'     },
-    'Venda finalizada':          { 'pt-BR':'Venda finalizada',          'en':'Sale finalized',          'de':'Verkauf abgeschlossen'      },
-    'Finalizado':                { 'pt-BR':'Finalizado',                'en':'Finalized',               'de':'Abgeschlossen'              },
     'Cancelado':                 { 'pt-BR':'Cancelado',                 'en':'Cancelled',               'de':'Storniert'                  },
-    'Elaboração de proposta':    { 'pt-BR':'Elaboração de proposta',    'en':'Proposal drafting',       'de':'Angebotserstellung'         },
-    'Negociação':                { 'pt-BR':'Negociação',                'en':'Negotiation',             'de':'Verhandlung'                },
 
     // ── Status de máquinas/scanners ─────────────────────────────────
-    'Manutenção':                { 'pt-BR':'Manutenção',                'en':'Maintenance',             'de':'Wartung'                    },
-    'Calibração':                { 'pt-BR':'Calibração',                'en':'Calibration',             'de':'Kalibrierung'               },
-    'Revisão Geral':             { 'pt-BR':'Revisão Geral',             'en':'General Review',          'de':'Allgemeine Überprüfung'     },
-    'Troca de Componente':       { 'pt-BR':'Troca de Componente',       'en':'Component Replacement',   'de':'Komponentenaustausch'       },
 
     // ── Períodos (verificação ambiental) ────────────────────────────
-    'Manhã':                     { 'pt-BR':'Manhã',                     'en':'Morning',                 'de':'Morgen'                     },
-    'Tarde':                     { 'pt-BR':'Tarde',                     'en':'Afternoon',               'de':'Nachmittag'                 },
-    'Dia todo':                  { 'pt-BR':'Dia todo',                  'en':'All day',                 'de':'Ganzer Tag'                 },
 
     // ── Conformidade (verificação ambiental) ────────────────────────
     'Conforme':                  { 'pt-BR':'Conforme',                  'en':'Compliant',               'de':'Konform'                    },
     'Não conforme':              { 'pt-BR':'Não conforme',              'en':'Non-compliant',           'de':'Nicht konform'              },
     'Desligadas':                { 'pt-BR':'Desligadas',                'en':'Switched off',            'de':'Ausgeschaltet'              },
     'Alguma ligada':             { 'pt-BR':'Alguma ligada',             'en':'Some still on',           'de':'Einige noch an'             },
-    'Dentro do padrão':          { 'pt-BR':'Dentro do padrão',          'en':'Within standard',         'de':'Im Normbereich'             },
     'Fora do padrão':            { 'pt-BR':'Fora do padrão',            'en':'Out of standard',         'de':'Außerhalb der Norm'         },
     'Todos desligados':          { 'pt-BR':'Todos desligados',          'en':'All switched off',        'de':'Alle ausgeschaltet'         },
 
     // ── Zonas NPS / avaliação ───────────────────────────────────────
-    'Zona Crítica':              { 'pt-BR':'Zona Crítica',              'en':'Critical Zone',           'de':'Kritische Zone'             },
-    'Zona de Melhoria':          { 'pt-BR':'Zona de Melhoria',          'en':'Improvement Zone',        'de':'Verbesserungszone'          },
-    'Zona de Qualidade':         { 'pt-BR':'Zona de Qualidade',         'en':'Quality Zone',            'de':'Qualitätszone'              },
-    'Zona de Excelência':        { 'pt-BR':'Zona de Excelência',        'en':'Excellence Zone',         'de':'Exzellenzzone'              },
 
     // ── Tipos de feedback ───────────────────────────────────────────
-    'Elogio':                    { 'pt-BR':'Elogio',                    'en':'Praise',                  'de':'Lob'                        },
-    'Reclamação':                { 'pt-BR':'Reclamação',                'en':'Complaint',               'de':'Beschwerde'                 },
-    'Sugestão':                  { 'pt-BR':'Sugestão',                  'en':'Suggestion',              'de':'Vorschlag'                  },
-    'Aviso':                     { 'pt-BR':'Aviso',                     'en':'Notice',                  'de':'Hinweis'                    },
 
     // ── Perfis de usuário ───────────────────────────────────────────
     'ADMIN':                     { 'pt-BR':'ADMIN',                     'en':'ADMIN',                   'de':'ADMIN'                      },
@@ -1268,74 +1070,28 @@
     // ── Estados de kanban ───────────────────────────────────────────
     'A Fazer':                   { 'pt-BR':'A Fazer',                   'en':'To Do',                   'de':'Zu erledigen'               },
     'Em Progresso':              { 'pt-BR':'Em Progresso',              'en':'In Progress',             'de':'In Bearbeitung'             },
-    'Concluído':                 { 'pt-BR':'Concluído',                 'en':'Done',                    'de':'Erledigt'                   },
 
     // ── Carregamento / estados vazios genéricos ─────────────────────
-    'Carregando...':             { 'pt-BR':'Carregando...',             'en':'Loading...',              'de':'Laden...'                   },
     'Nenhum registro encontrado.': { 'pt-BR':'Nenhum registro encontrado.', 'en':'No records found.',   'de':'Keine Einträge gefunden.'   },
     'Nenhuma nota registrada.':  { 'pt-BR':'Nenhuma nota registrada.',  'en':'No notes registered.',    'de':'Keine Notizen registriert.' },
     'Nenhum dado disponível.':   { 'pt-BR':'Nenhum dado disponível.',   'en':'No data available.',      'de':'Keine Daten verfügbar.'     },
-    'Sem dados.':                { 'pt-BR':'Sem dados.',                'en':'No data.',                'de':'Keine Daten.'               },
-    'Sem movimentações registradas': { 'pt-BR':'Sem movimentações registradas', 'en':'No movements registered', 'de':'Keine Bewegungen registriert' },
-    'Movimentações futuras aparecerão aqui.': { 'pt-BR':'Movimentações futuras aparecerão aqui.', 'en':'Future movements will appear here.', 'de':'Zukünftige Bewegungen erscheinen hier.' },
 
     // ── Mensagens de empty state por módulo ─────────────────────────
-    'Nenhuma amostra encontrada':       { 'pt-BR':'Nenhuma amostra encontrada',       'en':'No samples found',              'de':'Keine Proben gefunden'                   },
-    'Ajuste os filtros ou cadastre uma nova amostra.': { 'pt-BR':'Ajuste os filtros ou cadastre uma nova amostra.', 'en':'Adjust filters or register a new sample.', 'de':'Filter anpassen oder neue Probe registrieren.' },
-    'Nenhum item encontrado':           { 'pt-BR':'Nenhum item encontrado',           'en':'No items found',                'de':'Keine Einträge gefunden'                 },
-    'Ajuste os filtros ou cadastre um novo item.': { 'pt-BR':'Ajuste os filtros ou cadastre um novo item.', 'en':'Adjust filters or register a new item.', 'de':'Filter anpassen oder neuen Eintrag registrieren.' },
-    'Nenhum usuário encontrado':        { 'pt-BR':'Nenhum usuário encontrado',        'en':'No users found',                'de':'Keine Benutzer gefunden'                 },
-    'Crie um novo usuário ou ajuste os filtros.': { 'pt-BR':'Crie um novo usuário ou ajuste os filtros.', 'en':'Create a new user or adjust filters.', 'de':'Neuen Benutzer erstellen oder Filter anpassen.' },
-    'Nenhum evento encontrado':         { 'pt-BR':'Nenhum evento encontrado',         'en':'No events found',               'de':'Keine Veranstaltungen gefunden'          },
-    'Crie um novo evento ou ajuste os filtros.': { 'pt-BR':'Crie um novo evento ou ajuste os filtros.', 'en':'Create a new event or adjust filters.', 'de':'Neue Veranstaltung erstellen oder Filter anpassen.' },
-    'Nenhum evento registrado.':        { 'pt-BR':'Nenhum evento registrado.',        'en':'No events registered.',         'de':'Keine Veranstaltungen registriert.'      },
-    'Nenhum edital encontrado':         { 'pt-BR':'Nenhum edital encontrado',         'en':'No tenders found',              'de':'Keine Ausschreibungen gefunden'          },
-    'Crie um novo edital ou ajuste os filtros.': { 'pt-BR':'Crie um novo edital ou ajuste os filtros.', 'en':'Create a new tender or adjust filters.', 'de':'Neue Ausschreibung erstellen oder Filter anpassen.' },
-    'Nenhuma visita encontrada':        { 'pt-BR':'Nenhuma visita encontrada',        'en':'No visits found',               'de':'Keine Besuche gefunden'                  },
-    'Agende uma nova visita ou ajuste os filtros.': { 'pt-BR':'Agende uma nova visita ou ajuste os filtros.', 'en':'Schedule a new visit or adjust filters.', 'de':'Neuen Besuch planen oder Filter anpassen.' },
-    'Nenhum documento encontrado':      { 'pt-BR':'Nenhum documento encontrado',      'en':'No documents found',            'de':'Keine Dokumente gefunden'                },
-    'Envie documentos usando o botão acima.': { 'pt-BR':'Envie documentos usando o botão acima.', 'en':'Upload documents using the button above.', 'de':'Dokumente über die Schaltfläche oben hochladen.' },
-    'Nenhuma manutenção registrada':    { 'pt-BR':'Nenhuma manutenção registrada',    'en':'No maintenance registered',     'de':'Keine Wartung registriert'               },
-    'Registre a primeira manutenção para este scanner.': { 'pt-BR':'Registre a primeira manutenção para este scanner.', 'en':'Register the first maintenance for this scanner.', 'de':'Erste Wartung für diesen Scanner registrieren.' },
-    'Registre a retirada de um scanner.': { 'pt-BR':'Registre a retirada de um scanner.', 'en':'Register a scanner checkout.', 'de':'Scanner-Entnahme registrieren.' },
-    'Erro ao carregar dados':           { 'pt-BR':'Erro ao carregar dados',           'en':'Error loading data',            'de':'Fehler beim Laden der Daten'             },
-    'Nenhuma resposta encontrada':      { 'pt-BR':'Nenhuma resposta encontrada',       'en':'No responses found',            'de':'Keine Antworten gefunden'               },
     'Sem avaliações no período.':       { 'pt-BR':'Sem avaliações no período.',        'en':'No evaluations in this period.','de':'Keine Bewertungen im Zeitraum.'         },
-    'As avaliações aparecerão aqui após o envio do formulário.': { 'pt-BR':'As avaliações aparecerão aqui após o envio do formulário.', 'en':'Evaluations will appear here after the form is submitted.', 'de':'Bewertungen erscheinen nach dem Absenden des Formulars.' },
-    'Não foi possível carregar os dados.': { 'pt-BR':'Não foi possível carregar os dados.', 'en':'Could not load data.', 'de':'Daten konnten nicht geladen werden.' },
-    'Verifique a conexão com o servidor.': { 'pt-BR':'Verifique a conexão com o servidor.', 'en':'Check your server connection.', 'de':'Serververbindung prüfen.' },
-    'Verifique sua conexão e tente novamente.': { 'pt-BR':'Verifique sua conexão e tente novamente.', 'en':'Check your connection and try again.', 'de':'Verbindung prüfen und erneut versuchen.' },
-    'Nenhum dado de distribuição.':     { 'pt-BR':'Nenhum dado de distribuição.',     'en':'No distribution data.',         'de':'Keine Verteilungsdaten.'                 },
-    'Nenhum dado para o período selecionado.': { 'pt-BR':'Nenhum dado para o período selecionado.', 'en':'No data for the selected period.', 'de':'Keine Daten für den gewählten Zeitraum.' },
-    'Erro ao carregar projetos.':       { 'pt-BR':'Erro ao carregar projetos.',       'en':'Error loading projects.',       'de':'Fehler beim Laden der Projekte.'         },
 
     // ── Ações em tabelas (JS) ───────────────────────────────────────
     'Clique para ordenar':       { 'pt-BR':'Clique para ordenar',       'en':'Click to sort',           'de':'Zum Sortieren klicken'      },
-    'registro(s)':               { 'pt-BR':'registro(s)',               'en':'record(s)',               'de':'Eintrag/Einträge'           },
-    'registros exportados.':     { 'pt-BR':'registros exportados.',     'en':'records exported.',       'de':'Einträge exportiert.'       },
-    'Nenhum registro para exportar.': { 'pt-BR':'Nenhum registro para exportar.', 'en':'No records to export.', 'de':'Keine Einträge zum Exportieren.' },
 
     // ── Mensagens de ação (Toast / JS) ──────────────────────────────
-    'Nota salva com sucesso!':                { 'pt-BR':'Nota salva com sucesso!',                'en':'Note saved successfully!',              'de':'Notiz erfolgreich gespeichert!'          },
-    'Verificação ambiental registrada com sucesso!': { 'pt-BR':'Verificação ambiental registrada com sucesso!', 'en':'Environmental check registered!', 'de':'Umgebungsprüfung registriert!'   },
     'Verificação registrada! (modo demo)':    { 'pt-BR':'Verificação registrada! (modo demo)',    'en':'Check registered! (demo mode)',          'de':'Prüfung registriert! (Demo)'             },
-    'Termo de custódia enviado para impressão.': { 'pt-BR':'Termo de custódia enviado para impressão.', 'en':'Custody term sent to print.', 'de':'Verwahrungsschein an Drucker gesendet.' },
     'Recebimento registrado com sucesso!':    { 'pt-BR':'Recebimento registrado com sucesso!',    'en':'Reception registered successfully!',    'de':'Empfang erfolgreich registriert!'        },
     'Registro atualizado.':                   { 'pt-BR':'Registro atualizado.',                   'en':'Record updated.',                       'de':'Eintrag aktualisiert.'                   },
-    'Devolução registrada com sucesso!':      { 'pt-BR':'Devolução registrada com sucesso!',      'en':'Return registered successfully!',       'de':'Rückgabe erfolgreich registriert!'       },
-    'Registro excluído.':                     { 'pt-BR':'Registro excluído.',                     'en':'Record deleted.',                       'de':'Eintrag gelöscht.'                       },
-    'Documento anexado!':                     { 'pt-BR':'Documento anexado!',                     'en':'Document attached!',                    'de':'Dokument angehängt!'                     },
     'Preencha os campos obrigatórios (etapa 1).': { 'pt-BR':'Preencha os campos obrigatórios (etapa 1).', 'en':'Fill in the required fields (step 1).', 'de':'Pflichtfelder ausfüllen (Schritt 1).' },
     'Informe a data do recebimento.':         { 'pt-BR':'Informe a data do recebimento.',         'en':'Enter the reception date.',             'de':'Empfangsdatum eingeben.'                 },
     'Informe o responsável pelo recebimento.': { 'pt-BR':'Informe o responsável pelo recebimento.', 'en':'Enter the responsible for reception.', 'de':'Empfangsverantwortlichen eingeben.'     },
     'Informe o cliente / empresa.':           { 'pt-BR':'Informe o cliente / empresa.',           'en':'Enter the client / company.',           'de':'Kunden / Unternehmen eingeben.'          },
     'Informe a descrição da peça.':           { 'pt-BR':'Informe a descrição da peça.',           'en':'Enter the part description.',           'de':'Teilebeschreibung eingeben.'             },
-    'Informe uma quantidade válida.':         { 'pt-BR':'Informe uma quantidade válida.',         'en':'Enter a valid quantity.',               'de':'Gültige Menge eingeben.'                 },
     'Informe a unidade.':                     { 'pt-BR':'Informe a unidade.',                     'en':'Enter the unit.',                       'de':'Einheit eingeben.'                       },
-    'Informe a data de devolução.':           { 'pt-BR':'Informe a data de devolução.',           'en':'Enter the return date.',                'de':'Rückgabedatum eingeben.'                 },
-    'Informe o responsável.':                 { 'pt-BR':'Informe o responsável.',                 'en':'Enter the responsible person.',         'de':'Verantwortlichen eingeben.'              },
-    'Selecione um arquivo para anexar.':      { 'pt-BR':'Selecione um arquivo para anexar.',      'en':'Select a file to attach.',              'de':'Datei zum Anhängen auswählen.'           },
-    'Preencha todos os campos obrigatórios.': { 'pt-BR':'Preencha todos os campos obrigatórios.', 'en':'Fill in all required fields.',          'de':'Alle Pflichtfelder ausfüllen.'           },
 
     // ── Termos do termo de custódia ─────────────────────────────────
     'Novo Recebimento de Peças':       { 'pt-BR':'Novo Recebimento de Peças',       'en':'New Part Reception',           'de':'Neuer Teileempfang'           },
@@ -1345,7 +1101,6 @@
 
     // ── Navegação de etapas (stepper) ───────────────────────────────
     'Etapa':                     { 'pt-BR':'Etapa',                     'en':'Step',                    'de':'Schritt'                    },
-    'de':                        { 'pt-BR':'de',                        'en':'of',                      'de':'von'                        },
 
     // ── Meses ───────────────────────────────────────────────────────
     'Janeiro':    { 'pt-BR':'Janeiro',    'en':'January',    'de':'Januar'    },
