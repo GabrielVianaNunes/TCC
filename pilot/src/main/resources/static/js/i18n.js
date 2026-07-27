@@ -217,6 +217,7 @@
     // ── Status / valores de select ──────────────────────────────────
     'Em andamento':                    { 'pt-BR':'Em andamento',                    'en':'In progress',                         'de':'In Bearbeitung'                        },
     'Em Andamento':                    { 'pt-BR':'Em Andamento',                    'en':'In Progress',                         'de':'In Bearbeitung'                        },
+    'Em análise':                      { 'pt-BR':'Em análise',                      'en':'Under review',                        'de':'In Prüfung'                            },
     'Aguardando cliente':              { 'pt-BR':'Aguardando cliente',              'en':'Awaiting client',                     'de':'Warte auf Kunden'                      },
     'Venda finalizada':                { 'pt-BR':'Venda finalizada',                'en':'Sale completed',                      'de':'Verkauf abgeschlossen'                 },
     'Venda Finalizada':                { 'pt-BR':'Venda Finalizada',                'en':'Sale Completed',                      'de':'Verkauf Abgeschlossen'                 },
@@ -495,6 +496,11 @@
     'Histórico de Uso':                { 'pt-BR':'Histórico de Uso',                'en':'Usage History',                       'de':'Nutzungsverlauf'                       },
     'Registros de Manutenção':         { 'pt-BR':'Registros de Manutenção',         'en':'Maintenance Records',                 'de':'Wartungsaufzeichnungen'                },
     'Itens em Estoque':                { 'pt-BR':'Itens em Estoque',                'en':'Items in Stock',                      'de':'Lagerartikel'                          },
+
+    // ── Tipos de medição (Máquinas) ───────────────────────────────────
+    'Medição por Coordenadas (CMM)':   { 'pt-BR':'Medição por Coordenadas (CMM)',   'en':'Coordinate Measurement (CMM)',        'de':'Koordinatenmessung (KMG)'              },
+    'Multi-sensor Óptico':             { 'pt-BR':'Multi-sensor Óptico',             'en':'Optical Multi-sensor',                'de':'Optischer Multisensor'                 },
+    'Tomografia Computadorizada (CT)': { 'pt-BR':'Tomografia Computadorizada (CT)', 'en':'Computed Tomography (CT)',            'de':'Computertomographie (CT)'              },
 
     // ── Calendário / eventos ────────────────────────────────────────
     'Próximos eventos':                { 'pt-BR':'Próximos eventos',                'en':'Upcoming events',                     'de':'Nächste Veranstaltungen'               },
@@ -1173,7 +1179,7 @@
 
   // ── Text-node walker ─────────────────────────────────────────────
   const SKIP_TAGS = new Set([
-    'SCRIPT','STYLE','SVG','PATH','G','CIRCLE','LINE','POLYLINE',
+    'SCRIPT','STYLE','PATH','CIRCLE','LINE','POLYLINE',
     'RECT','POLYGON','ELLIPSE','DEFS','CODE','PRE','OPTION',
   ]);
 
