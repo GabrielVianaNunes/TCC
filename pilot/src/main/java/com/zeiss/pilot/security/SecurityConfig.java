@@ -11,11 +11,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    private final LoginAttemptService loginAttemptService;
+
+    public SecurityConfig(LoginAttemptService loginAttemptService) {
+        this.loginAttemptService = loginAttemptService;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,10 +41,17 @@ public class SecurityConfig {
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().authenticated()
             )
+            .addFilterBefore(new LoginRateLimitFilter(loginAttemptService), UsernamePasswordAuthenticationFilter.class)
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/index", true)
-                .failureUrl("/login?error")
+                .successHandler((request, response, authentication) -> {
+                    loginAttemptService.resetar(authentication.getName());
+                    response.sendRedirect(request.getContextPath() + "/index");
+                })
+                .failureHandler((request, response, exception) -> {
+                    loginAttemptService.registrarFalha(request.getParameter("username"));
+                    response.sendRedirect(request.getContextPath() + "/login?error");
+                })
                 .permitAll()
             )
             .logout(logout -> logout
