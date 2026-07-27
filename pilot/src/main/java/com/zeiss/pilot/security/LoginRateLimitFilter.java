@@ -21,7 +21,8 @@ public class LoginRateLimitFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        if ("POST".equalsIgnoreCase(request.getMethod()) && "/login".equals(request.getRequestURI())) {
+        if ("POST".equalsIgnoreCase(request.getMethod())
+                && request.getRequestURI().equals(request.getContextPath() + "/login")) {
             String email = request.getParameter("username");
             if (loginAttemptService.estaBloqueado(email)) {
                 response.sendRedirect(request.getContextPath() + "/login?bloqueado");

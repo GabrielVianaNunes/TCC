@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
 
 @Service
 public class LoginAttemptService {
@@ -18,7 +17,10 @@ public class LoginAttemptService {
     private final ConcurrentHashMap<String, Bucket> buckets = new ConcurrentHashMap<>();
 
     private Bucket novoBucket() {
-        Bandwidth limite = Bandwidth.classic(MAX_TENTATIVAS, Refill.intervally(MAX_TENTATIVAS, JANELA));
+        Bandwidth limite = Bandwidth.builder()
+                .capacity(MAX_TENTATIVAS)
+                .refillGreedy(MAX_TENTATIVAS, JANELA)
+                .build();
         return Bucket.builder().addLimit(limite).build();
     }
 
@@ -26,8 +28,8 @@ public class LoginAttemptService {
         if (email == null) {
             return false;
         }
-        Bucket bucket = buckets.computeIfAbsent(email.toLowerCase(), k -> novoBucket());
-        return bucket.getAvailableTokens() <= 0;
+        Bucket bucket = buckets.get(email.toLowerCase());
+        return bucket != null && bucket.getAvailableTokens() <= 0;
     }
 
     public void registrarFalha(String email) {
