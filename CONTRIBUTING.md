@@ -73,6 +73,10 @@ Controllers não acessam Repository diretamente, e não deve haver regra de neg�
 
 Toda resposta de API usa DTO, nunca a Entity diretamente. O padrão adotado é `DTO.fromEntity(entity)` / `dto.toEntity()` para conversão — siga esse padrão em DTOs novos em vez de expor os setters da Entity no controller.
 
+**`status` (e campos parecidos) tem vocabulário fixo por módulo — não presuma que um valor válido em um módulo vale em outro.** Vários módulos têm uma coluna `status` com `CHECK` constraint própria no banco (ex.: `Projeto.status` é ciclo de vida de projeto — "A iniciar", "Em andamento", "Concluído"...; `Servico.status` é funil comercial — "1º Contato", "Elaboração de proposta", "Venda finalizada"...). São vocabulários **diferentes e não intercambiáveis**, mesmo com nome de coluna idêntico. Antes de escrever um teste de integração ou popular dados para um módulo, confira o `CHECK` real da tabela (`V1__baseline.sql`, buscando `_status_check`) em vez de reaproveitar um valor visto em outro módulo.
+
+**Endpoint de listagem paginado (`Page<T>`) vs. lista simples (`List<T>`) — confira o contrato antes de consumir no frontend.** A maioria dos controllers `GET` de listagem devolve `List<T>` direto (ex.: `/api/projetos`, `/api/visitas-tecnicas`, `/api/documentos`), mas alguns devolvem `Page<T>` paginado com `{content, totalElements, ...}` (ex.: `/api/servicos`, `/api/amostras`). Código de frontend genérico que espera um formato fixo pra todo endpoint (ex.: um card de KPI reaproveitado pra vários módulos) quebra silenciosamente contra o outro formato — `data.totalElements` é `undefined` num array puro, sem lançar erro. Ver `PROJECT_STATUS.md`, Histórico 2026-08-16, para o bug real que isso causou (cards de KPI do Dashboard Executivo sempre mostrando 0).
+
 ### Tratamento de erro
 
 Erros são centralizados em `GlobalExceptionHandler` (`@RestControllerAdvice`). Não adicione blocos `try/catch` genéricos em controllers só para formatar resposta de erro — deixe a exceção subir e trate lá, a menos que o erro exija uma resposta HTTP muito específica daquele endpoint.
@@ -84,6 +88,8 @@ Regras de autorização ficam centralizadas em `SecurityConfig` (matchers por ro
 ### Migrações de banco
 
 Toda mudança de schema (nova tabela, nova coluna, alteração de tipo) precisa de uma migração Flyway em `pilot/src/main/resources/db/migration/`, nomeada `V{N}__descricao_em_snake_case.sql` — nunca edite uma migração já aplicada, sempre crie uma nova. `ddl-auto=validate` vai barrar a subida da aplicação se uma entidade não bater com o schema, então crie a migração antes de mudar a entidade correspondente.
+
+**Coluna do banco sem mapeamento na Entity não gera erro — falha silenciosa em runtime.** Como o `V1__baseline.sql` foi gerado via `pg_dump --schema-only` de um banco com dados legados, algumas colunas `NOT NULL` (sem `DEFAULT`) ficaram sem `@Column` correspondente em nenhuma Entity — isso não quebra a compilação nem `ddl-auto=validate` (que só reclama de coluna que a Entity espera e o banco não tem, nunca o contrário), só quebra em runtime, com `DataIntegrityViolation`, na primeira tentativa de `INSERT`. Foi assim que `Servico.codigo_os` ficou anos sem mapeamento — `POST /api/servicos` falhava sempre, e ninguém percebeu porque a rota nunca tinha sido exercitada de ponta a ponta (ver `PROJECT_STATUS.md`, Histórico 2026-08-16). Ao adicionar uma Entity nova ou revisar uma existente, confira as colunas `NOT NULL` reais da tabela (`\d+ tabela` no `psql`, ou grep no `V1__baseline.sql`) contra os campos mapeados — não confie só na compilação.
 
 ### Cobertura de testes
 
