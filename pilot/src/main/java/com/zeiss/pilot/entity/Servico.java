@@ -18,6 +18,9 @@ public class Servico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "codigo_os", nullable = false, unique = true, length = 20)
+    private String codigoOs;
+
     @Column(nullable = false)
     private String cliente;
 
@@ -54,6 +57,9 @@ public class Servico {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public String getCodigoOs() { return codigoOs; }
+    public void setCodigoOs(String codigoOs) { this.codigoOs = codigoOs; }
 
     public String getCliente() { return cliente; }
     public void setCliente(String cliente) { this.cliente = cliente; }

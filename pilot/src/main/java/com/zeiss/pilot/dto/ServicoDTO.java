@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public class ServicoDTO {
 
     private Long id;
+    private String codigoOs;
     private String cliente;
     private String cpfOuCnpj;
     private String endereco;
@@ -26,6 +27,7 @@ public class ServicoDTO {
     public static ServicoDTO fromEntity(Servico s) {
         ServicoDTO dto = new ServicoDTO();
         dto.setId(s.getId());
+        dto.setCodigoOs(s.getCodigoOs());
         dto.setCliente(s.getCliente());
         dto.setCpfOuCnpj(s.getCpfOuCnpj());
         dto.setEndereco(s.getEndereco());
@@ -41,6 +43,7 @@ public class ServicoDTO {
         return dto;
     }
 
+    // codigoOs não é copiado aqui de propósito — é sempre gerado pelo servidor em ServicoService.criarServico.
     public Servico toEntity() {
         Servico s = new Servico();
         s.setCliente(this.cliente);
@@ -60,6 +63,9 @@ public class ServicoDTO {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public String getCodigoOs() { return codigoOs; }
+    public void setCodigoOs(String codigoOs) { this.codigoOs = codigoOs; }
 
     public String getCliente() { return cliente; }
     public void setCliente(String cliente) { this.cliente = cliente; }

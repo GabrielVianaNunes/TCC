@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -36,14 +37,25 @@ public class ServicoService {
     }
 
     public ServicoDTO criarServico(ServicoDTO dto) {
-        return ServicoDTO.fromEntity(servicoRepository.save(dto.toEntity()));
+        Servico entity = dto.toEntity();
+        entity.setCodigoOs(gerarProximoCodigoOs());
+        return ServicoDTO.fromEntity(servicoRepository.save(entity));
+    }
+
+    private String gerarProximoCodigoOs() {
+        String prefixo = "OS-" + LocalDate.now().getYear() + "-";
+        int proximaSequencia = servicoRepository.buscarMaiorCodigoOsComPrefixo(prefixo)
+                .map(codigo -> Integer.parseInt(codigo.substring(codigo.length() - 4)) + 1)
+                .orElse(1);
+        return String.format("%s%04d", prefixo, proximaSequencia);
     }
 
     public ServicoDTO atualizarServico(Long id, ServicoDTO dto) {
-        servicoRepository.findById(id)
+        Servico existente = servicoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Serviço não encontrado: " + id));
         Servico entity = dto.toEntity();
         entity.setId(id);
+        entity.setCodigoOs(existente.getCodigoOs());
         return ServicoDTO.fromEntity(servicoRepository.save(entity));
     }
 

@@ -9,8 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ServicoRepository extends JpaRepository<Servico, Long> {
+
+    @Query("SELECT MAX(s.codigoOs) FROM Servico s WHERE s.codigoOs LIKE CONCAT(:prefixo, '%')")
+    Optional<String> buscarMaiorCodigoOsComPrefixo(@Param("prefixo") String prefixo);
 
     @Query("SELECT s FROM Servico s WHERE " +
            "(:query IS NULL OR :query = '' OR LOWER(s.cliente) LIKE LOWER(CONCAT('%', :query, '%')) " +
