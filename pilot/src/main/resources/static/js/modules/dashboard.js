@@ -47,7 +47,9 @@ const Dashboard = (() => {
     };
 
     grid.innerHTML = results.map(({ ok, k, data }) => {
-      const total = ok && data ? (data.totalElements ?? data.content?.length ?? 0) : '—';
+      const total = ok && data
+        ? (Array.isArray(data) ? data.length : (data.totalElements ?? data.content?.length ?? 0))
+        : '—';
       return `
         <div class="kpi-card kpi-${k.variant}">
           <div class="kpi-card__left">
