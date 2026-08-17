@@ -85,6 +85,8 @@ O schema é versionado com [Flyway](https://flywaydb.org/) — os arquivos ficam
 
 Para criar uma nova migração, adicione um arquivo `V{N}__descricao_em_snake_case.sql` (incrementando `N` a partir da última migração existente) com o SQL da mudança. Nunca edite uma migração já aplicada — sempre crie uma nova.
 
+Migrações também são usadas para **correção pontual de dados legados**, não só para mudança de schema (ex.: `V4` corrige um valor com casa decimal errada, `V5` remove um registro de teste vazio). Nesses casos, escreva o `WHERE` pela condição que caracteriza o problema, não pelo id — assim a migração é segura em qualquer ambiente, inclusive num banco onde aquela linha não exista.
+
 ## Executando
 
 ```bash
