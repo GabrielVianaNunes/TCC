@@ -157,7 +157,13 @@
   /* Text */
   --text-primary:         #F0F6FC;
   --text-secondary:       #8B949E;
-  --text-muted:           #484F58;
+  /* #484F58 (valor anterior) é um tom de contorno, não de texto: dava 2.28:1
+     sobre o fundo escuro, bem abaixo do mínimo de 4.5:1 do WCAG AA — e é usado
+     em cabeçalho de tabela e subtítulo de página, não só em detalhe decorativo.
+     #8B949E sobe para ~5.5:1. Fica igual a --text-secondary no escuro: no tema
+     claro os dois continuam distintos, e aqui a legibilidade pesa mais que a
+     distinção entre os dois tons. */
+  --text-muted:           #8B949E;
   --text-link:            #60A5FA;
   --text-link-hover:      #93C5FD;
 
