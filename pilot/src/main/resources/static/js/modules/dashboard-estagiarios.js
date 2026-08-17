@@ -27,7 +27,10 @@
   }
 
   function avatarColor(id) {
-    const palette = ['#0033A0','#00A3E0','#16A34A','#D97706','#DC2626','#7C3AED','#DB2777','#0891B2'];
+    // Tons escolhidos para que o texto branco das iniciais fique acima de
+    // 4.5:1 — os originais (#00A3E0, #16A34A, #D97706, #0891B2, #059669)
+    // ficavam entre 2.9:1 e 3.7:1.
+    const palette = ['#0033A0','#0E7490','#15803D','#B45309','#DC2626','#7C3AED','#DB2777','#155E75'];
     return palette[(id - 1) % palette.length];
   }
 
@@ -38,17 +41,19 @@
     return '★'.repeat(full) + '☆'.repeat(empty);
   }
 
+  // Usam os tokens de TEXTO: as variáveis sem sufixo são tons para fundo e
+  // ficam ilegíveis quando aplicadas como cor de texto no tema escuro.
   function starsColor(nota) {
     if (nota === null) return 'var(--text-muted)';
-    if (nota >= 4.5) return 'var(--color-success)';
-    if (nota >= 3)   return 'var(--color-warning)';
-    return 'var(--color-danger)';
+    if (nota >= 4.5) return 'var(--color-success-text)';
+    if (nota >= 3)   return 'var(--color-warning-text)';
+    return 'var(--color-danger-text)';
   }
 
   function taxaColor(taxa) {
-    if (taxa >= 70) return 'var(--color-success)';
-    if (taxa >= 40) return 'var(--color-warning)';
-    return 'var(--color-danger)';
+    if (taxa >= 70) return 'var(--color-success-text)';
+    if (taxa >= 40) return 'var(--color-warning-text)';
+    return 'var(--color-danger-text)';
   }
 
   function formatDate(iso) {
@@ -119,11 +124,11 @@
         </td>
         <td><span class="badge badge--neutral">${e.area || '—'}</span></td>
         <td style="text-align:center">${e.totalCards}</td>
-        <td style="text-align:center"><span style="color:var(--color-success);font-weight:var(--font-weight-semibold)">${cpc['concluido'] || 0}</span></td>
+        <td style="text-align:center"><span style="color:var(--color-success-text);font-weight:var(--font-weight-semibold)">${cpc['concluido'] || 0}</span></td>
         <td style="text-align:center">${emAnd}</td>
         <td style="text-align:center">
           ${e.vencidas > 0
-            ? `<span style="color:var(--color-danger);font-weight:var(--font-weight-semibold)">${e.vencidas}</span>`
+            ? `<span style="color:var(--color-danger-text);font-weight:var(--font-weight-semibold)">${e.vencidas}</span>`
             : `<span style="color:var(--text-muted)">0</span>`}
         </td>
         <td style="text-align:center">

@@ -17,8 +17,8 @@
 .almo-item-nome { font-weight: var(--font-weight-medium); color: var(--text-primary); }
 .almo-item-obs  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 .almo-qty       { font-weight: var(--font-weight-semibold); font-size: var(--font-size-base); }
-.almo-qty--critico { color: var(--color-danger); }
-.almo-qty--aviso   { color: #d97706; }
+.almo-qty--critico { color: var(--color-danger-text); }
+.almo-qty--aviso   { color: var(--color-warning-text); }
 .almo-qty-min      { color: var(--text-muted); font-size: var(--font-size-sm); }
 .almo-row--critico            { background: rgba(239,68,68,0.04); }
 .almo-row--critico:hover      { background: rgba(239,68,68,0.08) !important; }
@@ -29,30 +29,30 @@
   white-space: nowrap; background: var(--color-surface-hover);
   color: var(--text-secondary); border: 1px solid var(--border-color);
 }
-.almo-cat--ponteiras   { background: rgba(59,130,246,0.10);  color: #3b82f6; border-color: rgba(59,130,246,0.25); }
-.almo-cat--limpeza     { background: rgba(16,185,129,0.10);  color: #10b981; border-color: rgba(16,185,129,0.25); }
-.almo-cat--ferramentas { background: rgba(245,158,11,0.10);  color: #d97706; border-color: rgba(245,158,11,0.25); }
-.almo-cat--metrologia  { background: rgba(139,92,246,0.10);  color: #8b5cf6; border-color: rgba(139,92,246,0.25); }
-.almo-cat--engmec      { background: rgba(249,115,22,0.10);  color: #ea580c; border-color: rgba(249,115,22,0.25); }
-.almo-cat--epi         { background: rgba(239,68,68,0.10);   color: #dc2626; border-color: rgba(239,68,68,0.25);  }
-.almo-cat--papelaria   { background: rgba(100,116,139,0.10); color: #64748b; border-color: rgba(100,116,139,0.25);}
+.almo-cat--ponteiras   { background: rgba(59,130,246,0.10);  color: var(--color-info-text); border-color: rgba(59,130,246,0.25); }
+.almo-cat--limpeza     { background: rgba(16,185,129,0.10);  color: var(--color-success-text); border-color: rgba(16,185,129,0.25); }
+.almo-cat--ferramentas { background: rgba(245,158,11,0.10);  color: var(--color-warning-text); border-color: rgba(245,158,11,0.25); }
+.almo-cat--metrologia  { background: rgba(139,92,246,0.10);  color: #6D28D9; border-color: rgba(139,92,246,0.25); }
+.almo-cat--engmec      { background: rgba(249,115,22,0.10);  color: #C2410C; border-color: rgba(249,115,22,0.25); }
+.almo-cat--epi         { background: rgba(239,68,68,0.10);   color: var(--color-danger-text); border-color: rgba(239,68,68,0.25);  }
+.almo-cat--papelaria   { background: rgba(100,116,139,0.10); color: var(--color-neutral-text); border-color: rgba(100,116,139,0.25);}
 .badge--ok {
   display:inline-block; padding: 2px 8px; white-space:nowrap;
   border-radius: var(--border-radius-full); font-size: 11px; font-weight: var(--font-weight-semibold);
-  background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.3);
+  background: rgba(16,185,129,0.12); color: var(--color-success-text); border: 1px solid rgba(16,185,129,0.3);
 }
 .badge--aviso {
   display:inline-block; padding: 2px 8px; white-space:nowrap;
   border-radius: var(--border-radius-full); font-size: 11px; font-weight: var(--font-weight-semibold);
-  background: rgba(245,158,11,0.12); color: #d97706; border: 1px solid rgba(245,158,11,0.3);
+  background: rgba(245,158,11,0.12); color: var(--color-warning-text); border: 1px solid rgba(245,158,11,0.3);
 }
 .badge--critico {
   display:inline-block; padding: 2px 8px; white-space:nowrap;
   border-radius: var(--border-radius-full); font-size: 11px; font-weight: var(--font-weight-semibold);
-  background: rgba(239,68,68,0.12); color: #dc2626; border: 1px solid rgba(239,68,68,0.3);
+  background: rgba(239,68,68,0.12); color: var(--color-danger-text); border: 1px solid rgba(239,68,68,0.3);
 }
 .almo-actions { display: flex; gap: var(--space-1); align-items: center; }
-.almo-btn--delete:hover { color: var(--color-danger) !important; }
+.almo-btn--delete:hover { color: var(--color-danger-text) !important; }
 .almo-mov-item-nome {
   font-weight: var(--font-weight-semibold); color: var(--text-primary);
   font-size: var(--font-size-base); margin-bottom: var(--space-4);
@@ -67,7 +67,7 @@
   font-weight: var(--font-weight-medium); transition: var(--transition-fast);
   -webkit-user-select: none; user-select: none;
 }
-.almo-radio-btn:has(input:checked) { border-color: var(--color-primary); background: rgba(0,51,160,0.08); color: var(--color-primary); }
+.almo-radio-btn:has(input:checked) { border-color: var(--color-primary-text); background: rgba(0,51,160,0.08); color: var(--color-primary-text); }
 .almo-radio-btn input { margin: 0; cursor: pointer; }
 .form-hint { display: block; font-size: 12px; color: var(--text-muted); margin-top: var(--space-1); }
 .almo-item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
@@ -109,7 +109,12 @@
 #tabelaItens th[data-sort] { -webkit-user-select: none; user-select: none; }
 #tabelaItens th[data-sort]:hover { color: var(--text-primary); }
 #tabelaItens th.sort-asc,
-#tabelaItens th.sort-desc  { color: var(--color-primary); }
+#tabelaItens th.sort-desc  { color: var(--color-primary-text); }
 
 /* ── Modal overlay + dialog ── */
-/* All modal overlays use .modal-overlay from components.css for blur and background */
+/* All modal overlays use .modal-overlay from components.css for blur and background */
+
+/* Estas duas categorias usam tons fora do conjunto semantico, sem token
+   proprio. No tema escuro os tons do tema claro ficavam em 3.7:1 e 4.4:1. */
+[data-theme="dark"] .almo-cat--metrologia { color: #C4B5FD; }
+[data-theme="dark"] .almo-cat--engmec     { color: #FDBA74; }

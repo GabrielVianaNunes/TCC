@@ -285,7 +285,7 @@
           <span style="font-size:12px;color:var(--text-muted)">${fmtDate(r.data)}</span>
           <span style="font-size:12px;color:var(--text-secondary)">${esc(r.vinculo)}</span>
           ${npsBadgeHtml(r.nps)}
-          <span style="font-size:11px;color:${npsCategory(r.nps)==='promotor'?'#10b981':npsCategory(r.nps)==='neutro'?'#d97706':'#ef4444'}">${catLabel(r.nps)}</span>
+          <span style="font-size:11px;color:${npsCategory(r.nps)==='promotor'?'var(--color-success-text)':npsCategory(r.nps)==='neutro'?'var(--color-warning-text)':'var(--color-danger-text)'}">${catLabel(r.nps)}</span>
         </div>
         <div class="nps-comentario-texto">${esc(r.comentario)}</div>
         ${r.descServico ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px">Serviço: ${esc(r.descServico)}</div>` : ''}

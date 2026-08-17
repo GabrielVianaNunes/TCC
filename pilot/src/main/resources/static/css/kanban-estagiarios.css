@@ -29,7 +29,7 @@
 
 .kanban-col--drag-over {
   background: var(--color-primary-50);
-  border-color: var(--color-primary);
+  border-color: var(--color-primary-text);
 }
 
 /* ── Column header ── */
@@ -82,7 +82,7 @@
   display: flex; align-items: center; justify-content: center;
   transition: var(--transition-fast);
 }
-.kanban-col__add-btn:hover { background: var(--color-surface-alt); color: var(--color-primary); }
+.kanban-col__add-btn:hover { background: var(--color-surface-alt); color: var(--color-primary-text); }
 
 /* ── Cards container ── */
 .kanban-col__cards {
@@ -180,7 +180,7 @@
   font-size: 10px;
   font-weight: var(--font-weight-medium);
   background: var(--color-primary-50);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   padding: 2px 6px;
   border-radius: var(--border-radius-full);
 }
@@ -220,8 +220,8 @@
   gap: 3px;
   color: var(--text-muted);
 }
-.kanban-card__due--vencido { color: var(--color-danger); font-weight: var(--font-weight-semibold); }
-.kanban-card__due--urgente  { color: var(--color-warning); font-weight: var(--font-weight-semibold); }
+.kanban-card__due--vencido { color: var(--color-danger-text); font-weight: var(--font-weight-semibold); }
+.kanban-card__due--urgente  { color: var(--color-warning-text); font-weight: var(--font-weight-semibold); }
 
 /* ── Priority badge ── */
 .priority-badge {
@@ -236,9 +236,9 @@
   letter-spacing: .03em;
 }
 .priority-badge--baixa   { background: var(--color-neutral-bg);  color: var(--color-neutral); }
-.priority-badge--media   { background: var(--color-info-bg);     color: var(--color-info); }
-.priority-badge--alta    { background: var(--color-warning-bg);  color: var(--color-warning); }
-.priority-badge--urgente { background: var(--color-danger-bg);   color: var(--color-danger); }
+.priority-badge--media   { background: var(--color-info-bg);     color: var(--color-info-text); }
+.priority-badge--alta    { background: var(--color-warning-bg);  color: var(--color-warning-text); }
+.priority-badge--urgente { background: var(--color-danger-bg);   color: var(--color-danger-text); }
 
 /* ── Filter bar ── */
 .kanban-filters {
@@ -269,7 +269,7 @@
   flex-shrink: 0;
   position: relative;
 }
-.kanban-filter-avatar:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.kanban-filter-avatar:hover { border-color: var(--color-primary-text); color: var(--color-primary-text); }
 .kanban-filter-avatar.active {
   background: var(--color-primary);
   border-color: var(--color-primary);
@@ -325,7 +325,7 @@
   text-align: left;
 }
 .kanban-card-menu__item:hover { background: var(--color-surface-alt); }
-.kanban-card-menu__item--danger { color: var(--color-danger); }
+.kanban-card-menu__item--danger { color: var(--color-danger-text); }
 .kanban-card-menu__item--danger:hover { background: var(--color-danger-bg); }
 .kanban-card-menu__sep { height: 1px; background: var(--border-color); margin: var(--space-1) 0; }
 

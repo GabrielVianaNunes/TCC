@@ -152,7 +152,7 @@
 
 .login-box__pretitle {
   font-size: var(--font-size-sm);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -202,7 +202,7 @@
 
 .login-input:hover { border-color: var(--border-hover); }
 .login-input:focus {
-  border-color: var(--color-primary);
+  border-color: var(--color-primary-text);
   box-shadow: 0 0 0 4px rgba(0, 51, 160, 0.10);
 }
 
@@ -231,8 +231,8 @@
 .login-submit:active { transform: translateY(0); }
 
 .login-feedback { font-size: var(--font-size-sm); padding: var(--space-3) var(--space-4); border-radius: var(--border-radius-md); }
-.login-feedback--error { background: var(--color-danger-bg); color: var(--color-danger); border: 1px solid var(--color-danger-border); }
-.login-feedback--success { background: var(--color-success-bg); color: var(--color-success); border: 1px solid var(--color-success-border); }
+.login-feedback--error { background: var(--color-danger-bg); color: var(--color-danger-text); border: 1px solid var(--color-danger-border); }
+.login-feedback--success { background: var(--color-success-bg); color: var(--color-success-text); border: 1px solid var(--color-success-border); }
 
 .login-box__iso {
   display: flex;
@@ -253,7 +253,7 @@
   border-radius: var(--border-radius-full);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 
 /* ── Show/hide password eye button ── */
@@ -274,7 +274,7 @@
 /* ── Inline field error ── */
 .login-field-error {
   font-size: var(--font-size-xs);
-  color: var(--color-danger);
+  color: var(--color-danger-text);
   margin-top: 5px;
   display: none;
   padding-left: 2px;
@@ -308,7 +308,7 @@
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-full);
   background: var(--color-surface);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   cursor: pointer;
   transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
 }

@@ -28,9 +28,12 @@
   }
 
   function avatarColor(id) {
+    // Tons escolhidos para que o texto branco das iniciais fique acima de
+    // 4.5:1 — os originais (#00A3E0, #16A34A, #D97706, #0891B2, #059669)
+    // ficavam entre 2.9:1 e 3.7:1.
     const palette = [
-      '#0033A0','#00A3E0','#16A34A','#D97706','#DC2626',
-      '#7C3AED','#DB2777','#0891B2','#059669','#B45309',
+      '#0033A0','#0E7490','#15803D','#B45309','#DC2626',
+      '#7C3AED','#DB2777','#155E75','#047857','#9A3412',
     ];
     return palette[(id - 1) % palette.length];
   }

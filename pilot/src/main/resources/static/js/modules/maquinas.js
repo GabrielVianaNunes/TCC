@@ -915,7 +915,7 @@ function renderDocs() {
     return `<tr${rowStyle}>
       <td>
         <a href="/api/maquinas/${d.maquinaId}/documentos/${d.id}/abrir" target="_blank" rel="noopener"
-           style="display:flex;align-items:center;gap:6px;color:var(--color-primary);font-weight:500;text-decoration:none">
+           style="display:flex;align-items:center;gap:6px;color:var(--color-primary-text);font-weight:500;text-decoration:none">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
           ${d.nomeArquivo}
         </a>

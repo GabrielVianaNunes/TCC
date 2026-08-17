@@ -486,8 +486,8 @@
 
     tbody.innerHTML = filtered.map(m => {
       const tipoCls = m.tipo === 'entrada'
-        ? 'color:var(--color-success);font-weight:600'
-        : 'color:var(--color-danger);font-weight:600';
+        ? 'color:var(--color-success-text);font-weight:600'
+        : 'color:var(--color-danger-text);font-weight:600';
       const sinal = m.tipo === 'entrada' ? '+' : '−';
       return `<tr>
         <td>${fmtDT(m.data)}</td>

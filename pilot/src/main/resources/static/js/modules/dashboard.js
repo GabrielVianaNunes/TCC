@@ -279,16 +279,16 @@ const Dashboard = (() => {
       el.innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-3)">
           <div style="text-align:center;padding:var(--space-3);background:var(--color-success-bg);border-radius:var(--border-radius-md);border:1px solid var(--color-success-border)">
-            <div style="font-size:var(--font-size-2xl);font-weight:700;color:var(--color-success)">${ativos}</div>
-            <div style="font-size:var(--font-size-xs);color:var(--color-success);font-weight:600">${_t('Ativos')}</div>
+            <div style="font-size:var(--font-size-2xl);font-weight:700;color:var(--color-success-text)">${ativos}</div>
+            <div style="font-size:var(--font-size-xs);color:var(--color-success-text);font-weight:600">${_t('Ativos')}</div>
           </div>
           <div style="text-align:center;padding:var(--space-3);background:var(--color-warning-bg);border-radius:var(--border-radius-md);border:1px solid var(--color-warning-border)">
-            <div style="font-size:var(--font-size-2xl);font-weight:700;color:var(--color-warning)">${vencendo}</div>
-            <div style="font-size:var(--font-size-xs);color:var(--color-warning);font-weight:600">${_t('A Vencer')}</div>
+            <div style="font-size:var(--font-size-2xl);font-weight:700;color:var(--color-warning-text)">${vencendo}</div>
+            <div style="font-size:var(--font-size-xs);color:var(--color-warning-text);font-weight:600">${_t('A Vencer')}</div>
           </div>
           <div style="text-align:center;padding:var(--space-3);background:var(--color-danger-bg);border-radius:var(--border-radius-md);border:1px solid var(--color-danger-border)">
-            <div style="font-size:var(--font-size-2xl);font-weight:700;color:var(--color-danger)">${expirados}</div>
-            <div style="font-size:var(--font-size-xs);color:var(--color-danger);font-weight:600">${_t('Expirados')}</div>
+            <div style="font-size:var(--font-size-2xl);font-weight:700;color:var(--color-danger-text)">${expirados}</div>
+            <div style="font-size:var(--font-size-xs);color:var(--color-danger-text);font-weight:600">${_t('Expirados')}</div>
           </div>
         </div>
         ${vencendo > 0 || expirados > 0 ? `

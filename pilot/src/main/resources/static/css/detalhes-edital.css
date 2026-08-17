@@ -6,7 +6,7 @@
 .detail-field { display: flex; flex-direction: column; gap: 0.25rem; }
 .detail-field__label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
 .detail-field__value { font-size: 0.95rem; color: var(--text-primary); font-weight: 500; word-break: break-word; }
-.detail-field__value--large { font-size: 1.25rem; font-weight: 700; color: var(--color-primary); }
+.detail-field__value--large { font-size: 1.25rem; font-weight: 700; color: var(--color-primary-text); }
 .detail-field--full { grid-column: 1 / -1; }
 .detail-section { background: var(--color-surface); border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); padding: 1.5rem; }
 .detail-section__title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); }

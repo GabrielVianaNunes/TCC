@@ -166,7 +166,7 @@
 .card__title-icon {
   width: 20px;
   height: 20px;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 
 .card__subtitle {
@@ -261,12 +261,12 @@
 
 .kpi-card__delta--up {
   background: var(--color-success-bg);
-  color: var(--color-success);
+  color: var(--color-success-text);
 }
 
 .kpi-card__delta--down {
   background: var(--color-danger-bg);
-  color: var(--color-danger);
+  color: var(--color-danger-text);
 }
 
 .kpi-card__trend,
@@ -327,12 +327,12 @@
   flex-shrink: 0;
 }
 
-.badge--success  { background: var(--color-success-bg);  color: var(--color-success);  border: 1px solid var(--color-success-border); }
-.badge--warning  { background: var(--color-warning-bg);  color: var(--color-warning);  border: 1px solid var(--color-warning-border); }
-.badge--danger   { background: var(--color-danger-bg);   color: var(--color-danger);   border: 1px solid var(--color-danger-border); }
-.badge--info     { background: var(--color-info-bg);     color: var(--color-info);     border: 1px solid var(--color-info-border); }
-.badge--primary  { background: var(--color-primary-50);  color: var(--color-primary);  border: 1px solid #C3D0F5; }
-.badge--neutral  { background: var(--color-neutral-bg);  color: var(--color-neutral);  border: 1px solid var(--color-neutral-border); }
+.badge--success  { background: var(--color-success-bg);  color: var(--color-success-text);  border: 1px solid var(--color-success-border); }
+.badge--warning  { background: var(--color-warning-bg);  color: var(--color-warning-text);  border: 1px solid var(--color-warning-border); }
+.badge--danger   { background: var(--color-danger-bg);   color: var(--color-danger-text);   border: 1px solid var(--color-danger-border); }
+.badge--info     { background: var(--color-info-bg);     color: var(--color-info-text);     border: 1px solid var(--color-info-border); }
+.badge--primary  { background: var(--color-primary-50);  color: var(--color-primary-text);  border: 1px solid var(--color-primary-200, #C3D0F5); }
+.badge--neutral  { background: var(--color-neutral-bg);  color: var(--color-neutral-text);  border: 1px solid var(--color-neutral-border); }
 
 .badge--success  .badge-dot { background: var(--color-success); }
 .badge--warning  .badge-dot { background: var(--color-warning); }
@@ -342,9 +342,9 @@
 .badge--neutral  .badge-dot { background: var(--color-neutral); }
 
 /* ── Priority Badges ── */
-.priority--alta   { background:#FEF2F2; color:#991B1B; border:1px solid #FECACA; }
-.priority--media  { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
-.priority--baixa  { background:#F0FDF4; color:#166534; border:1px solid #BBF7D0; }
+.priority--alta   { background:#FEF2F2; color:var(--color-danger-text); border:1px solid #FECACA; }
+.priority--media  { background:#FFFBEB; color:var(--color-warning-text); border:1px solid #FDE68A; }
+.priority--baixa  { background:#F0FDF4; color:var(--color-success-text); border:1px solid #BBF7D0; }
 
 /* ══════════════════════════════════════════
    TABLES
@@ -457,7 +457,7 @@
 
 .form-label--required::after {
   content: ' *';
-  color: var(--color-danger);
+  color: var(--color-danger-text);
 }
 
 .form-control {
@@ -503,7 +503,7 @@ select.form-control { cursor: pointer; }
 
 .form-error {
   font-size: var(--font-size-xs);
-  color: var(--color-danger);
+  color: var(--color-danger-text);
 }
 
 .form-control.is-invalid { border-color: var(--color-danger); }
@@ -608,8 +608,8 @@ select.form-control { cursor: pointer; }
 
 .pagination__btn:hover:not(:disabled) {
   background: var(--color-primary-50);
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: var(--color-primary-text);
+  color: var(--color-primary-text);
 }
 
 .pagination__btn.active {
@@ -867,10 +867,10 @@ select.form-control { cursor: pointer; }
 
 .alert__icon { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
 
-.alert--success { background: var(--color-success-bg); border-color: var(--color-success-border); color: #166534; }
-.alert--warning { background: var(--color-warning-bg); border-color: var(--color-warning-border); color: #92400E; }
-.alert--danger  { background: var(--color-danger-bg);  border-color: var(--color-danger-border);  color: #991B1B; }
-.alert--info    { background: var(--color-info-bg);    border-color: var(--color-info-border);    color: #1E40AF; }
+.alert--success { background: var(--color-success-bg); border-color: var(--color-success-border); color: var(--color-success-text); }
+.alert--warning { background: var(--color-warning-bg); border-color: var(--color-warning-border); color: var(--color-warning-text); }
+.alert--danger  { background: var(--color-danger-bg);  border-color: var(--color-danger-border);  color: var(--color-danger-text); }
+.alert--info    { background: var(--color-info-bg);    border-color: var(--color-info-border);    color: var(--color-info-text); }
 
 /* ══════════════════════════════════════════
    PROGRESS / GAUGE BARS
@@ -977,7 +977,7 @@ select.form-control { cursor: pointer; }
 .upload-dropzone:hover,
 .upload-dropzone.drag-over,
 .upload-dropzone--dragover {
-  border-color: var(--color-primary);
+  border-color: var(--color-primary-text);
   background: var(--color-primary-50);
 }
 
@@ -987,7 +987,7 @@ select.form-control { cursor: pointer; }
 }
 
 .upload-dropzone__link {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   cursor: pointer;
   text-decoration: underline;
 }
@@ -999,7 +999,7 @@ select.form-control { cursor: pointer; }
   justify-content: center;
   margin-top: var(--space-3);
   font-size: var(--font-size-sm);
-  color: var(--color-success);
+  color: var(--color-success-text);
   font-weight: var(--font-weight-medium);
 }
 

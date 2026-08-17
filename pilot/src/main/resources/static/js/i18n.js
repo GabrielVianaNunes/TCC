@@ -1695,7 +1695,8 @@
      SWITCHER — badges coloridos (sem emojis de bandeira)
   ═══════════════════════════════════════════════════════════════════ */
   const LANG_META = {
-    'pt-BR': { short:'PT', full:'Português (BR)', color:'#16A34A' },
+    // #16A34A dava só 3.3:1 com o texto branco por cima; #15803D sobe para 5:1.
+    'pt-BR': { short:'PT', full:'Português (BR)', color:'#15803D' },
     'en':    { short:'EN', full:'English',         color:'#1D4ED8' },
     'de':    { short:'DE', full:'Deutsch',          color:'#DC2626' },
   };
