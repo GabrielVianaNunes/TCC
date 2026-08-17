@@ -129,6 +129,15 @@ while ((n = it.nextNode())) {
 console.log([...faltando]);                 // vazio = página 100% traduzida
 ```
 
+### Tema claro/escuro
+
+O tema vem de um atributo `data-theme` no elemento raiz, com as cores em variáveis CSS (`design-system.css`, blocos `:root` e `[data-theme="dark"]`). Regras:
+
+- **Use variável, nunca cor fixa.** `color: var(--text-primary)` funciona nos dois temas; `color: #0F172A` fica ilegível no escuro. O `login.css`, por exemplo, tem 101 usos de variável e por isso ganhou o tema escuro praticamente de graça.
+- **Confira o contraste ao escolher a variável.** `--text-muted` no escuro já esteve em `#484F58`, dando 2.28:1 contra o fundo — abaixo do mínimo de 4.5:1 do WCAG AA — e estava sendo usado em cabeçalho de tabela e subtítulo de página. Ao criar um par cor/fundo novo, meça: `(L1+0.05)/(L2+0.05) ≥ 4.5` para texto normal.
+- **Campo autopreenchido precisa de tratamento próprio.** O Chrome pinta um fundo branco em `:-webkit-autofill` que ignora `background`; o contorno é um `box-shadow` interno (ver final de `login.css`).
+- **Telas sem topbar precisam do seu próprio botão.** O `Theme` do `core.js` só é inicializado por `App.init()`, que também inicializa sidebar/topbar — em telas sem esses elementos (o login), use um handler próprio reaproveitando a chave `zp-theme`, para a escolha continuar valendo dentro do sistema.
+
 ### Frontend
 
 Páginas novas seguem o padrão modular já estabelecido: um template Thymeleaf em `templates/`, carregando `i18n.js` + `core.js` + `api.js` + `ui.js` + `modules/notifications.js` + um módulo próprio em `static/js/modules/[pagina].js`. Não crie arquivos JS soltos na raiz de `static/js/` (esse era o padrão antigo, já descontinuado — ver `PROJECT_STATUS.md` para a lista de arquivos legados pendentes de remoção).
