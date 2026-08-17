@@ -8,6 +8,16 @@
   <link rel="stylesheet" href="/css/components.css" />
   <link rel="stylesheet" href="/css/login.css" />
   <link rel="icon" href="/img/zeiss-logo.png" type="image/png" />
+  <!-- Aplica o tema salvo ANTES da primeira pintura, senão a tela pisca em
+       claro antes de virar escura. Mesma chave usada pelo Theme do core.js. -->
+  <script>
+    (function () {
+      try {
+        document.documentElement.setAttribute(
+          'data-theme', localStorage.getItem('zp-theme') || 'light');
+      } catch (e) { /* localStorage bloqueado: segue no tema claro */ }
+    })();
+  </script>
 </head>
 <body>
 
@@ -58,8 +68,26 @@
 
   <!-- ════ RIGHT ─ Form Panel ════ -->
   <main class="login-form-panel">
-    <!-- Âncora do seletor de idioma (i18n.js monta aqui quando não há topbar) -->
-    <div id="_langMount" style="display:flex;justify-content:flex-end;margin-bottom:var(--space-4)"></div>
+    <!-- Âncora do seletor de idioma (i18n.js monta aqui quando não há topbar)
+         e do botão de tema — a tela de login não tem topbar. -->
+    <div id="_langMount" style="display:flex;justify-content:flex-end;align-items:center;gap:var(--space-2);margin-bottom:var(--space-4)">
+      <button type="button" id="themeToggle" class="topbar__icon-btn"
+              title="Modo Escuro" aria-label="Modo Escuro"
+              style="display:flex;align-items:center;justify-content:center;width:36px;height:36px">
+        <svg id="themeIconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+        <svg id="themeIconSun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+    </div>
     <div class="login-box">
 
       <div class="login-box__header">
@@ -200,6 +228,44 @@
       box.style.transform = 'translateY(0)';
     }, 60);
   }
+
+  /* ── Tema claro/escuro ──
+     Handler próprio: o login não carrega core.js (o App.init de lá inicializa
+     sidebar/topbar, que não existem aqui). Usa a MESMA chave 'zp-theme', então
+     a escolha feita aqui continua valendo depois do login, e vice-versa. */
+  (function () {
+    var btn  = document.getElementById('themeToggle');
+    var moon = document.getElementById('themeIconMoon');
+    var sun  = document.getElementById('themeIconSun');
+    if (!btn) return;
+
+    function traduz(k) { return (window.I18n && window.I18n.t(k)) || k; }
+
+    function pintar(tema) {
+      document.documentElement.setAttribute('data-theme', tema);
+      try { localStorage.setItem('zp-theme', tema); } catch (e) {}
+      var escuro = tema === 'dark';
+      if (moon) moon.style.display = escuro ? 'none' : '';
+      if (sun)  sun.style.display  = escuro ? '' : 'none';
+      var rotulo = traduz(escuro ? 'Modo Claro' : 'Modo Escuro');
+      btn.title = rotulo;
+      btn.setAttribute('aria-label', rotulo);
+    }
+
+    var inicial = 'light';
+    try { inicial = localStorage.getItem('zp-theme') || 'light'; } catch (e) {}
+    pintar(inicial);
+
+    btn.addEventListener('click', function () {
+      var atual = document.documentElement.getAttribute('data-theme') || 'light';
+      pintar(atual === 'dark' ? 'light' : 'dark');
+    });
+
+    // Ao trocar de idioma, reetiqueta o botão
+    document.addEventListener('zeiss:langchange', function () {
+      pintar(document.documentElement.getAttribute('data-theme') || 'light');
+    });
+  })();
 
   /* ── Show / hide password ── */
   var passInput = document.getElementById('password');

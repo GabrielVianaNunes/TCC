@@ -249,7 +249,7 @@
   gap: 5px;
   padding: 4px 10px;
   background: var(--color-primary-50);
-  border: 1px solid #C3D0F5;
+  border: 1px solid var(--color-primary-200, #C3D0F5);
   border-radius: var(--border-radius-full);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
@@ -337,4 +337,16 @@
   .login-page { grid-template-columns: 1fr; }
   .login-brand { display: none; }
   .login-form-panel { padding: var(--space-6); background: var(--color-bg); }
+}
+
+/* O Chrome pinta um fundo branco proprio em campo autopreenchido, o que
+   quebra o tema escuro. Nao da para sobrescrever `background` nesse estado,
+   entao usa-se um box-shadow interno da cor da superficie. */
+.login-input:-webkit-autofill,
+.login-input:-webkit-autofill:hover,
+.login-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset;
+  -webkit-text-fill-color: var(--text-primary);
+  caret-color: var(--text-primary);
+  transition: background-color 9999s ease-in-out 0s;
 }
