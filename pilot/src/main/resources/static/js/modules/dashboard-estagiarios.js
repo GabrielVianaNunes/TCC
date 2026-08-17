@@ -352,7 +352,7 @@
       <div class="avatar">${initials(e.nome)}</div>
       <div>
         <div class="intern-name">${e.nome}</div>
-        <div class="intern-meta">${e.area} · Turno ${e.turno} · Orientador: ${e.orientador || '—'} · Início: ${e.inicioEstagio ? e.inicioEstagio.split('-').reverse().join('/') : '—'}</div>
+        <div class="intern-meta">${_t(e.area)} · ${_t('Turno')} ${_t(e.turno)} · ${_t('Orientador')}: ${e.orientador || '—'} · ${_t('Início')}: ${e.inicioEstagio ? e.inicioEstagio.split('-').reverse().join('/') : '—'}</div>
       </div>
     </div>
     <div class="kpi">
@@ -439,7 +439,7 @@
     estagiarios.forEach(e => {
       const opt = document.createElement('option');
       opt.value = e.id;
-      opt.textContent = `${e.nome} — ${e.area}`;
+      opt.textContent = `${e.nome} — ${_t(e.area)}`;
       sel.appendChild(opt);
     });
   }

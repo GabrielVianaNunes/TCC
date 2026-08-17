@@ -226,8 +226,12 @@ const Skeleton = {
 const StatusBadge = (() => {
 
   // ── Serviços ──
+  // Precisa cobrir os 6 valores aceitos pelo CHECK servicos_status_check;
+  // status fora do mapa cai no fallback (badge cinza + rótulo sem tradução).
   const SERVICOS = {
+    '1º Contato':             { cls: 'neutral', label: '1º Contato' },
     'Elaboração de proposta': { cls: 'info',    label: 'Elaboração de Proposta' },
+    'Visita':                 { cls: 'info',    label: 'Visita' },
     'Negociação':             { cls: 'warning', label: 'Negociação' },
     'Venda finalizada':       { cls: 'success', label: 'Venda Finalizada' },
     'Desistiu':               { cls: 'danger',  label: 'Desistiu' }
@@ -245,6 +249,7 @@ const StatusBadge = (() => {
 
   // ── Editais ──
   const EDITAIS = {
+    'Em análise':             { cls: 'info',    label: 'Em análise' },
     'Aguardando aprovação':   { cls: 'warning', label: 'Aguardando Aprovação' },
     'Reprovado':              { cls: 'danger',  label: 'Reprovado' },
     'Aprovado':               { cls: 'success', label: 'Aprovado' },
@@ -253,9 +258,12 @@ const StatusBadge = (() => {
   };
 
   // ── Documentos ──
+  // As chaves são exatamente os valores gravados pelo backend
+  // (DocumentoPDFService / DocumentoMaquinaService) — "prestes a vencer"
+  // com espaços, não hífens.
   const DOCUMENTOS = {
     'ativo':              { cls: 'success', label: 'Ativo' },
-    'prestes-a-vencer':   { cls: 'warning', label: 'Prestes a Vencer' },
+    'prestes a vencer':   { cls: 'warning', label: 'Prestes a Vencer' },
     'expirado':           { cls: 'danger',  label: 'Expirado' }
   };
 

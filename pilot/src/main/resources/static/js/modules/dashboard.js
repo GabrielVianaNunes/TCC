@@ -155,12 +155,16 @@ const Dashboard = (() => {
       .selectAll('text').attr('font-size', '11px').attr('fill', cssVar('--text-muted'));
   }
 
+  // Traduz ANTES de quebrar em linhas: depois de dividido em <tspan>, nenhum
+  // pedaço casa sozinho com o dicionário e o rótulo ficaria sempre em pt-BR.
   function wrap(selection, width) {
     selection.each(function() {
       const t = d3.select(this);
-      const words = t.text().split(' ');
+      const original = t.text();
+      const texto = _t(original);
+      const words = texto.split(' ');
+      t.text(words[0]);
       if (words.length > 1) {
-        t.text(words[0]);
         t.append('tspan').attr('x', 0).attr('dy', '1.1em').text(words.slice(1).join(' '));
       }
     });
@@ -237,7 +241,7 @@ const Dashboard = (() => {
     if (!dataExpiracao) return 'ativo';
     const diff = (new Date(dataExpiracao) - new Date()) / 86400000; // days
     if (diff < 0)   return 'expirado';
-    if (diff <= 30) return 'prestes-a-vencer';
+    if (diff <= 30) return 'prestes a vencer';
     return 'ativo';
   }
 
@@ -253,7 +257,7 @@ const Dashboard = (() => {
       }));
 
       const ativos    = items.filter(d => d._status === 'ativo').length;
-      const vencendo  = items.filter(d => d._status === 'prestes-a-vencer').length;
+      const vencendo  = items.filter(d => d._status === 'prestes a vencer').length;
       const expirados = items.filter(d => d._status === 'expirado').length;
 
       if (badgeDocs) badgeDocs.textContent = vencendo + expirados || '';

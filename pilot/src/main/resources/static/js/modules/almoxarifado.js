@@ -336,8 +336,8 @@
     if (!item) return;
     movItemId = id;
 
-    document.getElementById('movItemNome').textContent = `${item.nome} — ${_t('estoque atual:')} ${item.quantidadeAtual} ${item.unidade}`;
-    document.getElementById('movQtdHint').textContent  = `${_t('Disponível:')} ${item.quantidadeAtual} ${item.unidade}`;
+    document.getElementById('movItemNome').textContent = `${item.nome} — ${_t('estoque atual:')} ${item.quantidadeAtual} ${_t(item.unidade)}`;
+    document.getElementById('movQtdHint').textContent  = `${_t('Disponível:')} ${item.quantidadeAtual} ${_t(item.unidade)}`;
     document.querySelectorAll('input[name="movTipo"]').forEach(r => r.checked = false);
     document.getElementById('movQtd').value         = '';
     document.getElementById('movResponsavel').value = '';
@@ -364,7 +364,7 @@
     if (!item) return;
 
     if (tipo === 'saida' && qtd > item.quantidadeAtual) {
-      Toast.error(`${_t('Quantidade insuficiente. Estoque atual:')} ${item.quantidadeAtual} ${item.unidade}.`);
+      Toast.error(`${_t('Quantidade insuficiente. Estoque atual:')} ${item.quantidadeAtual} ${_t(item.unidade)}.`);
       return;
     }
 
@@ -385,14 +385,14 @@
         ? item.quantidadeAtual + qtd
         : Math.max(0, item.quantidadeAtual - qtd);
 
-      Toast.success(`${_t(tipo === 'entrada' ? 'Entrada' : 'Saída')} ${_t('registrada! Novo estoque:')} ${novoEstoque} ${item.unidade}`);
+      Toast.success(`${_t(tipo === 'entrada' ? 'Entrada' : 'Saída')} ${_t('registrada! Novo estoque:')} ${novoEstoque} ${_t(item.unidade)}`);
 
       closeModalMov();
       await load();
 
       const atualizado = allItens.find(i => i.id === movItemId);
       if (atualizado && statusInfo(atualizado).key === 'critico') {
-        setTimeout(() => Toast.error(`⚠️ ${_t('Atenção')}: "${atualizado.nome}" ${_t('está com estoque crítico')} (${atualizado.quantidadeAtual} ${atualizado.unidade})!`), 600);
+        setTimeout(() => Toast.error(`⚠️ ${_t('Atenção')}: "${atualizado.nome}" ${_t('está com estoque crítico')} (${atualizado.quantidadeAtual} ${_t(atualizado.unidade)})!`), 600);
       }
     } catch (err) {
       Toast.error(err?.message || _t('Erro ao registrar movimentação.'));
@@ -407,8 +407,8 @@
     if (!item) return;
     // Pré-seleciona "entrada" e abre modal de movimentação
     movItemId = id;
-    document.getElementById('movItemNome').textContent = `${item.nome} — ${_t('estoque atual:')} ${item.quantidadeAtual} ${item.unidade}`;
-    document.getElementById('movQtdHint').textContent  = `${_t('Disponível:')} ${item.quantidadeAtual} ${item.unidade}`;
+    document.getElementById('movItemNome').textContent = `${item.nome} — ${_t('estoque atual:')} ${item.quantidadeAtual} ${_t(item.unidade)}`;
+    document.getElementById('movQtdHint').textContent  = `${_t('Disponível:')} ${item.quantidadeAtual} ${_t(item.unidade)}`;
     document.querySelectorAll('input[name="movTipo"]').forEach(r => {
       r.checked = (r.value === 'entrada');
     });
@@ -543,7 +543,7 @@
         if (!item) return;
         document.getElementById('movQtdHint').textContent =
           r.value === 'saida'
-            ? `Estoque disponível: ${item.quantidadeAtual} ${item.unidade}`
+            ? `Estoque disponível: ${item.quantidadeAtual} ${_t(item.unidade)}`
             : '';
       });
     });

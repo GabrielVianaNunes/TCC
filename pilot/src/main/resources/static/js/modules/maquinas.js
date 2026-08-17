@@ -200,7 +200,7 @@ function renderDetailHeader() {
     <div class="machine-detail__right">
       <div class="machine-detail__info">
         <div class="machine-detail__title">${m.nome}</div>
-        <div class="machine-detail__subtitle">${m.modelo} &nbsp;·&nbsp; ${m.tipoMedida} &nbsp;·&nbsp; ${_t('Patrimônio')}: ${m.patrimonioId}</div>
+        <div class="machine-detail__subtitle">${m.modelo} &nbsp;·&nbsp; ${_t(m.tipoMedida)} &nbsp;·&nbsp; ${_t('Patrimônio')}: ${m.patrimonioId}</div>
         <div style="margin-top:var(--space-2)">
           <span class="power-indicator ${powerCls}">${powerDot}${m.ligada ? _t('Ligada') : _t('Desligada')}</span>
         </div>
@@ -267,7 +267,7 @@ function renderVisaoGeral() {
           <div class="current-user-info__name">${m.usuarioAtual}</div>
           <div class="current-user-info__since">
             ${_t('Usando desde')} ${sessaoAtiva ? fmtDT(sessaoAtiva.dataLigada) : '—'}
-            ${sessaoAtiva?.motivo ? ' · ' + sessaoAtiva.motivo : ''}
+            ${sessaoAtiva?.motivo ? ' · ' + _t(sessaoAtiva.motivo) : ''}
           </div>
         </div>
         <span class="power-indicator power-indicator--on" style="margin-left:auto">● ${_t('Em uso')}</span>
@@ -433,7 +433,7 @@ function renderAgenda() {
           <div class="agenda-item__title">${a.usuario}</div>
           <div class="agenda-item__meta">
             <span>🕐 ${fmtDT(a.dataInicio)} → ${fmtDT(a.dataFim)}</span>
-            ${a.motivo ? `<span>📋 ${a.motivo}</span>` : ''}
+            ${a.motivo ? `<span>📋 ${_t(a.motivo)}</span>` : ''}
           </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:var(--space-2)">

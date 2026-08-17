@@ -171,7 +171,7 @@
         : '';
 
       const servicosBadge = Array.isArray(a.servicos) && a.servicos.length
-        ? `<div style="font-size:10px;color:var(--text-muted);margin-top:2px">${esc(a.servicos.slice(0,2).join(', '))}${a.servicos.length > 2 ? ` +${a.servicos.length - 2}` : ''}</div>`
+        ? `<div style="font-size:10px;color:var(--text-muted);margin-top:2px">${esc(a.servicos.slice(0,2).map(s => _t(s)).join(', '))}${a.servicos.length > 2 ? ` +${a.servicos.length - 2}` : ''}</div>`
         : '';
 
       const podeDevolver = s.key === 'custodia' || s.key === 'vencendo';
@@ -187,7 +187,7 @@
             ? `<span class="amos-servico-ref">${esc(a.servicoRef)}</span>`
             : '<span style="color:var(--text-muted)">—</span>'}
         </td>
-        <td style="text-align:right;font-weight:var(--font-weight-semibold)">${a.quantidade} ${esc(a.unidade)}</td>
+        <td style="text-align:right;font-weight:var(--font-weight-semibold)">${a.quantidade} ${esc(_t(a.unidade))}</td>
         <td>${fmtDate(a.dataEntrada)}</td>
         <td>${devPrevHtml}</td>
         <td><span class="${s.cls}">${s.label}</span></td>
@@ -606,7 +606,7 @@
     if (!a) return;
     devItemId = id;
     document.getElementById('devInfoBox').textContent =
-      `${a.cliente} — ${a.descricao} (${a.quantidade} ${a.unidade})`;
+      `${a.cliente} — ${a.descricao} (${a.quantidade} ${_t(a.unidade)})`;
     setVal('devData',        todayISO());
     setVal('devResponsavel', '');
     setVal('devObs',         '');

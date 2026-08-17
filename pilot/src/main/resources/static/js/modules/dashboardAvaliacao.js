@@ -109,13 +109,13 @@
 
     const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
     set('kpiTotal',       total);
-    set('kpiTotalSub',    total ? `Média NPS: ${(data.reduce((s,r)=>s+r.nps,0)/total).toFixed(1)}` : '');
+    set('kpiTotalSub',    total ? `${_t('Média NPS')}: ${(data.reduce((s,r)=>s+r.nps,0)/total).toFixed(1)}` : '');
     set('kpiPromotores',  promotors);
-    set('kpiPromotoresPct', total ? `${pctProm.toFixed(1)}% do total` : '');
+    set('kpiPromotoresPct', total ? `${pctProm.toFixed(1)}% ${_t('do total')}` : '');
     set('kpiNeutros',     neutros);
-    set('kpiNeutrosPct',  total ? `${(neutros/total*100).toFixed(1)}% do total` : '');
+    set('kpiNeutrosPct',  total ? `${(neutros/total*100).toFixed(1)}% ${_t('do total')}` : '');
     set('kpiDetratores',  detrators);
-    set('kpiDetratoresPct', total ? `${pctDeta.toFixed(1)}% do total` : '');
+    set('kpiDetratoresPct', total ? `${pctDeta.toFixed(1)}% ${_t('do total')}` : '');
 
     // Barra de distribuição
     ['distProm','distNeut','distDeta'].forEach(id => {
@@ -265,7 +265,7 @@
       .sort((a,b) => new Date(b.data) - new Date(a.data));
 
     const countEl = document.getElementById('comentariosCount');
-    if (countEl) countEl.textContent = `${comComentario.length} comentário(s)`;
+    if (countEl) countEl.textContent = `${comComentario.length} ${_t('comentário(s)')}`;
 
     if (!comComentario.length) {
       container.innerHTML = `<div style="text-align:center;padding:var(--space-6);color:var(--text-muted)">${_t('Nenhum comentário encontrado.')}</div>`;
