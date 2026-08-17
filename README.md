@@ -168,6 +168,8 @@ O sistema tem tema claro e escuro, alternado pelo botão na barra superior e **t
 
 O tema é aplicado por um atributo `data-theme` no elemento raiz, e as cores vêm de variáveis CSS definidas em `design-system.css` — telas novas herdam os dois temas automaticamente desde que usem as variáveis (`var(--text-primary)`, `var(--color-surface)`…) em vez de cores fixas.
 
+Os dois temas foram auditados contra o **WCAG AA** (mínimo de 4.5:1 para texto normal, 3:1 para texto grande), medindo o contraste de cada elemento de texto contra o fundo real: 15 telas × 2 temas, sem falhas. Ao criar tela nova, note que existem **duas famílias de token de cor**: `--color-danger` e companhia são para *preencher* (fundo de botão, ponto de badge), enquanto `--color-danger-text` e companhia são para *texto*, com um valor por tema. Ver [CONTRIBUTING.md](CONTRIBUTING.md#tema-claroescuro).
+
 ## Segurança
 
 Autenticação via formulário (Spring Security), com senhas armazenadas com `DelegatingPasswordEncoder`. Endpoints sob `/api/usuarios/**` e operações administrativas (cadastro de eventos, documentos, etc.) exigem papel `ADMIN`. O endpoint de envio de avaliação (`POST /api/avaliacoes`) é público, para permitir respostas via QR code sem login.
