@@ -26,7 +26,7 @@
     const now = new Date();
     const diff = (exp - now) / (1000 * 60 * 60 * 24); // days
     if (diff < 0) return 'expirado';
-    if (diff <= 30) return 'prestes-a-vencer';
+    if (diff <= 30) return 'prestes a vencer';
     return 'ativo';
   }
 
@@ -52,7 +52,7 @@
   function checkAlerts() {
     const container = document.getElementById('alertExpirados');
     if (!container) return;
-    const expiring = allItems.filter(d => d._status === 'prestes-a-vencer');
+    const expiring = allItems.filter(d => d._status === 'prestes a vencer');
     const expired  = allItems.filter(d => d._status === 'expirado');
     const parts = [];
     if (expired.length)  parts.push(`<strong>${expired.length}</strong> documento(s) <strong>expirado(s)</strong>`);
