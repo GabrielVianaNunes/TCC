@@ -102,7 +102,7 @@
       const cor   = avatarColor(e.id);
       const ini   = initials(e.nome);
       const nota  = e.mediaNotas;
-      const taxa  = e.taxaConclusao;
+      const taxa  = Math.round(e.taxaConclusao);
       const cpc   = e.cardsPorColuna || {};
       const emAnd = (cpc['em-andamento'] || 0) + (cpc['revisao'] || 0);
 
@@ -259,7 +259,7 @@
     if (!e) return;
 
     const cpc         = e.cardsPorColuna || {};
-    const taxa        = e.taxaConclusao;
+    const taxa        = Math.round(e.taxaConclusao);
     const hoje        = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
     const internCards = allCards.filter(c => c.estagiariaId === estagId);
     const internNotas = allNotas.filter(n => n.estagiariaId === estagId).sort((a, b) => (b.data || '').localeCompare(a.data || ''));
