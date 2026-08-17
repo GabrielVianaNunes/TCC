@@ -17,6 +17,7 @@ Sistema de gestão para o Centro de Excelência em Metrologia (CEM) do SENAI Zei
 - [Testes](#testes)
 - [Backup e restauração](#backup-e-restauração)
 - [Módulos principais](#módulos-principais)
+- [Idiomas (i18n)](#idiomas-i18n)
 - [Segurança](#segurança)
 - [Estrutura do repositório](#estrutura-do-repositório)
 - [Contribuindo](#contribuindo)
@@ -141,6 +142,22 @@ O banco tem backup automatizado diário (`pg_dump -Fc` + upload para storage S3-
 | **Avaliação (NPS)** | Formulário público de satisfação com dashboard de respostas |
 | **Documentos** | Upload e organização de PDFs e documentos por pasta/máquina |
 | **Usuários** | Autenticação (Spring Security) e controle de acesso por papel (`ADMIN`) |
+
+## Idiomas (i18n)
+
+A interface está disponível em **português (pt-BR), inglês e alemão**. O seletor fica na barra superior das telas internas e também na própria tela de login — ou seja, dá para escolher o idioma **antes de entrar** no sistema. A escolha é gravada em `localStorage` e vale para as telas seguintes.
+
+A tradução é feita no cliente por `static/js/i18n.js`, que percorre os nós de texto da página e troca qualquer string reconhecida pelo dicionário — não é preciso marcar cada elemento com `data-i18n`.
+
+**O que é traduzido e o que não é:**
+
+| Traduzido | Não traduzido (proposital) |
+|---|---|
+| Rótulos, títulos, botões, mensagens e textos de formulário | Nomes de clientes, empresas e pessoas |
+| Valores de lista fixa (status, prioridade, categoria, tipo de documento, forma de recebimento…) | Descrições de peças, observações e notas escritas pelo usuário |
+| Rótulos de eixo e categoria dos gráficos | Nomes de produtos (ATOS Q, T-SCAN Hawk 2), normas (ISO 17025, NR-12) e dados legais |
+
+Dados **novos** entram traduzidos automaticamente quando vêm de campo de lista fixa (`<select>` ou coluna com `CHECK`), porque todo o domínio desses campos já está no dicionário. Texto livre digitado pelo usuário permanece como foi escrito — é conteúdo, não rótulo. Ao **adicionar uma opção nova** a um `<select>` (ou um valor novo a um `CHECK`), acrescente a entrada correspondente em `i18n.js`; ver [CONTRIBUTING.md](CONTRIBUTING.md#internacionalização-i18n).
 
 ## Segurança
 

@@ -103,6 +103,32 @@ Esses números são um **piso**, não uma meta — foram calibrados com margem a
 
 Todo service ou endpoint novo deveria vir acompanhado de teste — mesmo sem uma meta alta imposta hoje, é assim que o piso sobe organicamente em vez de regredir.
 
+### Internacionalização (i18n)
+
+O dicionário fica em `static/js/i18n.js` (`const T`), com uma entrada por texto pt-BR e as versões `en`/`de`. O motor percorre os nós de texto da página e substitui o que reconhece, então **texto que não está no dicionário simplesmente fica em português**, sem erro nem aviso.
+
+Regras ao mexer em tela ou dado:
+
+1. **Texto novo visível → entrada nova no dicionário.** Vale para template, string em JS e valor de lista fixa. Se o texto vem de `_t('...')`, a chave precisa existir; se está solto no HTML, o walker traduz sozinho *desde que* esteja no dicionário.
+2. **Opção nova em `<select>` ou valor novo em `CHECK` → entrada nova no dicionário.** É isso que garante que dado cadastrado depois também apareça traduzido. Todo o domínio atual desses campos já está coberto.
+3. **Nunca repita uma chave.** Objeto JS aceita chave duplicada silenciosamente e a última vence — foi exatamente o que causou o bug de traduções trocadas (210 chaves duplicadas, 65 com tradução divergente). Antes de adicionar, confira se a chave já existe.
+4. **Nunca concatene texto traduzível.** `` `${a.tipo} · ${a.codigo}` `` vira um único nó de texto que nunca casa com nenhuma chave. Traduza cada pedaço antes de juntar: `` `${_t(a.tipo)} · ${a.codigo}` ``. Isso vale também para rótulo de gráfico quebrado em linhas (`<tspan>`) — traduza **antes** de quebrar.
+5. **Chave de mapa é o valor do banco; o rótulo exibido é outra string.** Em `StatusBadge` (`ui.js`) a chave precisa bater exatamente com o que o backend grava (ex.: `'prestes a vencer'`, com espaços — não hifenizado), e o `label` do mapa é que vai para o dicionário. Status fora do mapa cai num fallback cinza e sem tradução, então mantenha o mapa cobrindo **todos** os valores aceitos pelo `CHECK`.
+6. **Não traduza conteúdo do usuário.** Nome de cliente, descrição de peça, observação e nota são dados, não rótulo — ficam como foram escritos.
+
+Para conferir rapidamente se sobrou algo sem traduzir, abra a página no idioma desejado e rode no console:
+
+```js
+const it = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT);
+const faltando = new Set(); let n;
+while ((n = it.nextNode())) {
+  const t = n.textContent.trim(); if (!t) continue;
+  const tr = window.I18n.tAny(t);          // o próprio motor responde
+  if (tr && tr !== t) faltando.add(t);      // conhecido, mas não aplicado
+}
+console.log([...faltando]);                 // vazio = página 100% traduzida
+```
+
 ### Frontend
 
 Páginas novas seguem o padrão modular já estabelecido: um template Thymeleaf em `templates/`, carregando `i18n.js` + `core.js` + `api.js` + `ui.js` + `modules/notifications.js` + um módulo próprio em `static/js/modules/[pagina].js`. Não crie arquivos JS soltos na raiz de `static/js/` (esse era o padrão antigo, já descontinuado — ver `PROJECT_STATUS.md` para a lista de arquivos legados pendentes de remoção).
