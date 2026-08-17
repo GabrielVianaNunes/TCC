@@ -38,6 +38,18 @@
   --color-info-bg:        #EFF6FF;
   --color-info-border:    #BFDBFE;
 
+  /* Versões para TEXTO das cores semânticas.
+     As variáveis acima (--color-danger etc.) são usadas como FUNDO de botão,
+     ponto de badge e barra de progresso, com texto branco por cima — clareá-las
+     quebraria o contraste ali. Estas aqui são só para texto sobre a superfície,
+     e por isso têm um valor por tema. */
+  --color-primary-text:   #0033A0;
+  --color-neutral-text:   #64748B;
+  --color-success-text:   #15803D;
+  --color-warning-text:   #92400E;
+  --color-danger-text:    #B91C1C;
+  --color-info-text:      #1E40AF;
+
   --color-neutral:        #64748B;
   --color-neutral-bg:     #F1F5F9;
   --color-neutral-border: #E2E8F0;
@@ -53,7 +65,13 @@
   /* ── TEXT HIERARCHY ── */
   --text-primary:         #0F172A;
   --text-secondary:       #475569;
-  --text-muted:           #94A3B8;
+  /* #94A3B8 (valor anterior) dava 2.56:1 sobre o branco das superfícies —
+     abaixo do mínimo de 4.5:1 do WCAG AA — e é usado em rótulo de KPI,
+     subtítulo de página e cabeçalho de tabela, não só em detalhe.
+     #5F6B7A passa nos dois fundos em que esse texto aparece: 5.4:1 sobre o
+     branco dos cartões e 4.9:1 sobre o cinza da página (--color-bg). O slate
+     padrão #64748B ficava em 4.31:1 sobre o fundo da página, quase no limite. */
+  --text-muted:           #5F6B7A;
   --text-inverse:         #FFFFFF;
   --text-link:            #2563EB;
   --text-link-hover:      #1D4ED8;
@@ -180,6 +198,16 @@
   --color-danger-border:  rgba(220,38,38,0.28);
   --color-info-bg:        rgba(37,99,235,0.12);
   --color-info-border:    rgba(37,99,235,0.28);
+
+  /* Sobre fundo escuro, os tons do tema claro ficam ilegíveis (o âmbar
+     #92400E dava 2.2:1 e o azul da marca #0033A0 dava 1.48:1, praticamente
+     invisível). Estes tons claros ficam entre 5.6:1 e 9.3:1. */
+  --color-primary-text:   #60A5FA;
+  --color-success-text:   #4ADE80;
+  --color-warning-text:   #FBBF24;
+  --color-danger-text:    #F87171;
+  --color-info-text:      #93C5FD;
+  --color-neutral-text:   #9CA3AF;
   --color-neutral-bg:     #1C2333;
   --color-neutral-border: #2D3748;
 }
