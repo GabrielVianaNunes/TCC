@@ -174,6 +174,8 @@ Os dois temas foram auditados contra o **WCAG AA** (mínimo de 4.5:1 para texto 
 
 Autenticação via formulário (Spring Security), com senhas armazenadas com `DelegatingPasswordEncoder`. Endpoints sob `/api/usuarios/**` e operações administrativas (cadastro de eventos, documentos, etc.) exigem papel `ADMIN`. O endpoint de envio de avaliação (`POST /api/avaliacoes`) é público, para permitir respostas via QR code sem login.
 
+**Endurecimento de implantação:** o contêiner roda com usuário de sistema sem privilégio (não root), o log de segurança fica em `WARN` por padrão (sem detalhe de autenticação em produção), documentos anexados usam volume Docker nomeado (sobrevivem a redeploy), e o CI roda varredura de dependência vulnerável (`dependency-review-action` a cada PR + Dependabot contínuo). Detalhes e o porquê de cada escolha em [CONTRIBUTING.md](CONTRIBUTING.md#checklist-de-produção).
+
 ## Estrutura do repositório
 
 ```
