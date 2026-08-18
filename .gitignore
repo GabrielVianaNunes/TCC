@@ -11,6 +11,13 @@ CLAUDE.md
 # Documento de status interno (não é entregável do projeto)
 PROJECT_STATUS.md
 
+# Análise de conformidade com as normas internas da GETIN/FIEG (DS-059,
+# FO-307, FO-358). Dois motivos para não versionar: resume documento
+# normativo interno de um terceiro, e inventaria lacunas de segurança do
+# sistema — inclusive falha ainda não corrigida, com o detalhe da
+# exposição. Reavaliar depois que as lacunas forem fechadas.
+CONFORMIDADE-GETIN.md
+
 # Specs e planos de implementação gerados durante o desenvolvimento
 # assistido por IA (superpowers) — histórico de processo, não documentação
 # do produto; podem conter caminhos/nomes pessoais de quem está codando.
