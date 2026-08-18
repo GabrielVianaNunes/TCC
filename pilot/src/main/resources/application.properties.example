@@ -11,7 +11,10 @@ spring.thymeleaf.prefix=classpath:/templates/
 spring.thymeleaf.suffix=.html
 spring.thymeleaf.mode=HTML
 spring.thymeleaf.encoding=UTF-8
-spring.thymeleaf.cache=false
+# true (produção) evita reparsear o template a cada requisição; um dev local
+# que queira ver alteração de HTML sem reiniciar pode exportar
+# THYMELEAF_CACHE=false antes de subir a aplicação.
+spring.thymeleaf.cache=${THYMELEAF_CACHE:true}
 
 # Tamanho máximo do arquivo individual
 spring.servlet.multipart.max-file-size=10MB
@@ -19,7 +22,15 @@ spring.servlet.multipart.max-file-size=10MB
 # Tamanho máximo da requisição (útil se enviar múltiplos arquivos ou campos juntos)
 spring.servlet.multipart.max-request-size=10MB
 
-logging.level.org.springframework.security=DEBUG
+# WARN por padrão — DEBUG aqui registra detalhe de autenticação/autorização
+# a cada requisição, inadequado fora de uma sessão de depuração pontual.
+logging.level.org.springframework.security=${LOG_LEVEL_SECURITY:WARN}
+
+# Pasta base onde documentos anexados (certificados, laudos) são gravados.
+# Local (Windows) usa o caminho já em uso; em Docker/produção (Linux), o
+# docker-compose.yml sobrescreve via STORAGE_PDF_PATH para um caminho com
+# volume nomeado, para o dado sobreviver a um redeploy do contêiner.
+storage.pdf.base-path=${STORAGE_PDF_PATH:C:/PDFs}
 
 spring.flyway.baseline-on-migrate=true
 spring.flyway.baseline-version=1

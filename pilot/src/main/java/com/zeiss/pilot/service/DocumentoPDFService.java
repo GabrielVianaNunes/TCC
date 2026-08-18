@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,12 @@ public class DocumentoPDFService {
 
     private final DocumentoPDFRepository documentoRepository;
 
-    private final String PASTA_BASE = "C:/PDFs";
+    // Configurável via storage.pdf.base-path (env STORAGE_PDF_PATH) — o
+    // padrão C:/PDFs vale para o ambiente de desenvolvimento local; em
+    // Docker/produção o docker-compose.yml aponta para um caminho Linux
+    // com volume nomeado, para o arquivo sobreviver a um redeploy.
+    @Value("${storage.pdf.base-path:C:/PDFs}")
+    private String pastaBase;
 
     public DocumentoPDFService(DocumentoPDFRepository documentoRepository) {
         this.documentoRepository = documentoRepository;
@@ -47,7 +53,7 @@ public class DocumentoPDFService {
 
         // --- armazenamento físico ---
         Long usuarioId = usuario.getId();
-        String pastaUsuario = PASTA_BASE + "/Usuario" + usuarioId;
+        String pastaUsuario = pastaBase + "/Usuario" + usuarioId;
         Files.createDirectories(Paths.get(pastaUsuario));
 
         String nomeArquivo = file.getOriginalFilename();

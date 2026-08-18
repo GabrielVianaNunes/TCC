@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -36,7 +37,10 @@ public class DocumentoMaquinaService {
 
     private final MaquinaRepository maquinaRepository;
 
-    private static final String BASE_PATH = "C:/PDFs/Maquina";
+    // Mesma base de storage.pdf.base-path usada por DocumentoPDFService —
+    // ver comentário lá para o porquê de ser configurável.
+    @Value("${storage.pdf.base-path:C:/PDFs}")
+    private String pastaBase;
 
     public DocumentoMaquinaService(DocumentoMaquinaRepository repository, MaquinaRepository maquinaRepository) {
         this.repository = repository;
@@ -49,7 +53,7 @@ public class DocumentoMaquinaService {
         Maquina maquina = maquinaRepository.findById(maquinaId)
                 .orElseThrow(() -> new IllegalArgumentException("Máquina não encontrada: " + maquinaId));
 
-        String pasta = BASE_PATH + maquinaId;
+        String pasta = pastaBase + "/Maquina" + maquinaId;
         Files.createDirectories(Paths.get(pasta));
 
         String nomeArquivo = file.getOriginalFilename();

@@ -18,6 +18,17 @@ services:
       BACKUP_S3_REGION: ${BACKUP_S3_REGION:-us-east-1}
       BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-30}
       BACKUP_CRON: ${BACKUP_CRON:-0 0 3 * * *}
+      # Endurecimento de produção (ver CONTRIBUTING.md > Checklist de produção):
+      # cache de template ligado, log de segurança sem detalhe de DEBUG.
+      THYMELEAF_CACHE: "true"
+      LOG_LEVEL_SECURITY: WARN
+      # Caminho Linux com volume nomeado — os defaults dos serviços (C:/PDFs)
+      # são only para desenvolvimento local no Windows. Sem essa variável,
+      # documentos anexados (certificados, laudos) seriam gravados num
+      # caminho relativo dentro do contêiner e perdidos no próximo redeploy.
+      STORAGE_PDF_PATH: /data/pdfs
+    volumes:
+      - pdf_data:/data/pdfs
     expose:
       - "8090"
 
@@ -48,5 +59,6 @@ services:
 
 volumes:
   pgdata:
+  pdf_data:
   caddy_data:
   caddy_config:
