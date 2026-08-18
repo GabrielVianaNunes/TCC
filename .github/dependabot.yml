@@ -1,0 +1,16 @@
+version: 2
+updates:
+  # Dependências Java/Maven do backend — abre PR automático quando uma
+  # dependência usada tiver vulnerabilidade conhecida (GitHub Advisory
+  # Database), além de manter versões em dia.
+  - package-ecosystem: "maven"
+    directory: "/pilot"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Actions usadas no próprio pipeline de CI.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

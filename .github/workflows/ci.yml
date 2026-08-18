@@ -53,3 +53,16 @@ jobs:
 
       - name: Build da imagem Docker
         run: docker build -t zeiss-pilot:ci ./pilot
+
+  dependency-review:
+    # Só roda em pull_request: compara o grafo de dependências do PR contra a
+    # base usando o GitHub Advisory Database. Bloqueia PR que introduza
+    # dependência com vulnerabilidade conhecida — sem depender de baixar a
+    # base do NVD (o que é lento e sujeito a rate limit em CI).
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
