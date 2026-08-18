@@ -39,6 +39,7 @@ const Theme = {
 /* ── Sidebar Manager ── */
 const Sidebar = {
   KEY: 'zp-sidebar-collapsed',
+  SCROLL_KEY: 'zp-sidebar-scroll',
 
   init() {
     const sidebar = document.getElementById('sidebar');
@@ -64,6 +65,33 @@ const Sidebar = {
     if (overlay) overlay.addEventListener('click', () => this.closeMobile());
 
     this.setActiveNav();
+    this.restoreScroll();
+  },
+
+  /**
+   * A navegação entre páginas é sempre um reload completo (PageTransition
+   * faz window.location.href), então o navegador zera o scroll do
+   * .sidebar__nav a cada troca de tela. Guarda a posição em sessionStorage
+   * (não localStorage: não deve sobreviver a uma sessão nova) e restaura no
+   * carregamento seguinte, para a sidebar "ficar parada" onde o usuário a
+   * deixou ao navegar — importante para demonstração ao vivo do sistema.
+   */
+  restoreScroll() {
+    const nav = document.querySelector('.sidebar__nav');
+    if (!nav) return;
+
+    const saved = sessionStorage.getItem(this.SCROLL_KEY);
+    if (saved !== null) nav.scrollTop = parseInt(saved, 10) || 0;
+
+    nav.addEventListener('scroll', () => {
+      sessionStorage.setItem(this.SCROLL_KEY, nav.scrollTop);
+    }, { passive: true });
+
+    // pagehide (não beforeunload) funciona de forma confiável no Safari
+    // mobile e cobre qualquer saída da página, não só clique em link interno.
+    window.addEventListener('pagehide', () => {
+      sessionStorage.setItem(this.SCROLL_KEY, nav.scrollTop);
+    });
   },
 
   toggle() {

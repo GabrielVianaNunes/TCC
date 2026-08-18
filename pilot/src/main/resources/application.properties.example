@@ -32,6 +32,14 @@ logging.level.org.springframework.security=${LOG_LEVEL_SECURITY:WARN}
 # volume nomeado, para o dado sobreviver a um redeploy do contêiner.
 storage.pdf.base-path=${STORAGE_PDF_PATH:C:/PDFs}
 
+# Sem isso, o navegador pode reter uma versão antiga de JS/CSS por dias via
+# cache heurístico (sem Cache-Control explícito, calcula frescor a partir do
+# Last-Modified) — depois de um deploy, quem já tinha visitado o site continua
+# rodando o JS velho até um hard refresh. no-cache força revalidação (If-None-
+# Match/ETag) a cada carregamento; ainda usa 304 quando o arquivo não mudou,
+# então não perde o benefício de cache, só a armadilha de servir algo obsoleto.
+spring.web.resources.cache.cachecontrol.no-cache=true
+
 spring.flyway.baseline-on-migrate=true
 spring.flyway.baseline-version=1
 
