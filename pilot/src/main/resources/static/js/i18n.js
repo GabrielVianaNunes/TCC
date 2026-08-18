@@ -1598,8 +1598,13 @@
     if (!text) return null;
     const key = REVERSE[text.trim()];
     if (!key) return null;
-    const tr = t(key, lang || currentLang);
-    return tr !== key ? tr : null;
+    // Não comparar tr com key aqui: como toda chave do dicionário É o texto
+    // pt-BR, t(key, 'pt-BR') quase sempre é idêntico a key — um "tr !== key"
+    // fazia essa função devolver null sempre que o idioma de destino fosse
+    // pt-BR, mesmo quando o texto atual na tela estava em outro idioma e
+    // precisava mudar. Quem chama já decide se precisa atualizar o DOM
+    // comparando com o texto atual (não com a chave) — ver walkTextNodes.
+    return t(key, lang || currentLang);
   }
 
   // ── Text-node walker ─────────────────────────────────────────────
