@@ -22,5 +22,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends wget gnupg2 lsb
 
 COPY --from=build /build/target/pilot-0.0.1-SNAPSHOT.jar app.jar
 
+# Usuário sem privilégio para rodar a aplicação — o contêiner não precisa de
+# root em tempo de execução (a instalação de pacotes acima já terminou).
+# /data/pdfs é criado e transferido para esse usuário ANTES do volume nomeado
+# ser montado ali: um volume nomeado vazio herda a dona/permissão do
+# diretório da imagem na primeira montagem, então isso precisa acontecer
+# aqui, não depois de rodando.
+RUN groupadd --system app \
+    && useradd --system --gid app --no-create-home --shell /usr/sbin/nologin app \
+    && mkdir -p /data/pdfs \
+    && chown -R app:app /app /data/pdfs
+
+USER app
+
 EXPOSE 8090
 ENTRYPOINT ["java", "-jar", "app.jar"]
