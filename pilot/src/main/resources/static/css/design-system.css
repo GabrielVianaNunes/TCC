@@ -4,8 +4,8 @@
    ISO 17025 / ISO 9001 Visual Identity
    ============================================================ */
 
-/* ── Google Fonts Import ── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* ── Fonte Inter — servida localmente, sem CDN público (FO-358 da GETIN) ── */
+@import url('/css/inter.css');
 
 /* ── CSS Custom Properties (Design Tokens) ── */
 :root {

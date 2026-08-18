@@ -18,10 +18,17 @@ services:
       BACKUP_S3_REGION: ${BACKUP_S3_REGION:-us-east-1}
       BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-30}
       BACKUP_CRON: ${BACKUP_CRON:-0 0 3 * * *}
+      # FO-307 da GETIN: a cópia de backup enviada ao S3 precisa ser
+      # criptografada. Sem essa chave (32 bytes em Base64), o backup falha
+      # em vez de subir sem criptografia. Gerar com: openssl rand -base64 32
+      BACKUP_ENCRYPTION_KEY: ${BACKUP_ENCRYPTION_KEY:-}
       # Endurecimento de produção (ver CONTRIBUTING.md > Checklist de produção):
       # cache de template ligado, log de segurança sem detalhe de DEBUG.
       THYMELEAF_CACHE: "true"
       LOG_LEVEL_SECURITY: WARN
+      # Caddy termina TLS na frente do app; o cookie de sessão só deve ser
+      # enviado por HTTPS (FO-358 da GETIN).
+      SESSION_COOKIE_SECURE: "true"
       # Caminho Linux com volume nomeado — os defaults dos serviços (C:/PDFs)
       # são only para desenvolvimento local no Windows. Sem essa variável,
       # documentos anexados (certificados, laudos) seriam gravados num

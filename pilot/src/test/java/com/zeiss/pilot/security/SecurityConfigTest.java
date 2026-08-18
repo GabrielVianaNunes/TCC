@@ -1,6 +1,7 @@
 package com.zeiss.pilot.security;
 
 import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -66,6 +67,32 @@ class SecurityConfigTest {
     @WithMockUser(roles = "ADMIN")
     void usuariosAutenticadoComRoleAdminRetorna200() throws Exception {
         mockMvc.perform(get("/api/usuarios"))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * OWASP A05 / FO-358 da GETIN: sem CSP, um script injetado (XSS refletido,
+     * ou uma dependência comprometida) pode carregar recursos de qualquer
+     * origem externa. object-src 'none' e frame-ancestors 'none' bloqueiam
+     * embed/clickjacking mesmo sem afetar os <script>/style="" inline que o
+     * app usa em todas as páginas hoje (por isso script-src e style-src
+     * ainda precisam de 'unsafe-inline' — restringi-los exigiria reescrever
+     * todas as templates com nonce, fora do escopo de baixo custo).
+     */
+    @Test
+    void respostaContemContentSecurityPolicy() throws Exception {
+        mockMvc.perform(get("/login"))
+                .andExpect(header().string("Content-Security-Policy", containsString("default-src 'self'")))
+                .andExpect(header().string("Content-Security-Policy", containsString("object-src 'none'")))
+                .andExpect(header().string("Content-Security-Policy", containsString("frame-ancestors 'none'")));
+    }
+
+    @Test
+    void fontesSemAutenticacaoRetorna200() throws Exception {
+        // A tela de login usa @font-face para a fonte Inter servida localmente
+        // (ver css/inter.css) — sem sessão, essa requisição precisa funcionar,
+        // senão o navegador nunca carrega a fonte na própria tela de login.
+        mockMvc.perform(get("/fonts/inter-latin.woff2"))
                 .andExpect(status().isOk());
     }
 

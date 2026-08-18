@@ -127,7 +127,7 @@ cd pilot
 
 ## Backup e restauração
 
-O banco tem backup automatizado diário (`pg_dump -Fc` + upload para storage S3-compatível + retenção configurável), rodando dentro do próprio app — sem depender de cron do host. Configuração e passo a passo de restauração (já validado ao vivo) em [`docs/RUNBOOK.md`](docs/RUNBOOK.md).
+O sistema tem backup automatizado diário do banco (`pg_dump -Fc`) e dos documentos anexados (compactados em `.zip`), ambos cifrados com AES-256-GCM antes do upload para storage S3-compatível, com retenção configurável — rodando dentro do próprio app, sem depender de cron do host. Configuração e passo a passo de restauração (já validado ao vivo) em [`docs/RUNBOOK.md`](docs/RUNBOOK.md).
 
 ## Módulos principais
 
@@ -175,6 +175,8 @@ Os dois temas foram auditados contra o **WCAG AA** (mínimo de 4.5:1 para texto 
 Autenticação via formulário (Spring Security), com senhas armazenadas com `DelegatingPasswordEncoder`. Endpoints sob `/api/usuarios/**` e operações administrativas (cadastro de eventos, documentos, etc.) exigem papel `ADMIN`. O endpoint de envio de avaliação (`POST /api/avaliacoes`) é público, para permitir respostas via QR code sem login.
 
 **Endurecimento de implantação:** o contêiner roda com usuário de sistema sem privilégio (não root), o log de segurança fica em `WARN` por padrão (sem detalhe de autenticação em produção), documentos anexados usam volume Docker nomeado (sobrevivem a redeploy), e o CI roda varredura de dependência vulnerável (`dependency-review-action` a cada PR + Dependabot contínuo). Detalhes e o porquê de cada escolha em [CONTRIBUTING.md](CONTRIBUTING.md#checklist-de-produção).
+
+**Endurecimento adicional (18/08/2026):** mensagem de erro nunca expõe detalhe interno ao cliente (handler dedicado às rotas de API, páginas de erro 404/500 estáticas e genéricas), fonte servida localmente (sem CDN público), cookie de sessão com flag `Secure` em produção, e `Content-Security-Policy` (`default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`) em toda resposta.
 
 ## Estrutura do repositório
 

@@ -24,12 +24,34 @@ public class SecurityConfig {
         this.loginAttemptService = loginAttemptService;
     }
 
+    /**
+     * FO-358 da GETIN + OWASP A05: sem CSP, um script injetado (XSS
+     * refletido, dependência comprometida) pode carregar recursos de
+     * qualquer origem. script-src e style-src ainda precisam de
+     * 'unsafe-inline' porque todas as páginas hoje usam <script> e
+     * style="" inline — removê-lo exigiria reescrever as templates com
+     * nonce, fora do escopo desta correção.
+     */
+    private static final String CSP = "default-src 'self'; "
+            + "script-src 'self' 'unsafe-inline'; "
+            + "style-src 'self' 'unsafe-inline'; "
+            + "img-src 'self' data:; "
+            + "font-src 'self'; "
+            + "connect-src 'self'; "
+            + "object-src 'none'; "
+            + "base-uri 'self'; "
+            + "form-action 'self'; "
+            + "frame-ancestors 'none'";
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            .headers(headers -> headers
+                .contentSecurityPolicy(csp -> csp.policyDirectives(CSP))
+            )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/login", "/css/**", "/img/**", "/js/**",
+                    "/login", "/css/**", "/img/**", "/js/**", "/fonts/**",
                     "/avaliacao", "/qrcode-avaliacao"
                 ).permitAll()
                 .requestMatchers("/api/usuarios/admins").hasRole("ADMIN")

@@ -1,0 +1,38 @@
+# Configuração de referência: ZEISS·PILOT atrás de NGINX em vez de Caddy.
+#
+# O app não tem nenhuma dependência do Caddy — a única coisa que o proxy
+# reverso faz hoje (ver Caddyfile) é encaminhar tudo para app:8090. Este
+# arquivo é o equivalente em NGINX, para responder à exigência do DS-059
+# (item 22) e do FO-358 (item 4) da GETIN de compatibilidade com NGINX.
+#
+# Diferença prática do Caddyfile: o Caddy emite e renova certificado TLS
+# automaticamente (ACME/Let's Encrypt) sem configuração extra. O NGINX não
+# faz isso nativamente — assume-se que a infraestrutura da GETIN (ou um
+# sidecar certbot) já cuida do certificado, e que o `ssl_certificate`/
+# `ssl_certificate_key` abaixo apontam para os arquivos correspondentes.
+#
+# Uso: substituir o serviço `caddy` do docker-compose.yml por um serviço
+# `nginx:latest` (ou usar o NGINX já existente na infraestrutura da GETIN),
+# montando este arquivo em /etc/nginx/conf.d/zeiss-pilot.conf.
+
+server {
+    listen 80;
+    server_name _;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name _;
+
+    ssl_certificate     /etc/nginx/certs/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/privkey.pem;
+
+    location / {
+        proxy_pass http://app:8090;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

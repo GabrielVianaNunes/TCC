@@ -4,7 +4,9 @@ Documento de operação do sistema, pensado tanto para o uso atual quanto para a
 
 ## Backup automatizado
 
-O sistema roda um backup diário do banco (`pg_dump -Fc`, formato custom do Postgres) e envia para um storage compatível com S3 (Backblaze B2, Cloudflare R2, ou qualquer outro que fale a API S3). O job roda dentro do próprio processo Java (`BackupService`, `@Scheduled`) — não depende de cron do sistema operacional nem da hospedagem escolhida.
+O sistema roda um backup diário do banco (`pg_dump -Fc`, formato custom do Postgres) e dos documentos anexados (certificados, laudos — pasta de `storage.pdf.base-path`, compactada em `.zip`), e envia ambos para um storage compatível com S3 (Backblaze B2, Cloudflare R2, ou qualquer outro que fale a API S3). Cobrir também os anexos, não só o banco, é exigência do FO-307 da GETIN. O job roda dentro do próprio processo Java (`BackupService`, `@Scheduled`) — não depende de cron do sistema operacional nem da hospedagem escolhida.
+
+Os dois arquivos (dump e zip de documentos) são **criptografados com AES-256-GCM** antes do envio — outra exigência do FO-307 ("a cópia deve ser criptografada"). Sem `BACKUP_ENCRYPTION_KEY` configurada (ou com valor inválido), o backup falha alto (`500`) em vez de subir um backup sem criptografia.
 
 Se as variáveis de storage não estiverem configuradas, o backup fica **desabilitado silenciosamente** (só loga um aviso) — é o comportamento esperado em desenvolvimento local.
 
@@ -20,6 +22,7 @@ Se as variáveis de storage não estiverem configuradas, o backup fica **desabil
 | `BACKUP_S3_REGION` | Não (padrão `us-east-1`) | Região — a maioria dos provedores S3-compatíveis aceita qualquer valor aqui, mas exige que o campo exista |
 | `BACKUP_RETENTION_DAYS` | Não (padrão `30`) | Backups mais antigos que isso são apagados automaticamente do bucket a cada execução |
 | `BACKUP_CRON` | Não (padrão `0 0 3 * * *`, diariamente às 3h) | Expressão cron de quando o backup automático roda |
+| `BACKUP_ENCRYPTION_KEY` | Sim, para habilitar backup | Chave AES-256 em Base64 usada para criptografar o dump e o zip de documentos antes do envio. Gerar com: `openssl rand -base64 32` |
 
 **Passo pendente do usuário:** criar uma conta gratuita em um provedor S3-compatível (Backblaze B2 ou Cloudflare R2 são boas opções com camada gratuita) e gerar uma chave de acesso — isso não pode ser feito por uma sessão de IA, precisa ser feito manualmente.
 
@@ -35,9 +38,9 @@ curl -X POST https://<host>/api/backup/executar \
 ```
 
 Requer autenticação como `ADMIN` (mesma regra de `/api/usuarios/**`). Respostas:
-- `200 OK` com `{"arquivo": "senai_zeiss-backup-20260724-030000.dump"}` — backup executado com sucesso.
+- `200 OK` com `{"arquivo": "senai_zeiss-backup-20260724-030000.dump"}` — backup executado com sucesso (banco e documentos).
 - `503 Service Unavailable` — variáveis `BACKUP_S3_*` não configuradas (backup desabilitado).
-- `500` — falha real durante `pg_dump` ou upload (verifique os logs da aplicação para o detalhe do erro).
+- `500` — falha real durante `pg_dump`, compactação, criptografia (inclui `BACKUP_ENCRYPTION_KEY` ausente/inválida) ou upload (verifique os logs da aplicação para o detalhe do erro).
 
 ## Restauração de backup
 
@@ -71,7 +74,7 @@ Procedimento **validado ao vivo** durante a implementação da Etapa 8 (2026-07-
 ### 1. Provisionar a VM
 
 Crie uma conta e uma instância "Always Free" na [Oracle Cloud](https://www.oracle.com/cloud/free/) (ou hospedagem equivalente que não hiberne por inatividade). Ao criar a instância:
-- Escolha uma imagem Ubuntu LTS.
+- Escolha uma imagem Ubuntu LTS, ou, se a hospedagem exigir (como o FO-358 da GETIN, que pede Red Hat 8+), qualquer distribuição RHEL-compatível (RHEL, Rocky Linux, AlmaLinux) — a aplicação roda inteira em contêiner Docker, então a distribuição da VM não importa para o app em si, só muda o comando de instalação do Docker no passo 2.
 - Anote o IP público da instância.
 - Nas regras de rede (Security List / VCN), libere as portas `80` (HTTP) e `443` (HTTPS) para entrada — sem isso o Caddy não consegue servir nada externamente.
 
@@ -125,3 +128,7 @@ docker compose up -d --build
 ```
 
 O `restart: unless-stopped` já configurado garante que a aplicação volta sozinha se a VM reiniciar (ex.: depois de uma atualização de sistema operacional) — não precisa de nenhuma ação manual pra isso.
+
+### 7. Usando NGINX em vez de Caddy
+
+O app não depende do Caddy — ele só encaminha requisições para `app:8090` (ver `Caddyfile`). Se a hospedagem exigir NGINX (DS-059 item 22, FO-358 item 4 da GETIN), use [`nginx.conf.example`](../nginx.conf.example) como ponto de partida: monte-o em `/etc/nginx/conf.d/` de um serviço `nginx` no lugar do serviço `caddy` do `docker-compose.yml`. A única diferença prática é que o NGINX não emite certificado TLS automaticamente como o Caddy (ACME embutido) — a infraestrutura da GETIN precisa fornecer o certificado (ou um sidecar certbot) para os caminhos indicados no arquivo.

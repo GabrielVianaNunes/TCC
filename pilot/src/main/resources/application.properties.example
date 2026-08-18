@@ -46,3 +46,19 @@ backup.s3.secret-key=${BACKUP_S3_SECRET_KEY:}
 backup.s3.region=${BACKUP_S3_REGION:us-east-1}
 backup.retention-days=${BACKUP_RETENTION_DAYS:30}
 backup.cron=${BACKUP_CRON:0 0 3 * * *}
+# FO-307 da GETIN exige que a cópia de backup seja criptografada. Gerar com:
+# openssl rand -base64 32
+backup.encryption-key=${BACKUP_ENCRYPTION_KEY:}
+
+# Erro: nunca expor detalhe interno ao cliente (FO-358 da GETIN + OWASP A05).
+# Os valores abaixo ja sao o padrao do Spring Boot, mas ficam explicitos para
+# que uma mudanca futura seja uma decisao consciente, e nao um efeito colateral.
+server.error.include-stacktrace=never
+server.error.include-message=never
+server.error.include-binding-errors=never
+server.error.include-exception=false
+
+# Cookie de sessão só por HTTPS (FO-358 da GETIN). Produção roda atrás de um
+# proxy com TLS (Caddy), então o valor recomendado aqui é true — diferente do
+# application.properties de dev, que roda em HTTP puro.
+server.servlet.session.cookie.secure=${SESSION_COOKIE_SECURE:true}
