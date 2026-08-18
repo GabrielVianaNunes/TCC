@@ -142,6 +142,22 @@ O tema vem de um atributo `data-theme` no elemento raiz, com as cores em variáv
 - **Campo autopreenchido precisa de tratamento próprio.** O Chrome pinta um fundo branco em `:-webkit-autofill` que ignora `background`; o contorno é um `box-shadow` interno (ver final de `login.css`).
 - **Telas sem topbar precisam do seu próprio botão.** O `Theme` do `core.js` só é inicializado por `App.init()`, que também inicializa sidebar/topbar — em telas sem esses elementos (o login), use um handler próprio reaproveitando a chave `zp-theme`, para a escolha continuar valendo dentro do sistema.
 
+### Checklist de produção
+
+Diferenças deliberadas entre o ambiente de desenvolvimento local e o `docker-compose.yml` de produção, todas controladas por variável de ambiente (nunca por código diferente entre os dois):
+
+| Configuração | Local (padrão) | Produção (`docker-compose.yml`) | Por quê |
+|---|---|---|---|
+| `spring.thymeleaf.cache` | `false` (`THYMELEAF_CACHE`) | `true` | Em produção, reparsear o template a cada requisição é custo sem benefício — ninguém edita HTML ao vivo lá. Localmente, `false` evita reiniciar a aplicação a cada ajuste de tela |
+| `logging.level.org.springframework.security` | `WARN` (`LOG_LEVEL_SECURITY`) | `WARN` | `DEBUG` registra detalhe de autenticação/autorização a cada requisição — depurar localmente é a exceção, não a regra; ligue `DEBUG` pontualmente via variável quando precisar |
+| `storage.pdf.base-path` | `C:/PDFs` (`STORAGE_PDF_PATH`) | `/data/pdfs`, com volume nomeado `pdf_data` | Sem o volume, documento anexado (certificado, laudo) seria gravado em caminho relativo dentro do contêiner e perdido no próximo `docker compose up`/redeploy |
+| Usuário do contêiner | — (processo Java local, fora de contêiner) | `app` (não-root), criado no `Dockerfile` | Contêiner rodando como root amplia o dano possível de qualquer vulnerabilidade de execução remota na aplicação ou numa dependência |
+| Varredura de dependência vulnerável | — | `dependency-review-action` no CI (a cada PR) + `dependabot.yml` (alerta contínuo no branch padrão) | Nenhum dos dois depende de baixar a base do NVD em CI, que é lenta e sujeita a rate limit — ambos usam o GitHub Advisory Database |
+
+Ao adicionar uma variável de ambiente nova nesse padrão (config diferente por ambiente), sempre dê um valor padrão em `application.properties`/`application.properties.example` que funcione localmente sem configuração extra, e só explicite o valor de produção no `docker-compose.yml` — nunca crie um `application-prod.properties` à parte, para não duplicar configuração que pode divergir silenciosamente.
+
+Ao criar um volume nomeado novo para dado que precisa sobreviver a redeploy, lembre que ele herda dono/permissão do caminho da imagem **apenas na primeira montagem** (volume vazio) — o `chown` correspondente precisa estar no `Dockerfile`, antes do `USER` não-root, não depois.
+
 ### Frontend
 
 Páginas novas seguem o padrão modular já estabelecido: um template Thymeleaf em `templates/`, carregando `i18n.js` + `core.js` + `api.js` + `ui.js` + `modules/notifications.js` + um módulo próprio em `static/js/modules/[pagina].js`. Não crie arquivos JS soltos na raiz de `static/js/` (esse era o padrão antigo, já descontinuado — ver `PROJECT_STATUS.md` para a lista de arquivos legados pendentes de remoção).
