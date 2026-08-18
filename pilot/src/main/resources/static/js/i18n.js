@@ -955,6 +955,7 @@
     'Avalie nosso atendimento':                   { 'pt-BR':'Avalie nosso atendimento',                   'en':'Rate our service',                              'de':'Bewerten Sie unseren Service'                      },
     'Centro de Excelência em Metrologia SENAI ZEISS': { 'pt-BR':'Centro de Excelência em Metrologia SENAI ZEISS', 'en':'SENAI ZEISS Metrology Excellence Center', 'de':'SENAI ZEISS Exzellenzzentrum für Metrologie'   },
     'ZEISS·PILOT — Sistema de Gestão Metrologia SENAI': { 'pt-BR':'ZEISS·PILOT — Sistema de Gestão Metrologia SENAI', 'en':'ZEISS·PILOT — SENAI Metrology Management System', 'de':'ZEISS·PILOT — SENAI Metrologie-Managementsystem' },
+    'Baixar QR Code':                             { 'pt-BR':'Baixar QR Code',                             'en':'Download QR Code',                              'de':'QR-Code herunterladen'                             },
 
     // ── Formulário verificação ambiental ─────────────────────────────
     'Outra':                                      { 'pt-BR':'Outra',                                      'en':'Other',                                         'de':'Andere'                                            },
