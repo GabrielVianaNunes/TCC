@@ -54,11 +54,13 @@ public class DocumentoPDFController {
     }
 
     @GetMapping("/usuario/{usuarioId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<DocumentoPDFDTO> listarPorUsuario(@PathVariable Long usuarioId) {
         return service.listarPorUsuario(usuarioId);
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<DocumentoPDFDTO>> listar() {
         return ResponseEntity.ok(service.listarTodos());
     }
@@ -80,6 +82,7 @@ public class DocumentoPDFController {
     }
 
     @GetMapping("/usuario/meus")
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<DocumentoPDFDTO> listarMeusDocumentos(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String nome,
@@ -92,6 +95,7 @@ public class DocumentoPDFController {
     }
 
     @GetMapping("/abrir/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Resource> abrirDocumento(@PathVariable Long id) {
         return service.abrirDocumentoComoResource(id);
     }

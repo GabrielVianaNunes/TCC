@@ -349,20 +349,24 @@ const Auth = (() => {
   const PERMS = {
     ESTAGIARIO: { delete: false, edit: false, viewFinancial: false, viewEditais: false, viewDocumentos: false, viewUsuarios: false, create: true  },
     TECNICO:    { delete: false, edit: false, viewFinancial: false, viewEditais: false, viewDocumentos: false, viewUsuarios: false, create: true  },
-    GESTOR:     { delete: true,  edit: true,  viewFinancial: true,  viewEditais: true,  viewDocumentos: true,  viewUsuarios: true,  create: true  },
+    GESTOR:     { delete: true,  edit: true,  viewFinancial: true,  viewEditais: true,  viewDocumentos: false, viewUsuarios: true,  create: true  },
     ADMIN:      { delete: true,  edit: true,  viewFinancial: true,  viewEditais: true,  viewDocumentos: true,  viewUsuarios: true,  create: true  },
   };
 
+  // Documentos gerais do laboratório (certificados/laudos) são só do Admin —
+  // Gestor, Técnico e Estagiário não têm acesso, nem visual nem de dado
+  // (a API em DocumentoPDFController também está travada com @PreAuthorize
+  // hasRole('ADMIN'); isto aqui é só a UI acompanhar a regra real).
   const PAGE_ROLES = {
     '/editais/lista':    ['GESTOR', 'ADMIN'],
     '/editais/detalhes': ['GESTOR', 'ADMIN'],
-    '/documentos':       ['GESTOR', 'ADMIN'],
+    '/documentos':       ['ADMIN'],
     '/usuarios':         ['GESTOR', 'ADMIN'],
   };
 
   const NAV_ROLES = {
     '/editais/lista': ['GESTOR', 'ADMIN'],
-    '/documentos':    ['GESTOR', 'ADMIN'],
+    '/documentos':    ['ADMIN'],
     '/usuarios':      ['GESTOR', 'ADMIN'],
   };
 

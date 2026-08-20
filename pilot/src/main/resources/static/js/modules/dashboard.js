@@ -21,16 +21,18 @@ const Dashboard = (() => {
   }
 
   /* ── KPI Cards ── */
-  async function loadKPIs() {
+  async function loadKPIs(isAdmin) {
     const grid = document.getElementById('kpiGrid');
     if (!grid) return;
-    Skeleton.kpis(grid, 4);
+    Skeleton.kpis(grid, isAdmin ? 4 : 3);
 
     const kpis = [
       { id: 'os',       variant: 'primary', label: _t('Ordens de Serviço Abertas'), icon: 'file', endpoint: '/api/servicos',         params: { size: 1 } },
       { id: 'projetos', variant: 'accent',  label: _t('Projetos Ativos'),           icon: 'star', endpoint: '/api/projetos',         params: { size: 1 } },
       { id: 'visitas',  variant: 'warning', label: _t('Visitas Agendadas'),         icon: 'user', endpoint: '/api/visitas-tecnicas', params: { size: 1 } },
-      { id: 'docs',     variant: 'success', label: _t('Documentos Ativos'),         icon: 'doc',  endpoint: '/api/documentos',       params: { size: 1 } },
+      // Documentos gerais do laboratório são só do Admin (ver core.js Auth.PERMS
+      // e DocumentoPDFController — @PreAuthorize hasRole('ADMIN') na API real).
+      ...(isAdmin ? [{ id: 'docs', variant: 'success', label: _t('Documentos Ativos'), icon: 'doc', endpoint: '/api/documentos', params: { size: 1 } }] : []),
     ];
 
     const fetches = kpis.map(k =>
@@ -473,15 +475,24 @@ const Dashboard = (() => {
   }
 
   /* ── Init ── */
-  function init() {
+  async function init() {
+    if (window.ZP?.Auth?.ready) await window.ZP.Auth.ready();
+    const isAdmin = (window.ZP?.Auth?.role ? window.ZP.Auth.role() : 'ADMIN') === 'ADMIN';
+
+    // Documentos gerais do laboratório: só Admin. Gestor/Técnico/Estagiário
+    // nem tentam a chamada (a API já bloqueia com 403, isso é só não pedir
+    // um recurso que a UI dessa pessoa nunca vai poder mostrar).
+    const cardDocumentos = document.getElementById('cardDocumentos');
+    if (cardDocumentos) cardDocumentos.style.display = isAdmin ? '' : 'none';
+
     setDate();
-    loadKPIs();
+    loadKPIs(isAdmin);
     loadChartServicos();
     loadChartReceita();
     loadChartProjetos();
     loadProximasVisitas();
     loadProjetosEmAndamento();
-    loadDocumentos();
+    if (isAdmin) loadDocumentos();
     loadSidebarBadges();
   }
 

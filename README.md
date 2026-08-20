@@ -172,7 +172,7 @@ Os dois temas foram auditados contra o **WCAG AA** (mínimo de 4.5:1 para texto 
 
 ## Segurança
 
-Autenticação via formulário (Spring Security), com senhas armazenadas com `DelegatingPasswordEncoder`. Endpoints sob `/api/usuarios/**` e operações administrativas (cadastro de eventos, documentos, etc.) exigem papel `ADMIN`. O endpoint de envio de avaliação (`POST /api/avaliacoes`) é público, para permitir respostas via QR code sem login.
+Autenticação via formulário (Spring Security), com senhas armazenadas com `DelegatingPasswordEncoder`. Endpoints sob `/api/usuarios/**` e operações administrativas (cadastro de eventos, documentos, etc.) exigem papel `ADMIN`. O endpoint de envio de avaliação (`POST /api/avaliacoes`) é público, para permitir respostas via QR code sem login. Documentos gerais do laboratório (certificados/laudos, `/api/documentos/**`) são de acesso **exclusivo do Admin** — Gestor, Técnico e Estagiário não têm acesso, nem via API nem via UI (diferente dos documentos por máquina, abertos a quem já tinha acesso à máquina).
 
 **Hierarquia de papéis:** `ESTAGIARIO` < `TECNICO` < `GESTOR` < `ADMIN` (Diretor do CEM). Um Gestor cria/gerencia Estagiários e Técnicos, nunca outro Gestor ou Admin. Todas as atividades (Estagiário, Técnico e Gestor) vivem no mesmo quadro Kanban (`/kanban-estagiarios`), com visibilidade em cascata: Estagiário só vê as próprias; Técnico vê as próprias e todas as de Estagiário (mas nenhuma de Gestor ou de outro Técnico); Gestor vê as próprias, todas as de Técnico e todas as de Estagiário (mas nenhuma de outro Gestor); Admin vê tudo. Um Gestor pode se auto-atribuir atividade; atribuir a um Técnico é papel de Gestor/Admin; atribuir a um Gestor é só do Admin (ou do próprio Gestor, para si mesmo).
 

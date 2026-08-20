@@ -18,8 +18,13 @@
 
     const alerts = [];
 
+    // Documentos gerais do laboratório são só do Admin (API real bloqueada
+    // com @PreAuthorize hasRole('ADMIN')) — não vale a pena nem tentar.
+    if (window.ZP?.Auth?.ready) await window.ZP.Auth.ready();
+    const isAdmin = (window.ZP?.Auth?.role ? window.ZP.Auth.role() : 'ADMIN') === 'ADMIN';
+
     await Promise.allSettled([
-      checkDocumentos(alerts),
+      ...(isAdmin ? [checkDocumentos(alerts)] : []),
       checkAlmoxarifado(alerts),
       checkMaquinas(alerts),
     ]);
@@ -106,7 +111,7 @@
       if (critical.length) alerts.push({
         id: 'stock-critical',
         type: 'warning',
-        title: `${critical.length} item${critical.length > 1 ? 'ns' : ''} ${_t('com estoque crítico')}`,
+        title: `${critical.length} ${critical.length > 1 ? _t('itens') : _t('item')} ${_t('com estoque crítico')}`,
         desc: critical.slice(0, 2).map(i => i.nome || i.descricao).filter(Boolean).join(', ') + (critical.length > 2 ? '…' : ''),
         href: '/almoxarifado',
         linkText: _t('Ver almoxarifado')

@@ -158,6 +158,34 @@ class SecurityConfigTest {
     }
 
     @Test
+    @WithMockUser(roles = "GESTOR")
+    void documentosGeraisSemRoleAdminRetorna403() throws Exception {
+        mockMvc.perform(get("/api/documentos"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "TECNICO")
+    void documentosGeraisTecnicoNaoTemAcesso() throws Exception {
+        mockMvc.perform(get("/api/documentos"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ESTAGIARIO")
+    void documentosGeraisEstagiarioNaoTemAcesso() throws Exception {
+        mockMvc.perform(get("/api/documentos"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void documentosGeraisComRoleAdminRetorna200() throws Exception {
+        mockMvc.perform(get("/api/documentos"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @WithMockUser(username = "gestor.sct@zeiss.com", roles = "GESTOR")
     void gestorConsegueCriarUsuarioComCargoEstagiario() throws Exception {
         salvarUsuario("gestor.sct@zeiss.com", "GESTOR", "GESTOR");
