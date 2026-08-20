@@ -1,21 +1,119 @@
-MIT License
+PROPRIETARY LICENSE — ALL RIGHTS RESERVED
+LICENÇA PROPRIETÁRIA — TODOS OS DIREITOS RESERVADOS
+PROPRIETÄRE LIZENZ — ALLE RECHTE VORBEHALTEN
 
-Copyright (c) 2025 Gabriel Nunes
+Copyright (c) 2025-2026
+Gabriel Viana Nunes
+Thiago Matheus Onório Pinheiro
+João Vítor de Alencar Fraissat Mamede
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+================================================================================
+ENGLISH
+================================================================================
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+All rights to this software and its associated documentation (the "Software"),
+developed as an undergraduate final project (TCC), are reserved exclusively to
+Gabriel Viana Nunes, Thiago Matheus Onório Pinheiro, and João Vítor de Alencar
+Fraissat Mamede (the "Authors").
+
+ACADEMIC LICENSE GRANTED TO THE INSTITUTION
+
+The Authors grant SENAI FATESG a limited, non-exclusive, non-transferable, and
+royalty-free license to use, reproduce, and evaluate the Software solely for
+academic purposes directly related to the assessment, archiving, and
+institutional recognition of this final project (TCC). This license does not
+extend to commercial use, sublicensing, resale, or any use by the institution
+or third parties for profit-generating purposes.
+
+NO PERMISSION FOR ANY OTHER PARTY
+
+Except for the Authors and the academic use expressly granted to SENAI FATESG
+above, no person or entity is granted any right to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software, in whole
+or in part, for any purpose, commercial or otherwise, without the prior
+written consent of all Authors.
+
+DISCLAIMER OF WARRANTY
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+================================================================================
+PORTUGUÊS
+================================================================================
+
+Todos os direitos sobre este software e sua documentação associada
+("Software"), desenvolvido como Trabalho de Conclusão de Curso (TCC), são
+reservados exclusivamente a Gabriel Viana Nunes, Thiago Matheus Onório
+Pinheiro e João Vítor de Alencar Fraissat Mamede ("Autores").
+
+LICENÇA ACADÊMICA CONCEDIDA À INSTITUIÇÃO
+
+Os Autores concedem ao SENAI FATESG uma licença limitada, não exclusiva, não
+transferível e gratuita para usar, reproduzir e avaliar o Software
+exclusivamente para fins acadêmicos diretamente relacionados à avaliação, ao
+arquivamento e ao reconhecimento institucional deste Trabalho de Conclusão de
+Curso (TCC). Esta licença não se estende a uso comercial, sublicenciamento,
+revenda, ou qualquer uso pela instituição ou por terceiros com finalidade
+lucrativa.
+
+NENHUMA PERMISSÃO A QUALQUER OUTRA PARTE
+
+Exceto pelos Autores e pelo uso acadêmico expressamente concedido ao SENAI
+FATESG acima, nenhuma pessoa ou entidade recebe qualquer direito de usar,
+copiar, modificar, integrar, publicar, distribuir, sublicenciar e/ou vender
+cópias do Software, total ou parcialmente, para qualquer finalidade, comercial
+ou não, sem o consentimento prévio e por escrito de todos os Autores.
+
+ISENÇÃO DE GARANTIA
+
+O SOFTWARE É FORNECIDO "COMO ESTÁ", SEM GARANTIA DE QUALQUER TIPO, EXPRESSA OU
+IMPLÍCITA, INCLUINDO, MAS NÃO SE LIMITANDO ÀS GARANTIAS DE COMERCIALIZAÇÃO,
+ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO E NÃO VIOLAÇÃO. EM NENHUMA HIPÓTESE OS
+AUTORES SERÃO RESPONSÁVEIS POR QUALQUER RECLAMAÇÃO, DANOS OU OUTRA
+RESPONSABILIDADE, SEJA EM AÇÃO DE CONTRATO, ATO ILÍCITO OU DE OUTRA FORMA,
+DECORRENTE DE, OU EM CONEXÃO COM O SOFTWARE OU O USO OU OUTRAS NEGOCIAÇÕES NO
 SOFTWARE.
+
+================================================================================
+DEUTSCH
+================================================================================
+
+Alle Rechte an dieser Software und der dazugehörigen Dokumentation
+("Software"), die als studentische Abschlussarbeit (TCC) entwickelt wurde,
+sind ausschließlich Gabriel Viana Nunes, Thiago Matheus Onório Pinheiro und
+João Vítor de Alencar Fraissat Mamede ("Autoren") vorbehalten.
+
+DER INSTITUTION GEWÄHRTE AKADEMISCHE LIZENZ
+
+Die Autoren gewähren SENAI FATESG eine beschränkte, nicht ausschließliche,
+nicht übertragbare und unentgeltliche Lizenz zur Nutzung, Vervielfältigung und
+Bewertung der Software ausschließlich zu akademischen Zwecken, die unmittelbar
+mit der Bewertung, Archivierung und institutionellen Anerkennung dieser
+Abschlussarbeit (TCC) zusammenhängen. Diese Lizenz umfasst keine kommerzielle
+Nutzung, Unterlizenzierung, Weiterverkauf oder jegliche Nutzung durch die
+Institution oder Dritte zu gewinnorientierten Zwecken.
+
+KEINE ERLAUBNIS FÜR JEGLICHE ANDERE PARTEI
+
+Mit Ausnahme der Autoren und der oben ausdrücklich SENAI FATESG gewährten
+akademischen Nutzung wird keiner Person oder Einrichtung das Recht
+eingeräumt, die Software oder Teile davon zu nutzen, zu kopieren, zu ändern,
+zusammenzuführen, zu veröffentlichen, zu verbreiten, unterzulizenzieren
+und/oder zu verkaufen, sei es zu kommerziellen oder anderen Zwecken, ohne die
+vorherige schriftliche Zustimmung aller Autoren.
+
+HAFTUNGSAUSSCHLUSS
+
+DIE SOFTWARE WIRD "WIE BESEHEN" OHNE JEGLICHE AUSDRÜCKLICHE ODER
+STILLSCHWEIGENDE GEWÄHRLEISTUNG BEREITGESTELLT, EINSCHLIESSLICH, ABER NICHT
+BESCHRÄNKT AUF DIE GEWÄHRLEISTUNG DER MARKTGÄNGIGKEIT, DER EIGNUNG FÜR EINEN
+BESTIMMTEN ZWECK UND DER NICHTVERLETZUNG VON RECHTEN DRITTER. DIE AUTOREN
+HAFTEN IN KEINEM FALL FÜR ANSPRÜCHE, SCHÄDEN ODER SONSTIGE HAFTUNG, OB AUS
+VERTRAG, UNERLAUBTER HANDLUNG ODER ANDERWEITIG, DIE SICH AUS ODER IN
+VERBINDUNG MIT DER SOFTWARE ODER DER NUTZUNG ODER SONSTIGEN VERWENDUNG DER
+SOFTWARE ERGEBEN.
