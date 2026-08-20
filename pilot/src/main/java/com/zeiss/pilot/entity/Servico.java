@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import com.zeiss.pilot.security.CryptoConverter;
 
 @Entity
 @Table(name = "servicos")
@@ -24,8 +27,10 @@ public class Servico {
     @Column(nullable = false)
     private String cliente;
 
+    @Convert(converter = CryptoConverter.class)
     private String cpfOuCnpj;
 
+    @Convert(converter = CryptoConverter.class)
     @Column(columnDefinition = "TEXT")
     private String endereco;
 

@@ -264,4 +264,102 @@ class SecurityConfigTest {
                         .content("{\"nome\":\"X\",\"email\":\"x.sct@zeiss.com\",\"senha\":\"senha123\",\"cargo\":\"ESTAGIARIO\"}"))
                 .andExpect(status().isForbidden());
     }
+
+    // ── Cobertura sistemática de autorização por papel (OWASP A01) ──────────
+    // Cada teste abaixo cobre uma regra já declarada em SecurityConfig ou via
+    // @PreAuthorize que ainda não tinha nenhum teste — não são regras novas.
+
+    @Test
+    @WithMockUser(roles = "GESTOR")
+    void usuariosAdminsExigeAdminMesmoParaGestorQueTemAcessoAoRestoDeApiUsuarios() throws Exception {
+        // /api/usuarios/admins tem uma regra hasRole(ADMIN) própria, mais
+        // restrita que o hasAnyRole(ADMIN, GESTOR) do resto de /api/usuarios/**
+        // — precisa vir ANTES da regra genérica em SecurityConfig, senão essa
+        // rota ficaria acessível a Gestor por engano.
+        mockMvc.perform(get("/api/usuarios/admins"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void usuariosAdminsComRoleAdminRetorna200() throws Exception {
+        mockMvc.perform(get("/api/usuarios/admins"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "GESTOR")
+    void uploadDocumentoGeralSemRoleAdminRetorna403() throws Exception {
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                        .multipart("/api/documentos/upload")
+                        .file(new org.springframework.mock.web.MockMultipartFile(
+                                "arquivo", "teste.pdf", "application/pdf", "conteudo".getBytes()))
+                        .param("dataExpiracao", "2027-01-01")
+                        .with(csrf()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "GESTOR")
+    void editarExpiracaoDocumentoGeralSemRoleAdminRetorna403() throws Exception {
+        mockMvc.perform(put("/api/documentos/1/expiracao")
+                        .param("data", "2027-01-01")
+                        .with(csrf()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "GESTOR")
+    void removerDocumentoGeralSemRoleAdminRetorna403() throws Exception {
+        mockMvc.perform(delete("/api/documentos/1").with(csrf()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "GESTOR")
+    void criarEventoSemRoleAdminRetorna403() throws Exception {
+        mockMvc.perform(post("/api/eventos")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"titulo\":\"Evento Teste\"}"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void criarEventoComRoleAdminRetorna200() throws Exception {
+        mockMvc.perform(post("/api/eventos")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"titulo\":\"Evento Teste\"}"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "GESTOR")
+    void uploadDocumentoDeMaquinaSemRoleAdminRetorna403() throws Exception {
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                        .multipart("/api/maquinas/1/documentos/upload")
+                        .file(new org.springframework.mock.web.MockMultipartFile(
+                                "arquivo", "teste.pdf", "application/pdf", "conteudo".getBytes()))
+                        .with(csrf()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "GESTOR")
+    void removerDocumentoDeMaquinaSemRoleAdminRetorna403() throws Exception {
+        mockMvc.perform(delete("/api/maquinas/1/documentos/1").with(csrf()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ESTAGIARIO")
+    void listarDocumentosDeMaquinaNaoExigePapelEspecifico() throws Exception {
+        // Diferente dos documentos gerais do laboratório, documentos por
+        // máquina são abertos a quem já tem acesso à máquina — sem
+        // @PreAuthorize no GET, só a regra genérica "autenticado".
+        mockMvc.perform(get("/api/maquinas/1/documentos"))
+                .andExpect(status().isOk());
+    }
 }

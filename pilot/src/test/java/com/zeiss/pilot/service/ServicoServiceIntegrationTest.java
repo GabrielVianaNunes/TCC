@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,9 @@ class ServicoServiceIntegrationTest {
 
     @Autowired
     private ServicoService servicoService;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     private ServicoDTO novoServico(String cliente) {
         ServicoDTO dto = new ServicoDTO();
@@ -55,5 +59,27 @@ class ServicoServiceIntegrationTest {
         int sequenciaPrimeiro = Integer.parseInt(primeiro.getCodigoOs().substring(primeiro.getCodigoOs().length() - 4));
         int sequenciaSegundo = Integer.parseInt(segundo.getCodigoOs().substring(segundo.getCodigoOs().length() - 4));
         assertEquals(sequenciaPrimeiro + 1, sequenciaSegundo);
+    }
+
+    @Test
+    void cpfEEnderecoFicamCriptografadosNoBancoMasEmTextoClaroViaService() {
+        ServicoDTO dto = novoServico("Cliente Teste Cripto");
+        dto.setCpfOuCnpj("123.456.789-00");
+        dto.setEndereco("Rua Exemplo, 123");
+
+        ServicoDTO criado = servicoService.criarServico(dto);
+
+        assertEquals("123.456.789-00", criado.getCpfOuCnpj());
+        assertEquals("Rua Exemplo, 123", criado.getEndereco());
+
+        String cpfNoBanco = jdbcTemplate.queryForObject(
+                "SELECT cpf_ou_cnpj FROM servicos WHERE id = ?", String.class, criado.getId());
+        String enderecoNoBanco = jdbcTemplate.queryForObject(
+                "SELECT endereco FROM servicos WHERE id = ?", String.class, criado.getId());
+
+        assertTrue(cpfNoBanco.startsWith("enc:v1:"));
+        assertTrue(enderecoNoBanco.startsWith("enc:v1:"));
+        assertNotEquals("123.456.789-00", cpfNoBanco);
+        assertNotEquals("Rua Exemplo, 123", enderecoNoBanco);
     }
 }

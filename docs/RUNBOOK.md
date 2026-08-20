@@ -48,6 +48,30 @@ Procedimento **validado ao vivo** durante a implementação da Etapa 8 (2026-07-
 
 **Pré-requisito:** ter `pg_dump`/`pg_restore` instalados, **da mesma versão major do Postgres do servidor** (hoje: Postgres 16) — usar uma versão diferente de `pg_restore` pode falhar ou restaurar incorretamente.
 
+## Criptografia de dado pessoal no banco
+
+CPF/CNPJ e endereço da tabela `servicos` são criptografados com AES-256-GCM antes de chegar ao banco (`CryptoConverter`, aplicado de forma transparente pelo JPA) — exigência do FO-307/FO-358 da GETIN ("mascaramento e/ou criptografia e/ou tokenização" de dado pessoal). O restante da aplicação (DTO, API, tela) continua vendo o valor em texto claro normalmente; só a coluna no Postgres guarda a versão cifrada.
+
+| Variável | Obrigatória? | Descrição |
+|---|---|---|
+| `FIELD_ENCRYPTION_KEY` | Sim | Chave AES-256 em Base64. Sem ela, qualquer criação ou leitura de serviço com CPF/CNPJ ou endereço falha (`500`) em vez de gravar em texto claro. Gerar com: `openssl rand -base64 32` |
+
+**Migração automática de dado legado:** ao subir, `FieldEncryptionMigrationRunner` varre `servicos` procurando CPF/CNPJ ou endereço ainda em texto claro (gravados antes desta criptografia existir) e recriptografa cada um, uma única vez. Roda a cada subida da aplicação, mas é idempotente — uma linha já criptografada nunca é tocada de novo, então não há custo real depois da primeira execução. Se `FIELD_ENCRYPTION_KEY` não estiver configurada, a migração fica desabilitada silenciosamente (só loga um aviso), do mesmo jeito que o backup fica desabilitado sem `BACKUP_S3_*`.
+
+**Perder a chave = perder o dado.** Diferente da senha do banco, não há como recuperar um CPF ou endereço cifrado sem a chave exata usada para cifrá-lo — trate `FIELD_ENCRYPTION_KEY` com o mesmo cuidado de um backup: guarde uma cópia fora do `.env` do servidor (cofre de senhas, por exemplo).
+
+## Log de auditoria
+
+Toda requisição de escrita (`POST`/`PUT`/`PATCH`/`DELETE`) sob `/api/**` gera uma linha no logger dedicado `AUDIT` — `usuario=<e-mail ou "anonimo"> metodo=<verbo> caminho=<rota> status=<código HTTP>`. Cobre tanto uma negação por regra grosseira (`SecurityConfig`) quanto por `@PreAuthorize`, sempre com o status final correto (ver `AuditLogFilter` e a nota de posicionamento no `CONTRIBUTING.md`).
+
+Por padrão sai junto com o log geral da aplicação (console/arquivo, conforme a configuração de log do ambiente). Para separar em um arquivo próprio (recomendado se for alimentar um sistema de monitoramento depois), adicione ao `application.properties` de produção:
+
+```properties
+logging.level.AUDIT=INFO
+```
+
+e, se quiser um arquivo dedicado, configure um appender próprio no `logback-spring.xml` do projeto para o logger `AUDIT` (não existe um arquivo `logback-spring.xml` hoje — a configuração atual usa só o `logging.level.*` padrão do Spring Boot).
+
 1. Baixe o arquivo de backup (`.dump`) do bucket S3-compatível para a máquina onde a restauração vai acontecer.
 
 2. Crie um banco novo para restaurar (nunca restaure em cima de um banco em uso sem antes fazer um backup dele também):

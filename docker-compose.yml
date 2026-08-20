@@ -22,6 +22,11 @@ services:
       # criptografada. Sem essa chave (32 bytes em Base64), o backup falha
       # em vez de subir sem criptografia. Gerar com: openssl rand -base64 32
       BACKUP_ENCRYPTION_KEY: ${BACKUP_ENCRYPTION_KEY:-}
+      # FO-307/FO-358 da GETIN: CPF/CNPJ e endereço em servicos precisam ser
+      # criptografados no banco. Obrigatória — sem ela, o app sobe mas
+      # qualquer operação com esses campos falha. Gerar com:
+      # openssl rand -base64 32
+      FIELD_ENCRYPTION_KEY: ${FIELD_ENCRYPTION_KEY:?defina FIELD_ENCRYPTION_KEY no .env}
       # Endurecimento de produção (ver CONTRIBUTING.md > Checklist de produção):
       # cache de template ligado, log de segurança sem detalhe de DEBUG.
       THYMELEAF_CACHE: "true"

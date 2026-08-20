@@ -180,6 +180,10 @@ Autenticação via formulário (Spring Security), com senhas armazenadas com `De
 
 **Endurecimento adicional (18/08/2026):** mensagem de erro nunca expõe detalhe interno ao cliente (handler dedicado às rotas de API, páginas de erro 404/500 estáticas e genéricas), fonte servida localmente (sem CDN público), cookie de sessão com flag `Secure` em produção, e `Content-Security-Policy` (`default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`) em toda resposta.
 
+**Criptografia de dado pessoal no banco (20/08/2026):** CPF/CNPJ e endereço em `servicos` são criptografados com AES-256-GCM (`CryptoConverter`, JPA `AttributeConverter`), de forma transparente — API e UI continuam vendo o valor em texto claro, só a coluna no Postgres guarda a versão cifrada. Dado gravado antes dessa mudança é recriptografado automaticamente, uma única vez, na subida da aplicação (`FieldEncryptionMigrationRunner`). Requer `FIELD_ENCRYPTION_KEY` (ver [`docs/RUNBOOK.md`](docs/RUNBOOK.md)).
+
+**Log de auditoria e cobertura de teste de autorização (20/08/2026):** toda escrita (`POST`/`PUT`/`PATCH`/`DELETE`) sob `/api/**` gera uma linha no logger `AUDIT` (usuário, verbo, rota, status), capturando tanto negação grosseira de `SecurityConfig` quanto de `@PreAuthorize` (`AuditLogFilter`, ver [`docs/RUNBOOK.md`](docs/RUNBOOK.md#log-de-auditoria)). `SecurityConfigTest` ganhou cobertura sistemática das regras de papel que ainda não tinham teste (`/api/usuarios/admins`, upload/edição/remoção de documentos gerais e por máquina, criação de evento).
+
 ## Estrutura do repositório
 
 ```

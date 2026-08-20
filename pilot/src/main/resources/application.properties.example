@@ -58,6 +58,12 @@ backup.cron=${BACKUP_CRON:0 0 3 * * *}
 # openssl rand -base64 32
 backup.encryption-key=${BACKUP_ENCRYPTION_KEY:}
 
+# Criptografia de dado pessoal no banco (CPF/CNPJ, endereço em servicos) —
+# exigência do FO-307/FO-358 da GETIN ("mascaramento e/ou criptografia e/ou
+# tokenização"). Sem essa chave, criar/ler um serviço com CPF ou endereço
+# falha em vez de gravar em texto claro. Gerar com: openssl rand -base64 32
+security.field-encryption-key=${FIELD_ENCRYPTION_KEY:}
+
 # Erro: nunca expor detalhe interno ao cliente (FO-358 da GETIN + OWASP A05).
 # Os valores abaixo ja sao o padrao do Spring Boot, mas ficam explicitos para
 # que uma mudanca futura seja uma decisao consciente, e nao um efeito colateral.

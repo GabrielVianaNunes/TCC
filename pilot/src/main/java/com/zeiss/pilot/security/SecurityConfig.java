@@ -11,7 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.zeiss.pilot.audit.AuditLogFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -68,6 +71,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .addFilterBefore(new LoginRateLimitFilter(loginAttemptService), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new AuditLogFilter(), ExceptionTranslationFilter.class)
             .formLogin(form -> form
                 .loginPage("/login")
                 .successHandler((request, response, authentication) -> {
