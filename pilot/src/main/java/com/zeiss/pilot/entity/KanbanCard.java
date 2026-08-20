@@ -20,6 +20,15 @@ public class KanbanCard {
     private String descricao;
 
     private Long estagiariaId;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    @ManyToOne
+    @JoinColumn(name = "atribuido_por_id")
+    private Usuario atribuidoPor;
+
     private String coluna;
     private String prioridade;
     private LocalDate prazo;
@@ -42,6 +51,10 @@ public class KanbanCard {
     public void setDescricao(String descricao) { this.descricao = descricao; }
     public Long getEstagiariaId() { return estagiariaId; }
     public void setEstagiariaId(Long estagiariaId) { this.estagiariaId = estagiariaId; }
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+    public Usuario getAtribuidoPor() { return atribuidoPor; }
+    public void setAtribuidoPor(Usuario atribuidoPor) { this.atribuidoPor = atribuidoPor; }
     public String getColuna() { return coluna; }
     public void setColuna(String coluna) { this.coluna = coluna; }
     public String getPrioridade() { return prioridade; }

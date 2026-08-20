@@ -54,6 +54,10 @@ public class SecurityConfig {
                     "/login", "/css/**", "/img/**", "/js/**", "/fonts/**",
                     "/avaliacao", "/qrcode-avaliacao"
                 ).permitAll()
+                // Qualquer usuário autenticado precisa saber quem é (papel/nome
+                // próprios) para a UI se adaptar ao papel — não é gestão de
+                // outros usuários, por isso fica fora da regra ADMIN/GESTOR abaixo.
+                .requestMatchers("/api/usuarios/me").authenticated()
                 .requestMatchers("/api/usuarios/admins").hasRole("ADMIN")
                 .requestMatchers("/api/usuarios/**").hasAnyRole("ADMIN", "GESTOR")
                 .requestMatchers(HttpMethod.POST, "/api/avaliacoes").permitAll()

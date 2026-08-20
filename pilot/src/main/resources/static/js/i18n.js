@@ -358,6 +358,9 @@
     'Nova Tarefa':                     { 'pt-BR':'Nova Tarefa',                     'en':'New Task',                            'de':'Neue Aufgabe'                          },
     'Editar Tarefa':                   { 'pt-BR':'Editar Tarefa',                   'en':'Edit Task',                           'de':'Aufgabe bearbeiten'                    },
     'Salvar Tarefa':                   { 'pt-BR':'Salvar Tarefa',                   'en':'Save Task',                           'de':'Aufgabe speichern'                     },
+    'Tipo de atividade':               { 'pt-BR':'Tipo de atividade',               'en':'Activity type',                       'de':'Aktivitätstyp'                         },
+    'Selecione a quem atribuir a tarefa.': { 'pt-BR':'Selecione a quem atribuir a tarefa.', 'en':'Select who to assign the task to.', 'de':'Wählen Sie aus, wem die Aufgabe zugewiesen wird.' },
+    'Erro ao mover tarefa.':           { 'pt-BR':'Erro ao mover tarefa.',           'en':'Error moving task.',                  'de':'Fehler beim Verschieben der Aufgabe.'  },
     'Nota do Diretor':                 { 'pt-BR':'Nota do Diretor',                 'en':"Director's Note",                     'de':'Notiz des Direktors'                   },
     'Salvar Nota':                     { 'pt-BR':'Salvar Nota',                     'en':'Save Note',                           'de':'Notiz speichern'                       },
     'Adicionar Nota':                  { 'pt-BR':'Adicionar Nota',                  'en':'Add Note',                            'de':'Notiz hinzufügen'                      },
@@ -441,7 +444,7 @@
 
     // ── Kanban ──────────────────────────────────────────────────────
     'Kanban de Atividades':            { 'pt-BR':'Kanban de Atividades',            'en':'Activities Kanban',                   'de':'Aktivitäten-Kanban'                    },
-    'Atribua e acompanhe tarefas dos estagiários em tempo real': { 'pt-BR':'Atribua e acompanhe tarefas dos estagiários em tempo real', 'en':'Assign and track intern tasks in real time', 'de':'Praktikantenaufgaben zuweisen und verfolgen' },
+    'Atribua e acompanhe atividades de Estagiários, Técnicos e Gestores em tempo real': { 'pt-BR':'Atribua e acompanhe atividades de Estagiários, Técnicos e Gestores em tempo real', 'en':'Assign and track activities for Interns, Technicians and Managers in real time', 'de':'Aktivitäten für Praktikanten, Techniker und Manager zuweisen und verfolgen' },
     'Ver Desempenho':                  { 'pt-BR':'Ver Desempenho',                  'en':'View Performance',                    'de':'Leistung ansehen'                      },
     'Abrir Kanban':                    { 'pt-BR':'Abrir Kanban',                    'en':'Open Kanban',                         'de':'Kanban öffnen'                         },
     'Estagiário:':                     { 'pt-BR':'Estagiário:',                     'en':'Intern:',                             'de':'Praktikant:'                           },

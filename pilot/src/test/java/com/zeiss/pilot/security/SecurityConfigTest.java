@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.zeiss.pilot.entity.Usuario;
@@ -143,6 +144,17 @@ class SecurityConfigTest {
     void backupAutenticadoComRoleAdminNaoBloqueiaAcessoDeSeguranca() throws Exception {
         mockMvc.perform(post("/api/backup/executar").with(csrf()))
                 .andExpect(status().isServiceUnavailable());
+    }
+
+    @Test
+    @WithMockUser(username = "tecnico.me.sct@zeiss.com", roles = "TECNICO")
+    void meRetornaODadoDoProprioUsuarioAutenticado() throws Exception {
+        salvarUsuario("tecnico.me.sct@zeiss.com", "TECNICO", "TECNICO");
+
+        mockMvc.perform(get("/api/usuarios/me"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("tecnico.me.sct@zeiss.com"))
+                .andExpect(jsonPath("$.role").value("TECNICO"));
     }
 
     @Test

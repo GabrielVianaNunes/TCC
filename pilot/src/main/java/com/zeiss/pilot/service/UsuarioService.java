@@ -15,6 +15,7 @@ import com.zeiss.pilot.repository.UsuarioRepository;
 public class UsuarioService {
 
     private static final String CARGO_ESTAGIARIO = "ESTAGIARIO";
+    private static final String CARGO_TECNICO = "TECNICO";
     private static final String CARGO_GESTOR = "GESTOR";
     private static final String CARGO_DIRETOR_CEM = "DIRETOR_CEM";
     private static final String ROLE_GESTOR = "GESTOR";
@@ -85,6 +86,9 @@ public class UsuarioService {
         if (CARGO_ESTAGIARIO.equalsIgnoreCase(cargo)) {
             return "ESTAGIARIO";
         }
+        if (CARGO_TECNICO.equalsIgnoreCase(cargo)) {
+            return "TECNICO";
+        }
         if (CARGO_GESTOR.equalsIgnoreCase(cargo)) {
             return "GESTOR";
         }
@@ -98,8 +102,11 @@ public class UsuarioService {
         if (!ROLE_GESTOR.equalsIgnoreCase(chamador.getRole())) {
             return;
         }
-        if (!CARGO_ESTAGIARIO.equalsIgnoreCase(cargoAlvo)) {
-            throw new AccessDeniedException("Gestor só pode gerenciar usuários com cargo Estagiário.");
+        // Gestor gerencia quem está abaixo dele na hierarquia (Estagiário e
+        // Técnico), nunca outro Gestor ou Diretor — isso continua exclusivo do Admin.
+        boolean cargoPermitido = CARGO_ESTAGIARIO.equalsIgnoreCase(cargoAlvo) || CARGO_TECNICO.equalsIgnoreCase(cargoAlvo);
+        if (!cargoPermitido) {
+            throw new AccessDeniedException("Gestor só pode gerenciar usuários com cargo Estagiário ou Técnico.");
         }
     }
 

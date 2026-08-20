@@ -21,6 +21,10 @@ public class Estagiario {
     private String email;
     private boolean ativo = true;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
     public Estagiario() {}
 
     public Long getId() { return id; }
@@ -39,4 +43,6 @@ public class Estagiario {
     public void setEmail(String email) { this.email = email; }
     public boolean isAtivo() { return ativo; }
     public void setAtivo(boolean ativo) { this.ativo = ativo; }
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 }

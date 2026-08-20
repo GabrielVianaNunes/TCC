@@ -280,6 +280,13 @@ const StatusBadge = (() => {
     'Baixa': { cls: 'success', label: 'Baixa' }
   };
 
+  // ── Tarefa de Técnico ──
+  const TAREFA_TECNICO = {
+    'Pendente':      { cls: 'neutral', label: 'Pendente' },
+    'Em andamento':  { cls: 'info',    label: 'Em Andamento' },
+    'Concluída':     { cls: 'success', label: 'Concluída' }
+  };
+
   const _t = k => window.I18n?.t(k) ?? k;
 
   function render(map, key) {
@@ -295,6 +302,7 @@ const StatusBadge = (() => {
     documento:  v => render(DOCUMENTOS, v),
     visita:     v => render(VISITAS,   v),
     prioridade: v => render(PRIORIDADE, v),
+    tarefaTecnico: v => render(TAREFA_TECNICO, v),
 
     // Generic fallback
     generic(v, colorMap = {}) {

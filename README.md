@@ -136,13 +136,13 @@ O sistema tem backup automatizado diário do banco (`pg_dump -Fc`) e dos documen
 | **Máquinas** | Cadastro de equipamentos, agendamento, manutenção e documentos por máquina |
 | **Amostras** | Controle de amostras recebidas para análise/calibração |
 | **Almoxarifado** | Itens e movimentações de estoque |
-| **Estagiários** | Cadastro, notas, dashboard e quadro Kanban de estagiários |
+| **Estagiários** | Cadastro, notas, dashboard e quadro Kanban de atividades — de Estagiários, Técnicos e Gestores, cada papel vendo só o que tem permissão |
 | **Visitas Técnicas** | Agendamento e acompanhamento de visitas ao CEM |
 | **Verificação Ambiental** | Registro de condições ambientais do laboratório |
 | **Eventos / Editais / Projetos** | Gestão de eventos, editais e projetos do centro |
 | **Avaliação (NPS)** | Formulário público de satisfação com dashboard de respostas |
 | **Documentos** | Upload e organização de PDFs e documentos por pasta/máquina |
-| **Usuários** | Autenticação (Spring Security) e controle de acesso por papel (`ADMIN`) |
+| **Usuários** | Autenticação (Spring Security) e controle de acesso por papel (`ADMIN`, `GESTOR`, `TECNICO`, `ESTAGIARIO`) |
 
 ## Idiomas (i18n)
 
@@ -173,6 +173,8 @@ Os dois temas foram auditados contra o **WCAG AA** (mínimo de 4.5:1 para texto 
 ## Segurança
 
 Autenticação via formulário (Spring Security), com senhas armazenadas com `DelegatingPasswordEncoder`. Endpoints sob `/api/usuarios/**` e operações administrativas (cadastro de eventos, documentos, etc.) exigem papel `ADMIN`. O endpoint de envio de avaliação (`POST /api/avaliacoes`) é público, para permitir respostas via QR code sem login.
+
+**Hierarquia de papéis:** `ESTAGIARIO` < `TECNICO` < `GESTOR` < `ADMIN` (Diretor do CEM). Um Gestor cria/gerencia Estagiários e Técnicos, nunca outro Gestor ou Admin. Todas as atividades (Estagiário, Técnico e Gestor) vivem no mesmo quadro Kanban (`/kanban-estagiarios`), com visibilidade em cascata: Estagiário só vê as próprias; Técnico vê as próprias e todas as de Estagiário (mas nenhuma de Gestor ou de outro Técnico); Gestor vê as próprias, todas as de Técnico e todas as de Estagiário (mas nenhuma de outro Gestor); Admin vê tudo. Um Gestor pode se auto-atribuir atividade; atribuir a um Técnico é papel de Gestor/Admin; atribuir a um Gestor é só do Admin (ou do próprio Gestor, para si mesmo).
 
 **Endurecimento de implantação:** o contêiner roda com usuário de sistema sem privilégio (não root), o log de segurança fica em `WARN` por padrão (sem detalhe de autenticação em produção), documentos anexados usam volume Docker nomeado (sobrevivem a redeploy), e o CI roda varredura de dependência vulnerável (`dependency-review-action` a cada PR + Dependabot contínuo). Detalhes e o porquê de cada escolha em [CONTRIBUTING.md](CONTRIBUTING.md#checklist-de-produção).
 

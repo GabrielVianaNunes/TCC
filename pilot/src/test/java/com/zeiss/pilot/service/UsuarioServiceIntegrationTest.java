@@ -71,6 +71,14 @@ class UsuarioServiceIntegrationTest {
     }
 
     @Test
+    void criarUsuarioComCargoTecnicoDerivaRoleTecnico() {
+        UsuarioDTO dto = usuarioService.criarUsuario(
+                novoUsuario("Fulano Técnico", "fulano.tecnico.usc@zeiss.com", "TECNICO"),
+                chamadorAdmin());
+        assertEquals("TECNICO", dto.getRole());
+    }
+
+    @Test
     void criarUsuarioComCargoDiretorCemDerivaRoleAdmin() {
         UsuarioDTO dto = usuarioService.criarUsuario(
                 novoUsuario("Fulano Diretor", "fulano.diretor.usc@zeiss.com", "DIRETOR_CEM"),
@@ -86,6 +94,14 @@ class UsuarioServiceIntegrationTest {
                 novoUsuario("Novo Estagiário", "novo.estagiario.usc@zeiss.com", "ESTAGIARIO"),
                 chamadorGestor());
         assertEquals("ESTAGIARIO", dto.getRole());
+    }
+
+    @Test
+    void gestorConsegueCriarUsuarioComCargoTecnico() {
+        UsuarioDTO dto = usuarioService.criarUsuario(
+                novoUsuario("Novo Técnico", "novo.tecnico.usc@zeiss.com", "TECNICO"),
+                chamadorGestor());
+        assertEquals("TECNICO", dto.getRole());
     }
 
     @Test
@@ -115,6 +131,15 @@ class UsuarioServiceIntegrationTest {
 
         UsuarioDTO dto = usuarioService.atualizarUsuario(alvo.getId(), dadosNovos, chamadorGestor());
         assertEquals("Estagiário Alvo Editado", dto.getNome());
+    }
+
+    @Test
+    void gestorConsegueEditarUsuarioQueJaETecnico() {
+        Usuario alvo = salvar("Técnico Alvo", "tecnico.alvo.usc@zeiss.com", "TECNICO", "TECNICO");
+        Usuario dadosNovos = novoUsuario("Técnico Alvo Editado", "tecnico.alvo.usc@zeiss.com", "TECNICO");
+
+        UsuarioDTO dto = usuarioService.atualizarUsuario(alvo.getId(), dadosNovos, chamadorGestor());
+        assertEquals("Técnico Alvo Editado", dto.getNome());
     }
 
     @Test

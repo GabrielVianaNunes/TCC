@@ -1,17 +1,24 @@
 /**
- * kanban-estagiarios.js — Kanban board de atividades dos estagiários
- * Suporta drag-and-drop nativo (HTML5 Drag API) e persistência via API.
+ * kanban-estagiarios.js — Kanban board de atividades (Estagiário, Técnico e
+ * Gestor no mesmo quadro). Suporta drag-and-drop nativo (HTML5 Drag API) e
+ * persistência via API. A API já devolve só os cards que o usuário logado
+ * tem permissão de ver (Estagiário só as próprias; Técnico as próprias +
+ * todas as de Estagiário; Gestor as próprias + todas as de Técnico e
+ * Estagiário; Admin, tudo) — aqui é só renderizar o que chegou.
  */
 (function () {
   'use strict';
 
   const API_CARDS       = '/api/kanban-cards';
   const API_ESTAGIARIOS = '/api/estagiarios';
+  const API_USUARIOS    = '/api/usuarios';
   const COLUNAS         = ['backlog', 'em-andamento', 'revisao', 'concluido'];
 
   let allCards       = [];
   let allEstagiarios = [];
-  let filtroId       = 'todos';
+  let allTecnicos    = [];
+  let allGestores    = [];
+  let filtroId       = 'todos'; // "todos" | "est-<id>" | "usr-<id>"
   let filtroPrioridade = '';
   let filtroBusca    = '';
   let dragCardId     = null;
@@ -37,6 +44,9 @@
     ];
     return palette[(id - 1) % palette.length];
   }
+
+  const ROLE_LABEL = { TECNICO: 'Técnico', GESTOR: 'Gestor', ESTAGIARIO: 'Estagiário' };
+  const ROLE_BADGE_CLS = { TECNICO: 'info', GESTOR: 'warning', ESTAGIARIO: 'neutral' };
 
   function todayISO() {
     return new Date().toISOString().slice(0, 10);
@@ -66,16 +76,31 @@
     return allEstagiarios.find(e => e.id === id);
   }
 
+  /** Nome + papel + id "unificado" do dono do card, seja Estagiário ou Técnico/Gestor. */
+  function assigneeInfo(card) {
+    if (card.estagiariaId != null) {
+      const e = getEstagiarioById(card.estagiariaId);
+      return { nome: e ? e.nome : '—', role: 'ESTAGIARIO', filtroKey: `est-${card.estagiariaId}` };
+    }
+    if (card.usuarioId != null) {
+      return { nome: card.usuarioNome || '—', role: card.usuarioRole || '', filtroKey: `usr-${card.usuarioId}` };
+    }
+    return { nome: '—', role: '', filtroKey: null };
+  }
+
   // ── Render ────────────────────────────────────────────────────────────────
 
   function renderCard(card) {
-    const estagiario = getEstagiarioById(card.estagiariaId);
-    const nome       = estagiario ? estagiario.nome : '—';
-    const ini        = initials(nome);
-    const cor        = avatarColor(card.estagiariaId || 1);
+    const info      = assigneeInfo(card);
+    const ini       = initials(info.nome);
+    const avatarSeed = card.estagiariaId ?? card.usuarioId ?? 1;
+    const cor        = avatarColor(avatarSeed);
     const dueCls     = dueDateClass(card.prazo, card.coluna);
     const tagsHtml   = (card.tags || []).map(t =>
       `<span class="kanban-card__tag">${t}</span>`).join('');
+    const roleBadge = info.role && info.role !== 'ESTAGIARIO'
+      ? `<span class="badge badge--${ROLE_BADGE_CLS[info.role] || 'neutral'}" style="font-size:9px;padding:1px 6px">${_t(ROLE_LABEL[info.role] || info.role)}</span>`
+      : '';
 
     const el = document.createElement('div');
     el.className = 'kanban-card';
@@ -91,11 +116,12 @@
         </button>
       </div>
       ${card.descricao ? `<p class="kanban-card__desc">${card.descricao}</p>` : ''}
+      ${roleBadge ? `<div class="kanban-card__tags">${roleBadge}</div>` : ''}
       ${tagsHtml ? `<div class="kanban-card__tags">${tagsHtml}</div>` : ''}
       <div class="kanban-card__footer">
         <div class="kanban-card__assignee">
           <div class="kanban-card__avatar" style="background:${cor}">${ini}</div>
-          <span>${nome.split(' ')[0]}</span>
+          <span>${(info.nome || '—').split(' ')[0]}</span>
         </div>
         <span class="kanban-card__due ${dueCls}">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -128,13 +154,13 @@
 
       const filtered = allCards.filter(c => {
         if (c.coluna !== col) return false;
-        if (filtroId !== 'todos' && c.estagiariaId !== parseInt(filtroId)) return false;
+        if (filtroId !== 'todos' && assigneeInfo(c).filtroKey !== filtroId) return false;
         if (filtroPrioridade && c.prioridade !== filtroPrioridade) return false;
         if (filtroBusca) {
           const q = filtroBusca.toLowerCase();
           if (!(c.titulo.toLowerCase().includes(q) ||
                 (c.descricao || '').toLowerCase().includes(q) ||
-                getNomeEstagiario(c.estagiariaId).toLowerCase().includes(q))) return false;
+                assigneeInfo(c).nome.toLowerCase().includes(q))) return false;
         }
         return true;
       });
@@ -153,24 +179,29 @@
 
   function renderFilterAvatars() {
     const wrap = document.getElementById('filtroEstagiario');
-    // Keep "Todos" button, remove old avatar buttons
     wrap.querySelectorAll('[data-id]:not([data-id="todos"])').forEach(el => el.remove());
 
-    allEstagiarios.filter(e => e.ativo).forEach(e => {
+    const pessoas = [
+      ...allEstagiarios.filter(e => e.ativo).map(e => ({ id: `est-${e.id}`, seed: e.id, nome: e.nome })),
+      ...allTecnicos.map(u => ({ id: `usr-${u.id}`, seed: u.id, nome: u.nome })),
+      ...allGestores.map(u => ({ id: `usr-${u.id}`, seed: u.id, nome: u.nome })),
+    ];
+
+    pessoas.forEach(p => {
       const btn = document.createElement('button');
       btn.className = 'kanban-filter-avatar';
-      btn.dataset.id = e.id;
-      btn.title = e.nome;
-      btn.textContent = initials(e.nome);
-      btn.style.background = avatarColor(e.id);
+      btn.dataset.id = p.id;
+      btn.title = p.nome;
+      btn.textContent = initials(p.nome);
+      btn.style.background = avatarColor(p.seed);
       btn.style.color = '#fff';
-      btn.style.borderColor = avatarColor(e.id);
-      btn.addEventListener('click', () => setFiltroEstagiario(String(e.id)));
+      btn.style.borderColor = avatarColor(p.seed);
+      btn.addEventListener('click', () => setFiltroPessoa(p.id));
       wrap.appendChild(btn);
     });
   }
 
-  function setFiltroEstagiario(id) {
+  function setFiltroPessoa(id) {
     filtroId = id;
     document.querySelectorAll('.kanban-filter-avatar').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.id === id);
@@ -211,11 +242,16 @@
         const novaColuna = col.dataset.col;
         const card = allCards.find(c => c.id === dragCardId);
         if (!card || card.coluna === novaColuna) return;
+        const colunaAnterior = card.coluna;
         card.coluna = novaColuna;
         renderBoard();
         try {
           await Api.patch(`${API_CARDS}/${card.id}`, { coluna: novaColuna });
-        } catch { /* non-fatal — board já atualizou localmente */ }
+        } catch (err) {
+          card.coluna = colunaAnterior;
+          renderBoard();
+          Toast.error(err.message || _t('Erro ao mover tarefa.'));
+        }
         dragCardId = null;
       });
     });
@@ -258,9 +294,16 @@
     menu.querySelectorAll('[data-move]').forEach(btn => {
       btn.addEventListener('click', async () => {
         closeOpenMenu();
+        const colunaAnterior = card.coluna;
         card.coluna = btn.dataset.move;
         renderBoard();
-        try { await Api.patch(`${API_CARDS}/${card.id}`, { coluna: card.coluna }); } catch {}
+        try {
+          await Api.patch(`${API_CARDS}/${card.id}`, { coluna: card.coluna });
+        } catch (err) {
+          card.coluna = colunaAnterior;
+          renderBoard();
+          Toast.error(err.message || _t('Erro ao mover tarefa.'));
+        }
       });
     });
 
@@ -282,16 +325,34 @@
 
   // ── Modal ─────────────────────────────────────────────────────────────────
 
-  function populateEstagiarioSelect(selectedId) {
+  const TIPO_LABEL = { estagiario: _t('Estagiário'), tecnico: _t('Técnico'), gestor: _t('Gestor') };
+
+  function populatePersonSelect(tipo, selectedId) {
     const sel = document.getElementById('cardEstagiario');
     sel.innerHTML = '<option value="">Selecione...</option>';
-    allEstagiarios.filter(e => e.ativo).forEach(e => {
+    let lista = [];
+    if (tipo === 'tecnico') lista = allTecnicos.map(u => ({ id: u.id, label: u.nome }));
+    else if (tipo === 'gestor') lista = allGestores.map(u => ({ id: u.id, label: u.nome }));
+    else lista = allEstagiarios.filter(e => e.ativo).map(e => ({ id: e.id, label: `${e.nome} — ${e.area}` }));
+
+    lista.forEach(p => {
       const opt = document.createElement('option');
-      opt.value = e.id;
-      opt.textContent = `${e.nome} — ${e.area}`;
-      if (selectedId && e.id === selectedId) opt.selected = true;
+      opt.value = p.id;
+      opt.textContent = p.label;
+      if (selectedId && p.id === selectedId) opt.selected = true;
       sel.appendChild(opt);
     });
+
+    document.getElementById('labelAtribuido').textContent = _t(
+      tipo === 'tecnico' ? 'Técnico' : tipo === 'gestor' ? 'Gestor' : 'Estagiário'
+    );
+  }
+
+  function tipoDoCard(card) {
+    if (!card) return 'estagiario';
+    if (card.usuarioRole === 'TECNICO') return 'tecnico';
+    if (card.usuarioRole === 'GESTOR') return 'gestor';
+    return 'estagiario';
   }
 
   function openModal(card, defaultColuna) {
@@ -305,7 +366,10 @@
     document.getElementById('cardPrazo').value     = card?.prazo || '';
     document.getElementById('cardTags').value      = (card?.tags || []).join(', ');
 
-    populateEstagiarioSelect(card?.estagiariaId);
+    const tipo = tipoDoCard(card);
+    document.getElementById('cardTipo').value = tipo;
+    const selectedId = tipo === 'estagiario' ? card?.estagiariaId : card?.usuarioId;
+    populatePersonSelect(tipo, selectedId);
 
     const colSel = document.getElementById('cardColuna');
     colSel.value = card?.coluna || defaultColuna || 'backlog';
@@ -320,7 +384,8 @@
     const id         = parseInt(document.getElementById('cardId').value) || null;
     const titulo     = document.getElementById('cardTitulo').value.trim();
     const descricao  = document.getElementById('cardDescricao').value.trim();
-    const estagId    = parseInt(document.getElementById('cardEstagiario').value);
+    const tipo       = document.getElementById('cardTipo').value;
+    const pessoaId   = parseInt(document.getElementById('cardEstagiario').value);
     const coluna     = document.getElementById('cardColuna').value;
     const prioridade = document.getElementById('cardPrioridade').value;
     const prazo      = document.getElementById('cardPrazo').value;
@@ -328,16 +393,21 @@
     const tags       = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
 
     if (!titulo)  { Toast.error(_t('Informe o título da tarefa.')); return; }
-    if (!estagId) { Toast.error(_t('Selecione um estagiário.')); return; }
+    if (!pessoaId) { Toast.error(_t('Selecione a quem atribuir a tarefa.')); return; }
     if (!prazo)   { Toast.error(_t('Informe o prazo.')); return; }
 
-    const payload = { titulo, descricao, estagiariaId: estagId, coluna, prioridade, prazo, tags };
+    const payload = { titulo, descricao, coluna, prioridade, prazo, tags };
+    if (tipo === 'tecnico' || tipo === 'gestor') {
+      payload.usuarioId = pessoaId;
+    } else {
+      payload.estagiariaId = pessoaId;
+    }
 
     try {
       if (id) {
         const updated = await Api.patch(`${API_CARDS}/${id}`, payload);
         const idx = allCards.findIndex(c => c.id === id);
-        if (idx >= 0) allCards[idx] = { ...allCards[idx], ...updated };
+        if (idx >= 0) allCards[idx] = updated;
         Toast.success(_t('Tarefa atualizada!'));
       } else {
         const created = await Api.post(API_CARDS, {
@@ -348,8 +418,8 @@
         allCards.unshift(created);
         Toast.success(_t('Tarefa criada!'));
       }
-    } catch {
-      Toast.error(_t('Erro ao salvar tarefa.'));
+    } catch (err) {
+      Toast.error(err.message || _t('Erro ao salvar tarefa.'));
       return;
     }
 
@@ -365,8 +435,8 @@
       allCards = allCards.filter(c => c.id !== card.id);
       renderBoard();
       Toast.success(_t('Tarefa excluída.'));
-    } catch {
-      Toast.error(_t('Erro ao excluir tarefa.'));
+    } catch (err) {
+      Toast.error(err.message || _t('Erro ao excluir tarefa.'));
     }
   }
 
@@ -380,16 +450,23 @@
 
   // ── Load ──────────────────────────────────────────────────────────────────
 
+  function toArray(resp) {
+    return Array.isArray(resp) ? resp : (resp?.content || []);
+  }
+
   async function load() {
     try {
-      const [cardsResp, estagResp] = await Promise.all([
+      const [cardsResp, estagResp, tecResp, gestResp] = await Promise.all([
         Api.get(API_CARDS),
         Api.get(API_ESTAGIARIOS),
+        Api.get(API_USUARIOS, { role: 'TECNICO' }),
+        Api.get(API_USUARIOS, { role: 'GESTOR' }),
       ]);
 
-      // handle paginated or array responses
-      allCards       = Array.isArray(cardsResp)       ? cardsResp       : (cardsResp.content       || []);
-      allEstagiarios = Array.isArray(estagResp)       ? estagResp       : (estagResp.content       || []);
+      allCards       = toArray(cardsResp);
+      allEstagiarios = toArray(estagResp);
+      allTecnicos    = toArray(tecResp);
+      allGestores    = toArray(gestResp);
 
       renderFilterAvatars();
       renderBoard();
@@ -401,7 +478,9 @@
 
   // ── Init ──────────────────────────────────────────────────────────────────
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
+    if (window.ZP?.Auth?.ready) await window.ZP.Auth.ready();
+
     load();
     initDropZones();
     initColAddBtns();
@@ -412,6 +491,9 @@
       const id = parseInt(document.getElementById('cardId').value);
       const card = allCards.find(c => c.id === id);
       if (card) { Modal.close('modalCard'); deleteCard(card); }
+    });
+    document.getElementById('cardTipo').addEventListener('change', e => {
+      populatePersonSelect(e.target.value);
     });
 
     document.getElementById('kanbanBusca').addEventListener('input', e => {
@@ -424,7 +506,7 @@
     });
     document.getElementById('filtroEstagiario').addEventListener('click', e => {
       const btn = e.target.closest('[data-id]');
-      if (btn) setFiltroEstagiario(btn.dataset.id);
+      if (btn) setFiltroPessoa(btn.dataset.id);
     });
   });
   document.addEventListener('zeiss:langchange', renderBoard);

@@ -39,6 +39,11 @@ public class UsuarioController {
         return usuarioService.buscarPorEmail(auth.getName());
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UsuarioDTO> me() {
+        return ResponseEntity.ok(usuarioService.buscarPorId(usuarioLogado().getId()));
+    }
+
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> listarUsuarios(@RequestParam(required = false) String role) {
         if (role != null && !role.isEmpty()) {

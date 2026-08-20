@@ -333,35 +333,44 @@ const Auth = (() => {
   const KEY  = 'zp-role';
   const UKEY = 'zp-user';
 
+  // As chaves aqui precisam bater com o valor real de usuarios.role no banco
+  // (ver UsuarioService.derivarRole) — cargo "DIRETOR_CEM" vira role "ADMIN",
+  // não "DIRETOR_CEM". Usar a chave errada aqui não dava erro nenhum antes
+  // porque Auth.set() nunca era chamado com o papel real (ver fetchMe/ready
+  // acima) — assim que o wiring foi corrigido, guardPage() começou a barrar
+  // o próprio Admin de /documentos, /usuarios e /editais/lista.
   const ROLES = {
-    ESTAGIARIO:  'Estagiário',
-    GESTOR:      'Gestor',
-    DIRETOR_CEM: 'Diretor do CEM',
+    ESTAGIARIO: 'Estagiário',
+    TECNICO:    'Técnico',
+    GESTOR:     'Gestor',
+    ADMIN:      'Diretor do CEM',
   };
 
   const PERMS = {
-    ESTAGIARIO:  { delete: false, edit: false, viewFinancial: false, viewEditais: false, viewDocumentos: false, viewUsuarios: false, create: true  },
-    GESTOR:      { delete: true,  edit: true,  viewFinancial: true,  viewEditais: true,  viewDocumentos: true,  viewUsuarios: true,  create: true  },
-    DIRETOR_CEM: { delete: true,  edit: true,  viewFinancial: true,  viewEditais: true,  viewDocumentos: true,  viewUsuarios: true,  create: true  },
+    ESTAGIARIO: { delete: false, edit: false, viewFinancial: false, viewEditais: false, viewDocumentos: false, viewUsuarios: false, create: true  },
+    TECNICO:    { delete: false, edit: false, viewFinancial: false, viewEditais: false, viewDocumentos: false, viewUsuarios: false, create: true  },
+    GESTOR:     { delete: true,  edit: true,  viewFinancial: true,  viewEditais: true,  viewDocumentos: true,  viewUsuarios: true,  create: true  },
+    ADMIN:      { delete: true,  edit: true,  viewFinancial: true,  viewEditais: true,  viewDocumentos: true,  viewUsuarios: true,  create: true  },
   };
 
   const PAGE_ROLES = {
-    '/editais/lista':    ['GESTOR', 'DIRETOR_CEM'],
-    '/editais/detalhes': ['GESTOR', 'DIRETOR_CEM'],
-    '/documentos':       ['GESTOR', 'DIRETOR_CEM'],
-    '/usuarios':         ['GESTOR', 'DIRETOR_CEM'],
+    '/editais/lista':    ['GESTOR', 'ADMIN'],
+    '/editais/detalhes': ['GESTOR', 'ADMIN'],
+    '/documentos':       ['GESTOR', 'ADMIN'],
+    '/usuarios':         ['GESTOR', 'ADMIN'],
   };
 
   const NAV_ROLES = {
-    '/editais/lista': ['GESTOR', 'DIRETOR_CEM'],
-    '/documentos':    ['GESTOR', 'DIRETOR_CEM'],
-    '/usuarios':      ['GESTOR', 'DIRETOR_CEM'],
+    '/editais/lista': ['GESTOR', 'ADMIN'],
+    '/documentos':    ['GESTOR', 'ADMIN'],
+    '/usuarios':      ['GESTOR', 'ADMIN'],
   };
 
   const ROLE_COLORS = {
-    ESTAGIARIO:  '#6b7280',
-    GESTOR:      '#2563eb',
-    DIRETOR_CEM: '#7c3aed',
+    ESTAGIARIO: '#6b7280',
+    TECNICO:    '#0d9488',
+    GESTOR:     '#2563eb',
+    ADMIN:      '#7c3aed',
   };
 
   function role() { return sessionStorage.getItem(KEY) || 'GESTOR'; }
@@ -371,6 +380,26 @@ const Auth = (() => {
   function set(r, u) {
     sessionStorage.setItem(KEY, r);
     if (u) sessionStorage.setItem(UKEY, JSON.stringify(u));
+  }
+
+  /**
+   * Busca o usuário autenticado de verdade no servidor. Sem isso, role()
+   * nunca tinha um valor real gravado (nada chamava Auth.set()) e sempre
+   * caía no fallback 'GESTOR' — ou seja, todo mundo via o menu inteiro,
+   * papel nenhum era escondido de verdade na UI (achado pré-existente,
+   * não introduzido por esta mudança). Falha de rede aqui não derruba a
+   * página: mantém o fallback anterior e segue (a autorização real sempre
+   * foi — e continua sendo — imposta no backend, isso aqui é só UI).
+   */
+  async function fetchMe() {
+    try {
+      const resp = await fetch('/api/usuarios/me');
+      if (!resp.ok) return;
+      const u = await resp.json();
+      if (u && u.role) set(u.role, u);
+    } catch (e) {
+      // Sem conexão ou erro de rede: segue com o que já estava em sessionStorage.
+    }
   }
 
   function guardPage() {
@@ -439,14 +468,27 @@ const Auth = (() => {
     if (manageLink && !can('viewUsuarios')) manageLink.style.display = 'none';
   }
 
-  function init() {
+  let _readyPromise = null;
+
+  async function init() {
+    _readyPromise = fetchMe();
+    await _readyPromise;
     applyBodyRole();
     if (!guardPage()) return;
     applyNav();
     showRoleBadge();
   }
 
-  return { role, user, can, set, init, ROLES, PERMS };
+  /**
+   * Promise que resolve quando o papel/usuário real já foi carregado do
+   * servidor. Módulos de página que precisam decidir o que renderizar de
+   * acordo com o papel (ex.: tarefas-tecnico.js) devem `await` isso antes
+   * de ler Auth.role() — o fetch ainda está em andamento no momento em que
+   * o script da página começa a rodar (mesmo ciclo de DOMContentLoaded).
+   */
+  function ready() { return _readyPromise || fetchMe(); }
+
+  return { role, user, can, set, init, ready, ROLES, PERMS };
 })();
 
 /* ── Page Transitions ── */

@@ -169,7 +169,7 @@
       <div class="page-header">
         <div class="page-header__left">
           <h1 class="page-header__title">Kanban de Atividades</h1>
-          <p class="page-header__subtitle">Atribua e acompanhe tarefas dos estagiários em tempo real</p>
+          <p class="page-header__subtitle">Atribua e acompanhe atividades de Estagiários, Técnicos e Gestores em tempo real</p>
         </div>
         <div class="page-header__actions">
           <a href="/dashboard-estagiarios" class="btn btn-secondary">
@@ -190,7 +190,7 @@
           <input class="form-control search-bar__input" type="text" id="kanbanBusca" placeholder="Buscar tarefa..." />
         </div>
         <div style="display:flex;align-items:center;gap:var(--space-2)">
-          <span style="font-size:var(--font-size-xs);color:var(--text-muted);font-weight:var(--font-weight-medium)">Estagiário:</span>
+          <span style="font-size:var(--font-size-xs);color:var(--text-muted);font-weight:var(--font-weight-medium)">Pessoa:</span>
           <div class="kanban-filters__avatars" id="filtroEstagiario">
             <button class="kanban-filter-avatar active" data-id="todos" title="Todos">★</button>
           </div>
@@ -294,9 +294,11 @@
         </div>
         <div class="form-grid form-grid--2col">
           <div class="form-group">
-            <label class="form-label form-label--required" for="cardEstagiario">Estagiário</label>
-            <select class="form-control" id="cardEstagiario" required>
-              <option value="">Selecione...</option>
+            <label class="form-label form-label--required" for="cardTipo">Tipo de atividade</label>
+            <select class="form-control" id="cardTipo" required>
+              <option value="estagiario">Estagiário</option>
+              <option value="tecnico">Técnico</option>
+              <option value="gestor">Gestor</option>
             </select>
           </div>
           <div class="form-group">
@@ -308,6 +310,12 @@
               <option value="concluido">Concluído</option>
             </select>
           </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required" for="cardEstagiario" id="labelAtribuido">Estagiário</label>
+          <select class="form-control" id="cardEstagiario" required>
+            <option value="">Selecione...</option>
+          </select>
         </div>
         <div class="form-grid form-grid--2col">
           <div class="form-group">
