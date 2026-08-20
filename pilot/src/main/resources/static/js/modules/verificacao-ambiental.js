@@ -43,7 +43,6 @@
   function init() {
     buildResponsaveisOptions();
     bindEvents();
-    Nav.highlightCurrent?.();
     loadKPIs();
     loadChartHistorico();
     loadHistorico();
