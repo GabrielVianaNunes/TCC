@@ -1,13 +1,18 @@
 package com.zeiss.pilot.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.zeiss.pilot.dto.ClienteDTO;
+import com.zeiss.pilot.dto.ClienteReceitaDTO;
 import com.zeiss.pilot.entity.Cliente;
 import com.zeiss.pilot.exception.ClienteConflitoException;
+import com.zeiss.pilot.repository.ClienteReceitaAgregado;
 import com.zeiss.pilot.repository.ClienteRepository;
 import com.zeiss.pilot.repository.ServicoRepository;
 import com.zeiss.pilot.security.HashUtil;
@@ -77,5 +82,36 @@ public class ClienteService {
 
     private String calcularHash(String cpfOuCnpj) {
         return HashUtil.sha256Hex(HashUtil.normalizarDocumento(cpfOuCnpj));
+    }
+
+    public List<ClienteReceitaDTO> obterRankingReceita() {
+        LocalDate hoje = LocalDate.now();
+        Map<Long, ClienteReceitaAgregado> porMes = indexarPorCliente(
+                servicoRepository.calcularReceitaPorClienteNoMes(hoje.getYear(), hoje.getMonthValue()));
+        Map<Long, ClienteReceitaAgregado> porAno = indexarPorCliente(
+                servicoRepository.calcularReceitaPorClienteNoAno(hoje.getYear()));
+
+        return clienteRepository.findAll().stream()
+                .map(cliente -> {
+                    ClienteReceitaAgregado mes = porMes.get(cliente.getId());
+                    ClienteReceitaAgregado ano = porAno.get(cliente.getId());
+                    return new ClienteReceitaDTO(
+                            cliente.getId(),
+                            cliente.getNome(),
+                            mes != null ? mes.getReceita() : BigDecimal.ZERO,
+                            mes != null ? mes.getQtd() : 0,
+                            ano != null ? ano.getReceita() : BigDecimal.ZERO,
+                            ano != null ? ano.getQtd() : 0);
+                })
+                .sorted((a, b) -> b.getReceitaAno().compareTo(a.getReceitaAno()))
+                .toList();
+    }
+
+    private Map<Long, ClienteReceitaAgregado> indexarPorCliente(List<ClienteReceitaAgregado> agregados) {
+        Map<Long, ClienteReceitaAgregado> mapa = new HashMap<>();
+        for (ClienteReceitaAgregado a : agregados) {
+            mapa.put(a.getClienteId(), a);
+        }
+        return mapa;
     }
 }

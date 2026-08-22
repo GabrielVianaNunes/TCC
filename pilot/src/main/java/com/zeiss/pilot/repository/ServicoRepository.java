@@ -28,4 +28,15 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
     List<RelatorioMensalDTO> calcularArrecadacaoMensal();
 
     boolean existsByClienteEntidadeId(Long clienteId);
+
+    @Query("SELECT s.clienteEntidade.id as clienteId, COALESCE(SUM(s.valor), 0) as receita, COUNT(s) as qtd "
+           + "FROM Servico s WHERE s.clienteEntidade IS NOT NULL "
+           + "AND YEAR(s.dataCriacao) = :ano AND MONTH(s.dataCriacao) = :mes "
+           + "GROUP BY s.clienteEntidade.id")
+    List<ClienteReceitaAgregado> calcularReceitaPorClienteNoMes(@Param("ano") int ano, @Param("mes") int mes);
+
+    @Query("SELECT s.clienteEntidade.id as clienteId, COALESCE(SUM(s.valor), 0) as receita, COUNT(s) as qtd "
+           + "FROM Servico s WHERE s.clienteEntidade IS NOT NULL AND YEAR(s.dataCriacao) = :ano "
+           + "GROUP BY s.clienteEntidade.id")
+    List<ClienteReceitaAgregado> calcularReceitaPorClienteNoAno(@Param("ano") int ano);
 }

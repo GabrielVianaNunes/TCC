@@ -154,4 +154,54 @@ class ClienteServiceIntegrationTest {
 
         assertThrows(ClienteConflitoException.class, () -> clienteService.excluir(cliente.getId()));
     }
+
+    @Test
+    void rankingDeReceitaSomaOsDoMesEDoAnoPorCliente() {
+        ClienteDTO cliente = clienteService.criar(novoCliente("Cliente Ranking Teste", "131.313.131-31"));
+
+        com.zeiss.pilot.dto.ServicoDTO servico1 = new com.zeiss.pilot.dto.ServicoDTO();
+        servico1.setClienteId(cliente.getId());
+        servico1.setSolicitacao("Calibração");
+        servico1.setQuantidade(1);
+        servico1.setStatus("1º Contato");
+        servico1.setValor(new java.math.BigDecimal("500.00"));
+        servico1.setDataCriacao(LocalDate.now());
+        servicoService.criarServico(servico1);
+
+        com.zeiss.pilot.dto.ServicoDTO servico2 = new com.zeiss.pilot.dto.ServicoDTO();
+        servico2.setClienteId(cliente.getId());
+        servico2.setSolicitacao("Digitalização");
+        servico2.setQuantidade(1);
+        servico2.setStatus("1º Contato");
+        servico2.setValor(new java.math.BigDecimal("300.00"));
+        servico2.setDataCriacao(LocalDate.now());
+        servicoService.criarServico(servico2);
+
+        List<com.zeiss.pilot.dto.ClienteReceitaDTO> ranking = clienteService.obterRankingReceita();
+
+        com.zeiss.pilot.dto.ClienteReceitaDTO linhaDoCliente = ranking.stream()
+                .filter(r -> r.getClienteId().equals(cliente.getId()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Cliente não apareceu no ranking"));
+
+        assertEquals(0, new java.math.BigDecimal("800.00").compareTo(linhaDoCliente.getReceitaMes()));
+        assertEquals(2, linhaDoCliente.getQtdOsMes());
+        assertEquals(0, new java.math.BigDecimal("800.00").compareTo(linhaDoCliente.getReceitaAno()));
+        assertEquals(2, linhaDoCliente.getQtdOsAno());
+    }
+
+    @Test
+    void clienteSemOsApareceNoRankingComReceitaZero() {
+        ClienteDTO cliente = clienteService.criar(novoCliente("Cliente Sem OS Teste", "141.414.141-41"));
+
+        List<com.zeiss.pilot.dto.ClienteReceitaDTO> ranking = clienteService.obterRankingReceita();
+
+        com.zeiss.pilot.dto.ClienteReceitaDTO linha = ranking.stream()
+                .filter(r -> r.getClienteId().equals(cliente.getId()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Cliente sem OS deveria aparecer no ranking com zero"));
+
+        assertEquals(0, java.math.BigDecimal.ZERO.compareTo(linha.getReceitaMes()));
+        assertEquals(0, linha.getQtdOsMes());
+    }
 }
