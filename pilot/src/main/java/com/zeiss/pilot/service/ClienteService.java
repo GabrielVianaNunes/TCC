@@ -9,15 +9,18 @@ import com.zeiss.pilot.dto.ClienteDTO;
 import com.zeiss.pilot.entity.Cliente;
 import com.zeiss.pilot.exception.ClienteConflitoException;
 import com.zeiss.pilot.repository.ClienteRepository;
+import com.zeiss.pilot.repository.ServicoRepository;
 import com.zeiss.pilot.security.HashUtil;
 
 @Service
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final ServicoRepository servicoRepository;
 
-    public ClienteService(ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository, ServicoRepository servicoRepository) {
         this.clienteRepository = clienteRepository;
+        this.servicoRepository = servicoRepository;
     }
 
     public List<ClienteDTO> listar() {
@@ -66,8 +69,9 @@ public class ClienteService {
         if (!clienteRepository.existsById(id)) {
             throw new RuntimeException("Cliente não encontrado: " + id);
         }
-        // TODO(Task 6): trocar por servicoRepository.existsByClienteEntidadeId(id) assim que
-        // Servico.cliente existir — hoje nenhuma OS pode estar vinculada ainda.
+        if (servicoRepository.existsByClienteEntidadeId(id)) {
+            throw new ClienteConflitoException("Não é possível excluir um cliente com Ordens de Serviço vinculadas.");
+        }
         clienteRepository.deleteById(id);
     }
 

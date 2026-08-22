@@ -26,4 +26,6 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
     @Query("SELECT new com.zeiss.pilot.dto.RelatorioMensalDTO(YEAR(s.dataCriacao), MONTH(s.dataCriacao), SUM(s.valor), COUNT(s)) " +
            "FROM Servico s GROUP BY YEAR(s.dataCriacao), MONTH(s.dataCriacao) ORDER BY YEAR(s.dataCriacao), MONTH(s.dataCriacao)")
     List<RelatorioMensalDTO> calcularArrecadacaoMensal();
+
+    boolean existsByClienteEntidadeId(Long clienteId);
 }
