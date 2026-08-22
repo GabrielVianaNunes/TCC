@@ -59,7 +59,7 @@ const ServicosModule = (() => {
 
       tbody.innerHTML = items.map(s => `
         <tr>
-          <td class="table-cell--strong">${s.cliente || '—'}</td>
+          <td class="table-cell--strong">${s.clienteNome || s.cliente || '—'}</td>
           <td>${s.solicitacao || '—'}</td>
           <td style="text-align:center">${s.quantidade ?? '—'}</td>
           <td>${StatusBadge.servico(s.status)}</td>
@@ -128,8 +128,11 @@ const ServicosModule = (() => {
     } catch { clientes = []; }
 
     const selecionado = select.value;
+    // O rótulo só precisa ajudar a escolher o cliente pelo nome — mostrar
+    // CPF/CNPJ aqui expõe o dado a qualquer usuário que abra o formulário de
+    // OS, mesmo sem precisar visitar /clientes.
     select.innerHTML = '<option value="">Selecione um cliente...</option>' +
-      clientes.map(c => `<option value="${c.id}">${escapeHtml(c.nome)} — ${escapeHtml(c.cpfOuCnpj)}</option>`).join('');
+      clientes.map(c => `<option value="${c.id}">${escapeHtml(c.nome)}</option>`).join('');
     if (selecionado) select.value = selecionado;
   }
 
@@ -165,7 +168,7 @@ const ServicosModule = (() => {
       toggleNotaSection(s.status || '');
       await loadEstagiarios();
 
-      document.getElementById('modalTitulo').textContent = `${_t('Editar OS')} — ${s.cliente}`;
+      document.getElementById('modalTitulo').textContent = `${_t('Editar OS')} — ${s.clienteNome || s.cliente}`;
       document.getElementById('btnExcluirServico').style.display = 'inline-flex';
       Modal.open('modalServico');
     } catch (err) {
