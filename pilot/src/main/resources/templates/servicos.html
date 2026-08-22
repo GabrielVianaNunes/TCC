@@ -245,20 +245,12 @@
       <form id="servicoForm">
         <input type="hidden" id="servicoId" />
 
-        <div class="form-grid form-grid--2col">
-          <div class="form-group">
-            <label class="form-label form-label--required" for="cliente">Cliente</label>
-            <input class="form-control" type="text" id="cliente" placeholder="Nome do cliente" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label form-label--required" for="cpfOuCnpj">CPF / CNPJ</label>
-            <input class="form-control" type="text" id="cpfOuCnpj" placeholder="CPF ou CNPJ" required />
-          </div>
-        </div>
-
         <div class="form-group">
-          <label class="form-label form-label--required" for="endereco">Endereço</label>
-          <input class="form-control" type="text" id="endereco" placeholder="Endereço completo" required />
+          <label class="form-label form-label--required" for="clienteId">Cliente</label>
+          <select class="form-control" id="clienteId" required>
+            <option value="">Selecione um cliente...</option>
+          </select>
+          <button type="button" class="btn btn--sm" id="btnClienteRapido">+ Cadastrar novo cliente</button>
         </div>
 
         <div class="form-group">

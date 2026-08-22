@@ -11,6 +11,12 @@ const ServicosModule = (() => {
   const ENDPOINT       = '/api/servicos';
   const ENDPOINT_NOTAS = '/api/notas-estagiarios';
   const ENDPOINT_ESTAG = '/api/estagiarios';
+  const CLIENTES_URL   = '/api/clientes';
+
+  function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
   let notaDiretorValor = null;
   let allEstagiarios   = [];
@@ -112,14 +118,30 @@ const ServicosModule = (() => {
     } catch { /* non-fatal */ }
   }
 
+  /* ── Clientes select ── */
+  async function carregarClientesNoSelect() {
+    const select = document.getElementById('clienteId');
+    if (!select) return;
+    let clientes = [];
+    try {
+      clientes = await Api.get(CLIENTES_URL);
+    } catch { clientes = []; }
+
+    const selecionado = select.value;
+    select.innerHTML = '<option value="">Selecione um cliente...</option>' +
+      clientes.map(c => `<option value="${c.id}">${escapeHtml(c.nome)} — ${escapeHtml(c.cpfOuCnpj)}</option>`).join('');
+    if (selecionado) select.value = selecionado;
+  }
+
   /* ── Open Modal (New) ── */
-  function novo() {
+  async function novo() {
     document.getElementById('servicoId').value = '';
     document.getElementById('servicoForm').reset();
     document.getElementById('modalTitulo').textContent = _t('Nova Ordem de Serviço');
     document.getElementById('btnExcluirServico').style.display = 'none';
     resetNotaDirector();
     toggleNotaSection('');
+    await carregarClientesNoSelect();
     Modal.open('modalServico');
   }
 
@@ -128,9 +150,8 @@ const ServicosModule = (() => {
     try {
       const s = await Api.get(`${ENDPOINT}/${id}`);
       document.getElementById('servicoId').value       = s.id;
-      document.getElementById('cliente').value         = s.cliente || '';
-      document.getElementById('cpfOuCnpj').value       = s.cpfOuCnpj || '';
-      document.getElementById('endereco').value        = s.endereco || '';
+      await carregarClientesNoSelect();
+      document.getElementById('clienteId').value = s.clienteId || '';
       document.getElementById('solicitacao').value     = s.solicitacao || '';
       document.getElementById('quantidade').value      = s.quantidade || '';
       document.getElementById('status').value          = s.status || '';
@@ -159,9 +180,7 @@ const ServicosModule = (() => {
 
     const id = document.getElementById('servicoId').value;
     const payload = {
-      cliente:             document.getElementById('cliente').value.trim(),
-      cpfOuCnpj:           document.getElementById('cpfOuCnpj').value.trim(),
-      endereco:            document.getElementById('endereco').value.trim(),
+      clienteId:           document.getElementById('clienteId').value ? Number(document.getElementById('clienteId').value) : null,
       solicitacao:         document.getElementById('solicitacao').value.trim(),
       quantidade:          parseInt(document.getElementById('quantidade').value, 10),
       status:              document.getElementById('status').value,
@@ -248,6 +267,7 @@ const ServicosModule = (() => {
   function init() {
     loadServicos(0);
     loadEstagiarios();
+    carregarClientesNoSelect();
 
     // Stars interaction for Nota do Diretor
     document.querySelectorAll('.nd-star').forEach(btn => {
@@ -273,6 +293,7 @@ const ServicosModule = (() => {
     document.getElementById('btnNovoServico')?.addEventListener('click', novo);
     document.getElementById('btnSalvarServico')?.addEventListener('click', salvar);
     document.getElementById('btnExcluirServico')?.addEventListener('click', excluir);
+    document.getElementById('btnClienteRapido')?.addEventListener('click', () => window.open('/clientes', '_blank'));
 
     document.getElementById('btnAnterior')?.addEventListener('click', () => {
       if (currentPage > 0) loadServicos(currentPage - 1);
