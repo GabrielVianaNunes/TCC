@@ -2,7 +2,9 @@ package com.zeiss.pilot.service;
 
 import com.zeiss.pilot.dto.RelatorioMensalDTO;
 import com.zeiss.pilot.dto.ServicoDTO;
+import com.zeiss.pilot.entity.Cliente;
 import com.zeiss.pilot.entity.Servico;
+import com.zeiss.pilot.repository.ClienteRepository;
 import com.zeiss.pilot.repository.ServicoRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,9 +18,11 @@ import java.util.List;
 public class ServicoService {
 
     private final ServicoRepository servicoRepository;
+    private final ClienteRepository clienteRepository;
 
-    public ServicoService(ServicoRepository servicoRepository) {
+    public ServicoService(ServicoRepository servicoRepository, ClienteRepository clienteRepository) {
         this.servicoRepository = servicoRepository;
+        this.clienteRepository = clienteRepository;
     }
 
     public Page<ServicoDTO> listarPaginado(int page, int size, String query, String status) {
@@ -37,7 +41,15 @@ public class ServicoService {
     }
 
     public ServicoDTO criarServico(ServicoDTO dto) {
+        if (dto.getClienteId() == null) {
+            throw new IllegalArgumentException("clienteId é obrigatório para criar uma Ordem de Serviço.");
+        }
+        Cliente cliente = clienteRepository.findById(dto.getClienteId())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado: " + dto.getClienteId()));
+
         Servico entity = dto.toEntity();
+        entity.setClienteEntidade(cliente);
+        entity.setCliente(cliente.getNome());
         entity.setCodigoOs(gerarProximoCodigoOs());
         return ServicoDTO.fromEntity(servicoRepository.save(entity));
     }
@@ -53,8 +65,16 @@ public class ServicoService {
     public ServicoDTO atualizarServico(Long id, ServicoDTO dto) {
         Servico existente = servicoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Serviço não encontrado: " + id));
+        if (dto.getClienteId() == null) {
+            throw new IllegalArgumentException("clienteId é obrigatório ao atualizar uma Ordem de Serviço.");
+        }
+        Cliente cliente = clienteRepository.findById(dto.getClienteId())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado: " + dto.getClienteId()));
+
         Servico entity = dto.toEntity();
         entity.setId(id);
+        entity.setClienteEntidade(cliente);
+        entity.setCliente(cliente.getNome());
         entity.setCodigoOs(existente.getCodigoOs());
         return ServicoDTO.fromEntity(servicoRepository.save(entity));
     }

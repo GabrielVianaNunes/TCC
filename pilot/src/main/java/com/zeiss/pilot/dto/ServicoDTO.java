@@ -1,5 +1,6 @@
 package com.zeiss.pilot.dto;
 
+import com.zeiss.pilot.entity.Cliente;
 import com.zeiss.pilot.entity.Servico;
 
 import java.math.BigDecimal;
@@ -10,8 +11,10 @@ public class ServicoDTO {
     private Long id;
     private String codigoOs;
     private String cliente;
-    private String cpfOuCnpj;
-    private String endereco;
+    private Long clienteId;
+    private String clienteNome;
+    private String clienteCpfOuCnpj;
+    private String clienteEndereco;
     private String solicitacao;
     private int quantidade;
     private String status;
@@ -29,8 +32,13 @@ public class ServicoDTO {
         dto.setId(s.getId());
         dto.setCodigoOs(s.getCodigoOs());
         dto.setCliente(s.getCliente());
-        dto.setCpfOuCnpj(s.getCpfOuCnpj());
-        dto.setEndereco(s.getEndereco());
+        if (s.getClienteEntidade() != null) {
+            Cliente c = s.getClienteEntidade();
+            dto.setClienteId(c.getId());
+            dto.setClienteNome(c.getNome());
+            dto.setClienteCpfOuCnpj(c.getCpfOuCnpj());
+            dto.setClienteEndereco(c.getEndereco());
+        }
         dto.setSolicitacao(s.getSolicitacao());
         dto.setQuantidade(s.getQuantidade());
         dto.setStatus(s.getStatus());
@@ -47,8 +55,6 @@ public class ServicoDTO {
     public Servico toEntity() {
         Servico s = new Servico();
         s.setCliente(this.cliente);
-        s.setCpfOuCnpj(this.cpfOuCnpj);
-        s.setEndereco(this.endereco);
         s.setSolicitacao(this.solicitacao);
         s.setQuantidade(this.quantidade);
         s.setStatus(this.status);
@@ -70,11 +76,17 @@ public class ServicoDTO {
     public String getCliente() { return cliente; }
     public void setCliente(String cliente) { this.cliente = cliente; }
 
-    public String getCpfOuCnpj() { return cpfOuCnpj; }
-    public void setCpfOuCnpj(String cpfOuCnpj) { this.cpfOuCnpj = cpfOuCnpj; }
+    public Long getClienteId() { return clienteId; }
+    public void setClienteId(Long clienteId) { this.clienteId = clienteId; }
 
-    public String getEndereco() { return endereco; }
-    public void setEndereco(String endereco) { this.endereco = endereco; }
+    public String getClienteNome() { return clienteNome; }
+    public void setClienteNome(String clienteNome) { this.clienteNome = clienteNome; }
+
+    public String getClienteCpfOuCnpj() { return clienteCpfOuCnpj; }
+    public void setClienteCpfOuCnpj(String clienteCpfOuCnpj) { this.clienteCpfOuCnpj = clienteCpfOuCnpj; }
+
+    public String getClienteEndereco() { return clienteEndereco; }
+    public void setClienteEndereco(String clienteEndereco) { this.clienteEndereco = clienteEndereco; }
 
     public String getSolicitacao() { return solicitacao; }
     public void setSolicitacao(String solicitacao) { this.solicitacao = solicitacao; }

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zeiss.pilot.dto.ClienteDTO;
 import com.zeiss.pilot.exception.ClienteConflitoException;
+import com.zeiss.pilot.repository.ServicoRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -23,6 +24,12 @@ class ClienteServiceIntegrationTest {
 
     @Autowired
     private ClienteService clienteService;
+
+    @Autowired
+    private ServicoRepository servicoRepository;
+
+    @Autowired
+    private ServicoService servicoService;
 
     private ClienteDTO novoCliente(String nome, String cpf) {
         ClienteDTO dto = new ClienteDTO();
@@ -90,5 +97,21 @@ class ClienteServiceIntegrationTest {
         clienteService.excluir(criado.getId());
 
         assertThrows(RuntimeException.class, () -> clienteService.buscarPorId(criado.getId()));
+    }
+
+    @Test
+    void excluirClienteComOsVinculadaLancaConflito() {
+        ClienteDTO cliente = clienteService.criar(novoCliente("Cliente Teste H", "999.999.999-99"));
+
+        com.zeiss.pilot.dto.ServicoDTO servico = new com.zeiss.pilot.dto.ServicoDTO();
+        servico.setClienteId(cliente.getId());
+        servico.setSolicitacao("Calibração");
+        servico.setQuantidade(1);
+        servico.setStatus("1º Contato");
+        servico.setValor(new java.math.BigDecimal("100.00"));
+        servico.setDataCriacao(LocalDate.now());
+        servicoService.criarServico(servico);
+
+        assertThrows(ClienteConflitoException.class, () -> clienteService.excluir(cliente.getId()));
     }
 }

@@ -26,6 +26,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.zeiss.pilot.dto.ClienteDTO;
+import com.zeiss.pilot.service.ClienteService;
+
 import java.util.Map;
 
 /**
@@ -43,6 +46,9 @@ class GlobalExceptionHandlerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ClienteService clienteService;
+
     /**
      * Uma violação de restrição do banco chega ao handler como
      * DataIntegrityViolationException, que é uma RuntimeException. O handler dedicado
@@ -52,12 +58,17 @@ class GlobalExceptionHandlerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void erroDeBancoNaoVazaEstruturaInternaParaOCliente() throws Exception {
+        ClienteDTO clienteDto = new ClienteDTO();
+        clienteDto.setNome("Cliente Teste Handler");
+        clienteDto.setCpfOuCnpj("321.321.321-21");
+        Long clienteId = clienteService.criar(clienteDto).getId();
+
         // 'status' fora do CHECK servicos_status_check -> violação no INSERT
         String corpo = """
-                {"cliente":"Cliente Teste Handler","solicitacao":"Teste",
+                {"cliente":"Cliente Teste Handler","clienteId":%d,"solicitacao":"Teste",
                  "quantidade":1,"status":"STATUS_QUE_NAO_EXISTE",
                  "valor":100.00,"dataCriacao":"2026-08-18"}
-                """;
+                """.formatted(clienteId);
 
         mockMvc.perform(post("/api/servicos").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)

@@ -3,6 +3,7 @@ package com.zeiss.pilot.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -11,7 +12,6 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +26,7 @@ class ServicoServiceIntegrationTest {
     private ServicoService servicoService;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private ClienteService clienteService;
 
     private ServicoDTO novoServico(String cliente) {
         ServicoDTO dto = new ServicoDTO();
@@ -41,7 +41,11 @@ class ServicoServiceIntegrationTest {
 
     @Test
     void criarServicoGeraCodigoOsNoFormatoEsperado() {
-        ServicoDTO criado = servicoService.criarServico(novoServico("Cliente Teste A"));
+        com.zeiss.pilot.dto.ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Teste A", "101.101.101-01"));
+        ServicoDTO dto = novoServico("Cliente Teste A");
+        dto.setClienteId(cliente.getId());
+
+        ServicoDTO criado = servicoService.criarServico(dto);
 
         assertNotNull(criado.getCodigoOs());
         assertTrue(criado.getCodigoOs().matches("OS-\\d{4}-\\d{4}"),
@@ -51,8 +55,16 @@ class ServicoServiceIntegrationTest {
 
     @Test
     void doisServicosCriadosEmSequenciaRecebemCodigosDiferentesEIncrementais() {
-        ServicoDTO primeiro = servicoService.criarServico(novoServico("Cliente Teste B"));
-        ServicoDTO segundo = servicoService.criarServico(novoServico("Cliente Teste C"));
+        com.zeiss.pilot.dto.ClienteDTO clienteB = clienteService.criar(clienteDeTeste("Cliente Teste B", "102.102.102-02"));
+        com.zeiss.pilot.dto.ClienteDTO clienteC = clienteService.criar(clienteDeTeste("Cliente Teste C", "103.103.103-03"));
+
+        ServicoDTO dtoPrimeiro = novoServico("Cliente Teste B");
+        dtoPrimeiro.setClienteId(clienteB.getId());
+        ServicoDTO dtoSegundo = novoServico("Cliente Teste C");
+        dtoSegundo.setClienteId(clienteC.getId());
+
+        ServicoDTO primeiro = servicoService.criarServico(dtoPrimeiro);
+        ServicoDTO segundo = servicoService.criarServico(dtoSegundo);
 
         assertNotEquals(primeiro.getCodigoOs(), segundo.getCodigoOs());
 
@@ -62,24 +74,29 @@ class ServicoServiceIntegrationTest {
     }
 
     @Test
-    void cpfEEnderecoFicamCriptografadosNoBancoMasEmTextoClaroViaService() {
-        ServicoDTO dto = novoServico("Cliente Teste Cripto");
-        dto.setCpfOuCnpj("123.456.789-00");
-        dto.setEndereco("Rua Exemplo, 123");
+    void criarServicoSemClienteIdLancaExcecao() {
+        ServicoDTO dto = novoServico("Cliente Sem Vinculo");
+
+        assertThrows(RuntimeException.class, () -> servicoService.criarServico(dto));
+    }
+
+    @Test
+    void criarServicoComClienteIdValidoRefleteOsDadosDoClienteNoDto() {
+        com.zeiss.pilot.dto.ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Vinculado Teste", "121.212.121-21"));
+
+        ServicoDTO dto = novoServico("ignorado");
+        dto.setClienteId(cliente.getId());
 
         ServicoDTO criado = servicoService.criarServico(dto);
 
-        assertEquals("123.456.789-00", criado.getCpfOuCnpj());
-        assertEquals("Rua Exemplo, 123", criado.getEndereco());
+        assertEquals(cliente.getId(), criado.getClienteId());
+        assertEquals("Cliente Vinculado Teste", criado.getClienteNome());
+    }
 
-        String cpfNoBanco = jdbcTemplate.queryForObject(
-                "SELECT cpf_ou_cnpj FROM servicos WHERE id = ?", String.class, criado.getId());
-        String enderecoNoBanco = jdbcTemplate.queryForObject(
-                "SELECT endereco FROM servicos WHERE id = ?", String.class, criado.getId());
-
-        assertTrue(cpfNoBanco.startsWith("enc:v1:"));
-        assertTrue(enderecoNoBanco.startsWith("enc:v1:"));
-        assertNotEquals("123.456.789-00", cpfNoBanco);
-        assertNotEquals("Rua Exemplo, 123", enderecoNoBanco);
+    private com.zeiss.pilot.dto.ClienteDTO clienteDeTeste(String nome, String cpf) {
+        com.zeiss.pilot.dto.ClienteDTO dto = new com.zeiss.pilot.dto.ClienteDTO();
+        dto.setNome(nome);
+        dto.setCpfOuCnpj(cpf);
+        return dto;
     }
 }
