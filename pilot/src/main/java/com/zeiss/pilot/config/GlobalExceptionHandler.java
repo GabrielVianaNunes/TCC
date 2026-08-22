@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.zeiss.pilot.exception.ClienteConflitoException;
 
@@ -80,6 +81,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ClienteConflitoException.class)
     public ResponseEntity<Map<String, String>> handleClienteConflito(ClienteConflitoException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, String>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        // Violação de restrição do banco (UNIQUE, FK, etc.) não expõe detalhe interno.
+        // A mensagem do driver carrega nome de tabela, restrição, colunas — informação sensível.
+        String referencia = registrarNoLog("Violação de restrição ao salvar dados", ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("message", "Conflito ao salvar: um registro com os mesmos dados já existe.",
+                             "referencia", referencia));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

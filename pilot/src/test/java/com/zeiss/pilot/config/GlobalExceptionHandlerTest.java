@@ -9,16 +9,24 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * Garante que a resposta de erro da API nunca devolve detalhe interno ao
@@ -37,9 +45,9 @@ class GlobalExceptionHandlerTest {
 
     /**
      * Uma violação de restrição do banco chega ao handler como
-     * DataIntegrityViolationException, que é uma RuntimeException. Antes desta
-     * correção, a mensagem do driver ia inteira para o cliente, expondo nome de
-     * tabela, nome da restrição, a lista completa de colunas e o SQL.
+     * DataIntegrityViolationException, que é uma RuntimeException. O handler dedicado
+     * retorna 409 Conflict com uma mensagem genérica sem expor nome de tabela, restrição,
+     * colunas ou SQL. A mensagem do driver vai para o log do servidor apenas.
      */
     @Test
     @WithMockUser(roles = "ADMIN")
@@ -54,7 +62,7 @@ class GlobalExceptionHandlerTest {
         mockMvc.perform(post("/api/servicos").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(corpo))
-                .andExpect(status().isInternalServerError())
+                .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value(not(allOf(
                         containsString("servicos"),          // nome da tabela
                         containsString("insert into"),       // o SQL
@@ -73,5 +81,40 @@ class GlobalExceptionHandlerTest {
     void recursoInexistenteContinuaRetornando404() throws Exception {
         mockMvc.perform(get("/api/servicos/99999999"))
                 .andExpect(status().isNotFound());
+    }
+
+    /**
+     * Violações de restrição do banco (como UNIQUE constraints) chegam como
+     * DataIntegrityViolationException. Quando dois clientes concorrentes passam
+     * pela verificação de aplicação e ambos tentam salvar, o perdedor bate na
+     * restrição do banco. O handler deve retornar 409 Conflict com uma mensagem
+     * genérica — nunca expondo nome de tabela, nome de restrição ou SQL.
+     */
+    @Test
+    void violacaoDeIntegridadeRetorna409ComMensagemGenerica() {
+        GlobalExceptionHandler handler = new GlobalExceptionHandler();
+
+        // Simula uma violação de restrição UNIQUE no banco (ex: cpf_ou_cnpj_hash duplicado)
+        DataIntegrityViolationException ex = new DataIntegrityViolationException(
+                "could not execute statement; SQL [insert into clientes (cpf_ou_cnpj_hash, ...) values (?, ...)]; " +
+                "constraint [UK_clientes_cpf_ou_cnpj_hash] violated: unique constraint or index violation");
+
+        ResponseEntity<Map<String, String>> response = handler.handleDataIntegrityViolation(ex);
+
+        // Assert: status 409 Conflict
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+
+        // Assert: mensagem genérica, sem expor detalhe interno
+        String msg = response.getBody().get("message");
+        assertEquals("Conflito ao salvar: um registro com os mesmos dados já existe.", msg);
+
+        // Assert: tem referência para correlacionar no log
+        String ref = response.getBody().get("referencia");
+        assertTrue(ref != null && ref.length() == 8, "Referência deve ter 8 caracteres");
+
+        // Assert: NÃO expõe estrutura interna do banco
+        assertFalse(msg.contains("clientes"), "Mensagem não deve mencionar nome de tabela");
+        assertFalse(msg.contains("constraint"), "Mensagem não deve mencionar restrição");
+        assertFalse(msg.contains("SQL"), "Mensagem não deve mencionar SQL");
     }
 }
