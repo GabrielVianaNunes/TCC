@@ -16,7 +16,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zeiss.pilot.dto.ClienteDTO;
+import com.zeiss.pilot.entity.Maquina;
+import com.zeiss.pilot.entity.TipoServico;
 import com.zeiss.pilot.exception.ClienteConflitoException;
+import com.zeiss.pilot.repository.MaquinaRepository;
+import com.zeiss.pilot.repository.TipoServicoRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -32,6 +36,12 @@ class ClienteServiceIntegrationTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private MaquinaRepository maquinaRepository;
+
+    @Autowired
+    private TipoServicoRepository tipoServicoRepository;
+
     private ClienteDTO novoCliente(String nome, String cpf) {
         ClienteDTO dto = new ClienteDTO();
         dto.setNome(nome);
@@ -41,6 +51,20 @@ class ClienteServiceIntegrationTest {
 
     private String colunaBruta(Long id, String coluna) {
         return jdbcTemplate.queryForObject("SELECT " + coluna + " FROM clientes WHERE id = ?", String.class, id);
+    }
+
+    private Long maquinaDeTeste() {
+        Maquina m = new Maquina();
+        m.setNome("Maquina Teste");
+        m.setTipoMedida("Medição por Coordenadas (CMM)");
+        return maquinaRepository.save(m).getId();
+    }
+
+    private Long tipoServicoDeTeste() {
+        TipoServico t = new TipoServico();
+        t.setCategoria("Medição por Coordenadas (CMM)");
+        t.setDescricao("Serviço de teste");
+        return tipoServicoRepository.save(t).getId();
     }
 
     @Test
@@ -158,6 +182,8 @@ class ClienteServiceIntegrationTest {
 
         com.zeiss.pilot.dto.ServicoDTO servico = new com.zeiss.pilot.dto.ServicoDTO();
         servico.setClienteId(cliente.getId());
+        servico.setMaquinaId(maquinaDeTeste());
+        servico.setTipoServicoId(tipoServicoDeTeste());
         servico.setSolicitacao("Calibração");
         servico.setQuantidade(1);
         servico.setStatus("1º Contato");
@@ -172,9 +198,13 @@ class ClienteServiceIntegrationTest {
     @Test
     void rankingDeReceitaSomaOsDoMesEDoAnoPorCliente() {
         ClienteDTO cliente = clienteService.criar(novoCliente("Cliente Ranking Teste", "131.313.131-31"));
+        Long maquinaId = maquinaDeTeste();
+        Long tipoServicoId = tipoServicoDeTeste();
 
         com.zeiss.pilot.dto.ServicoDTO servico1 = new com.zeiss.pilot.dto.ServicoDTO();
         servico1.setClienteId(cliente.getId());
+        servico1.setMaquinaId(maquinaId);
+        servico1.setTipoServicoId(tipoServicoId);
         servico1.setSolicitacao("Calibração");
         servico1.setQuantidade(1);
         servico1.setStatus("1º Contato");
@@ -184,6 +214,8 @@ class ClienteServiceIntegrationTest {
 
         com.zeiss.pilot.dto.ServicoDTO servico2 = new com.zeiss.pilot.dto.ServicoDTO();
         servico2.setClienteId(cliente.getId());
+        servico2.setMaquinaId(maquinaId);
+        servico2.setTipoServicoId(tipoServicoId);
         servico2.setSolicitacao("Digitalização");
         servico2.setQuantidade(1);
         servico2.setStatus("1º Contato");

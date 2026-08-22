@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import com.zeiss.pilot.entity.Maquina;
+
 @Entity
 @Table(name = "servicos")
 public class Servico {
@@ -30,6 +32,14 @@ public class Servico {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id")
     private Cliente clienteEntidade;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "maquina_id")
+    private Maquina maquina;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_servico_id")
+    private TipoServico tipoServico;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String solicitacao;
@@ -68,6 +78,12 @@ public class Servico {
 
     public Cliente getClienteEntidade() { return clienteEntidade; }
     public void setClienteEntidade(Cliente clienteEntidade) { this.clienteEntidade = clienteEntidade; }
+
+    public Maquina getMaquina() { return maquina; }
+    public void setMaquina(Maquina maquina) { this.maquina = maquina; }
+
+    public TipoServico getTipoServico() { return tipoServico; }
+    public void setTipoServico(TipoServico tipoServico) { this.tipoServico = tipoServico; }
 
     public String getSolicitacao() { return solicitacao; }
     public void setSolicitacao(String solicitacao) { this.solicitacao = solicitacao; }

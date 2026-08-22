@@ -27,6 +27,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zeiss.pilot.dto.ClienteDTO;
+import com.zeiss.pilot.entity.Maquina;
+import com.zeiss.pilot.entity.TipoServico;
+import com.zeiss.pilot.repository.MaquinaRepository;
+import com.zeiss.pilot.repository.TipoServicoRepository;
 import com.zeiss.pilot.service.ClienteService;
 
 import java.util.Map;
@@ -49,6 +53,12 @@ class GlobalExceptionHandlerTest {
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private MaquinaRepository maquinaRepository;
+
+    @Autowired
+    private TipoServicoRepository tipoServicoRepository;
+
     /**
      * Uma violação de restrição do banco chega ao handler como
      * DataIntegrityViolationException, que é uma RuntimeException. Este caso é uma
@@ -67,12 +77,22 @@ class GlobalExceptionHandlerTest {
         clienteDto.setCpfOuCnpj("321.321.321-21");
         Long clienteId = clienteService.criar(clienteDto).getId();
 
+        Maquina maquina = new Maquina();
+        maquina.setNome("Maquina Teste Handler");
+        maquina.setTipoMedida("Medição por Coordenadas (CMM)");
+        Long maquinaId = maquinaRepository.save(maquina).getId();
+
+        TipoServico tipoServico = new TipoServico();
+        tipoServico.setCategoria("Medição por Coordenadas (CMM)");
+        tipoServico.setDescricao("Servico de teste handler");
+        Long tipoServicoId = tipoServicoRepository.save(tipoServico).getId();
+
         // 'status' fora do CHECK servicos_status_check -> violação no INSERT
         String corpo = """
-                {"cliente":"Cliente Teste Handler","clienteId":%d,"solicitacao":"Teste",
+                {"cliente":"Cliente Teste Handler","clienteId":%d,"maquinaId":%d,"tipoServicoId":%d,"solicitacao":"Teste",
                  "quantidade":1,"status":"STATUS_QUE_NAO_EXISTE",
                  "valor":100.00,"dataCriacao":"2026-08-18"}
-                """.formatted(clienteId);
+                """.formatted(clienteId, maquinaId, tipoServicoId);
 
         mockMvc.perform(post("/api/servicos").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)

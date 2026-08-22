@@ -20,8 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zeiss.pilot.dto.ClienteDTO;
 import com.zeiss.pilot.dto.ServicoDTO;
+import com.zeiss.pilot.entity.Maquina;
 import com.zeiss.pilot.entity.Servico;
+import com.zeiss.pilot.entity.TipoServico;
+import com.zeiss.pilot.repository.MaquinaRepository;
 import com.zeiss.pilot.repository.ServicoRepository;
+import com.zeiss.pilot.repository.TipoServicoRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -40,6 +44,12 @@ class ServicoServiceIntegrationTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private MaquinaRepository maquinaRepository;
+
+    @Autowired
+    private TipoServicoRepository tipoServicoRepository;
+
     private ServicoDTO novoServico(String cliente) {
         ServicoDTO dto = new ServicoDTO();
         dto.setCliente(cliente);
@@ -51,11 +61,29 @@ class ServicoServiceIntegrationTest {
         return dto;
     }
 
+    private Long maquinaDeTeste() {
+        Maquina m = new Maquina();
+        m.setNome("Maquina Teste");
+        m.setTipoMedida("Medição por Coordenadas (CMM)");
+        return maquinaRepository.save(m).getId();
+    }
+
+    private Long tipoServicoDeTeste() {
+        TipoServico t = new TipoServico();
+        t.setCategoria("Medição por Coordenadas (CMM)");
+        t.setDescricao("Serviço de teste");
+        return tipoServicoRepository.save(t).getId();
+    }
+
     @Test
     void criarServicoGeraCodigoOsNoFormatoEsperado() {
         com.zeiss.pilot.dto.ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Teste A", "101.101.101-01"));
+        Long maquinaId = maquinaDeTeste();
+        Long tipoServicoId = tipoServicoDeTeste();
         ServicoDTO dto = novoServico("Cliente Teste A");
         dto.setClienteId(cliente.getId());
+        dto.setMaquinaId(maquinaId);
+        dto.setTipoServicoId(tipoServicoId);
 
         ServicoDTO criado = servicoService.criarServico(dto);
 
@@ -69,11 +97,17 @@ class ServicoServiceIntegrationTest {
     void doisServicosCriadosEmSequenciaRecebemCodigosDiferentesEIncrementais() {
         com.zeiss.pilot.dto.ClienteDTO clienteB = clienteService.criar(clienteDeTeste("Cliente Teste B", "102.102.102-02"));
         com.zeiss.pilot.dto.ClienteDTO clienteC = clienteService.criar(clienteDeTeste("Cliente Teste C", "103.103.103-03"));
+        Long maquinaId = maquinaDeTeste();
+        Long tipoServicoId = tipoServicoDeTeste();
 
         ServicoDTO dtoPrimeiro = novoServico("Cliente Teste B");
         dtoPrimeiro.setClienteId(clienteB.getId());
+        dtoPrimeiro.setMaquinaId(maquinaId);
+        dtoPrimeiro.setTipoServicoId(tipoServicoId);
         ServicoDTO dtoSegundo = novoServico("Cliente Teste C");
         dtoSegundo.setClienteId(clienteC.getId());
+        dtoSegundo.setMaquinaId(maquinaId);
+        dtoSegundo.setTipoServicoId(tipoServicoId);
 
         ServicoDTO primeiro = servicoService.criarServico(dtoPrimeiro);
         ServicoDTO segundo = servicoService.criarServico(dtoSegundo);
@@ -95,9 +129,13 @@ class ServicoServiceIntegrationTest {
     @Test
     void criarServicoComClienteIdValidoRefleteOsDadosDoClienteNoDto() {
         com.zeiss.pilot.dto.ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Vinculado Teste", "121.212.121-21"));
+        Long maquinaId = maquinaDeTeste();
+        Long tipoServicoId = tipoServicoDeTeste();
 
         ServicoDTO dto = novoServico("ignorado");
         dto.setClienteId(cliente.getId());
+        dto.setMaquinaId(maquinaId);
+        dto.setTipoServicoId(tipoServicoId);
 
         ServicoDTO criado = servicoService.criarServico(dto);
 
@@ -115,9 +153,13 @@ class ServicoServiceIntegrationTest {
     @Test
     void renomearClienteAtualizaBuscaDeOsPeloNomeNovo() {
         ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Renome Teste", "151.515.151-51"));
+        Long maquinaId = maquinaDeTeste();
+        Long tipoServicoId = tipoServicoDeTeste();
 
         ServicoDTO dto = novoServico("ignorado");
         dto.setClienteId(cliente.getId());
+        dto.setMaquinaId(maquinaId);
+        dto.setTipoServicoId(tipoServicoId);
         ServicoDTO criado = servicoService.criarServico(dto);
 
         clienteService.atualizar(cliente.getId(), clienteDeTeste("Cliente Renomeado XYZ", "151.515.151-51"));
@@ -166,5 +208,56 @@ class ServicoServiceIntegrationTest {
         dto.setNome(nome);
         dto.setCpfOuCnpj(cpf);
         return dto;
+    }
+
+    @Test
+    void criarServicoSemMaquinaIdLancaExcecao() {
+        com.zeiss.pilot.dto.ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Sem Maquina", "161.616.161-61"));
+        Long tipoServicoId = tipoServicoDeTeste();
+
+        ServicoDTO dto = novoServico("Cliente Sem Maquina");
+        dto.setClienteId(cliente.getId());
+        dto.setTipoServicoId(tipoServicoId);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> servicoService.criarServico(dto));
+        assertEquals("maquinaId é obrigatório para criar uma Ordem de Serviço.", ex.getMessage());
+    }
+
+    @Test
+    void criarServicoSemTipoServicoIdLancaExcecao() {
+        com.zeiss.pilot.dto.ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Sem Tipo Servico", "171.717.171-71"));
+        Long maquinaId = maquinaDeTeste();
+
+        ServicoDTO dto = novoServico("Cliente Sem Tipo Servico");
+        dto.setClienteId(cliente.getId());
+        dto.setMaquinaId(maquinaId);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> servicoService.criarServico(dto));
+        assertEquals("tipoServicoId é obrigatório para criar uma Ordem de Serviço.", ex.getMessage());
+    }
+
+    @Test
+    void criarServicoComMaquinaETipoServicoValidosRefleteOsDadosNoDtoEGravaSolicitacaoAPartirDoTipoServico() {
+        com.zeiss.pilot.dto.ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Maquina Tipo Servico", "181.818.181-81"));
+        Maquina maquina = new Maquina();
+        maquina.setNome("Zeiss Teste XYZ");
+        maquina.setTipoMedida("Multi-sensor Óptico");
+        Long maquinaId = maquinaRepository.save(maquina).getId();
+        TipoServico tipoServico = new TipoServico();
+        tipoServico.setCategoria("Multi-sensor Óptico");
+        tipoServico.setDescricao("Digitalização 3D de peças");
+        Long tipoServicoId = tipoServicoRepository.save(tipoServico).getId();
+
+        ServicoDTO dto = novoServico("ignorado");
+        dto.setClienteId(cliente.getId());
+        dto.setMaquinaId(maquinaId);
+        dto.setTipoServicoId(tipoServicoId);
+
+        ServicoDTO criado = servicoService.criarServico(dto);
+
+        assertEquals(maquinaId, criado.getMaquinaId());
+        assertEquals("Zeiss Teste XYZ", criado.getMaquinaNome());
+        assertEquals(tipoServicoId, criado.getTipoServicoId());
+        assertEquals("Digitalização 3D de peças", criado.getSolicitacao());
     }
 }

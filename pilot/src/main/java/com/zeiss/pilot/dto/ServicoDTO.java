@@ -13,6 +13,9 @@ public class ServicoDTO {
     private String cliente;
     private Long clienteId;
     private String clienteNome;
+    private Long maquinaId;
+    private String maquinaNome;
+    private Long tipoServicoId;
     private String solicitacao;
     private int quantidade;
     private String status;
@@ -34,6 +37,13 @@ public class ServicoDTO {
             Cliente c = s.getClienteEntidade();
             dto.setClienteId(c.getId());
             dto.setClienteNome(c.getNome());
+        }
+        if (s.getMaquina() != null) {
+            dto.setMaquinaId(s.getMaquina().getId());
+            dto.setMaquinaNome(s.getMaquina().getNome());
+        }
+        if (s.getTipoServico() != null) {
+            dto.setTipoServicoId(s.getTipoServico().getId());
         }
         dto.setSolicitacao(s.getSolicitacao());
         dto.setQuantidade(s.getQuantidade());
@@ -77,6 +87,15 @@ public class ServicoDTO {
 
     public String getClienteNome() { return clienteNome; }
     public void setClienteNome(String clienteNome) { this.clienteNome = clienteNome; }
+
+    public Long getMaquinaId() { return maquinaId; }
+    public void setMaquinaId(Long maquinaId) { this.maquinaId = maquinaId; }
+
+    public String getMaquinaNome() { return maquinaNome; }
+    public void setMaquinaNome(String maquinaNome) { this.maquinaNome = maquinaNome; }
+
+    public Long getTipoServicoId() { return tipoServicoId; }
+    public void setTipoServicoId(Long tipoServicoId) { this.tipoServicoId = tipoServicoId; }
 
     public String getSolicitacao() { return solicitacao; }
     public void setSolicitacao(String solicitacao) { this.solicitacao = solicitacao; }
