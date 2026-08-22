@@ -376,4 +376,25 @@ class SecurityConfigTest {
         mockMvc.perform(get("/api/clientes"))
                 .andExpect(status().isOk());
     }
+
+    /**
+     * /clientes/relatorio (ranking de receita por cliente) fica sob um prefixo
+     * de URL diferente de /api/clientes — protegido só pela regra catch-all
+     * anyRequest().authenticated() do SecurityConfig, sem regra própria. Mesma
+     * cobertura de dupla ponta (anônimo x autenticado) já existente para
+     * /api/clientes.
+     */
+    @Test
+    void clientesRelatorioSemAutenticacaoRedirecionaParaLogin() throws Exception {
+        mockMvc.perform(get("/clientes/relatorio"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", endsWith("/login")));
+    }
+
+    @Test
+    @WithMockUser(roles = "ESTAGIARIO")
+    void clientesRelatorioAutenticadoComQualquerPapelRetorna200() throws Exception {
+        mockMvc.perform(get("/clientes/relatorio"))
+                .andExpect(status().isOk());
+    }
 }
