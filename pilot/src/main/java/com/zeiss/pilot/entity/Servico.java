@@ -13,8 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import com.zeiss.pilot.entity.Maquina;
-
 @Entity
 @Table(name = "servicos")
 public class Servico {

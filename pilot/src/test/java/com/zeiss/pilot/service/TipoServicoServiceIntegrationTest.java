@@ -1,6 +1,6 @@
 package com.zeiss.pilot.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -36,8 +36,8 @@ class TipoServicoServiceIntegrationTest {
         List<TipoServicoDTO> catalogo = tipoServicoService.listar();
 
         catalogo.forEach(t -> {
-            assertEquals(false, t.getCategoria() == null || t.getCategoria().isBlank());
-            assertEquals(false, t.getDescricao() == null || t.getDescricao().isBlank());
+            assertFalse(t.getCategoria() == null || t.getCategoria().isBlank(), "categoria vazia no item id=" + t.getId());
+            assertFalse(t.getDescricao() == null || t.getDescricao().isBlank(), "descricao vazia no item id=" + t.getId());
         });
     }
 }

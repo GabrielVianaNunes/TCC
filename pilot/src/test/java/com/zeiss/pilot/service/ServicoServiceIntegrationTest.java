@@ -260,4 +260,66 @@ class ServicoServiceIntegrationTest {
         assertEquals(tipoServicoId, criado.getTipoServicoId());
         assertEquals("Digitalização 3D de peças", criado.getSolicitacao());
     }
+
+    @Test
+    void atualizarServicoSemMaquinaIdLancaExcecao() {
+        com.zeiss.pilot.dto.ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Update Sem Maquina", "191.919.191-91"));
+        Long maquinaId = maquinaDeTeste();
+        Long tipoServicoId = tipoServicoDeTeste();
+
+        ServicoDTO dto = novoServico("Cliente Update Sem Maquina");
+        dto.setClienteId(cliente.getId());
+        dto.setMaquinaId(maquinaId);
+        dto.setTipoServicoId(tipoServicoId);
+        ServicoDTO criado = servicoService.criarServico(dto);
+
+        ServicoDTO atualizacao = novoServico("Cliente Update Sem Maquina");
+        atualizacao.setClienteId(cliente.getId());
+        atualizacao.setTipoServicoId(tipoServicoId);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> servicoService.atualizarServico(criado.getId(), atualizacao));
+        assertEquals("maquinaId é obrigatório ao atualizar uma Ordem de Serviço.", ex.getMessage());
+    }
+
+    @Test
+    void atualizarServicoComMaquinaETipoServicoValidosRefleteOsDadosNoDtoEGravaSolicitacaoAPartirDoTipoServicoEPreservaCodigoOs() {
+        com.zeiss.pilot.dto.ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Update Maquina Tipo Servico", "202.020.202-02"));
+        Maquina maquinaOriginal = new Maquina();
+        maquinaOriginal.setNome("Zeiss Original ABC");
+        maquinaOriginal.setTipoMedida("Medição por Coordenadas (CMM)");
+        Long maquinaOriginalId = maquinaRepository.save(maquinaOriginal).getId();
+        TipoServico tipoServicoOriginal = new TipoServico();
+        tipoServicoOriginal.setCategoria("Medição por Coordenadas (CMM)");
+        tipoServicoOriginal.setDescricao("Serviço original");
+        Long tipoServicoOriginalId = tipoServicoRepository.save(tipoServicoOriginal).getId();
+
+        ServicoDTO dto = novoServico("ignorado");
+        dto.setClienteId(cliente.getId());
+        dto.setMaquinaId(maquinaOriginalId);
+        dto.setTipoServicoId(tipoServicoOriginalId);
+        ServicoDTO criado = servicoService.criarServico(dto);
+
+        Maquina maquinaNova = new Maquina();
+        maquinaNova.setNome("Zeiss Nova XYZ");
+        maquinaNova.setTipoMedida("Multi-sensor Óptico");
+        Long maquinaNovaId = maquinaRepository.save(maquinaNova).getId();
+        TipoServico tipoServicoNovo = new TipoServico();
+        tipoServicoNovo.setCategoria("Multi-sensor Óptico");
+        tipoServicoNovo.setDescricao("Digitalização 3D de peças atualizada");
+        Long tipoServicoNovoId = tipoServicoRepository.save(tipoServicoNovo).getId();
+
+        ServicoDTO atualizacao = novoServico("ignorado");
+        atualizacao.setClienteId(cliente.getId());
+        atualizacao.setMaquinaId(maquinaNovaId);
+        atualizacao.setTipoServicoId(tipoServicoNovoId);
+
+        ServicoDTO atualizado = servicoService.atualizarServico(criado.getId(), atualizacao);
+
+        assertEquals(maquinaNovaId, atualizado.getMaquinaId());
+        assertEquals("Zeiss Nova XYZ", atualizado.getMaquinaNome());
+        assertEquals(tipoServicoNovoId, atualizado.getTipoServicoId());
+        assertEquals("Digitalização 3D de peças atualizada", atualizado.getSolicitacao());
+        assertEquals(criado.getCodigoOs(), atualizado.getCodigoOs());
+    }
 }

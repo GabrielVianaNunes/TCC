@@ -199,6 +199,20 @@ const ServicosModule = (() => {
     tipoServicoCombobox.setItems(filtrados);
   }
 
+  function esconderTipoServicoLegadoHint() {
+    const hint = document.getElementById('tipoServicoLegadoHint');
+    if (!hint) return;
+    hint.style.display = 'none';
+    hint.textContent = '';
+  }
+
+  function mostrarTipoServicoLegadoHint(solicitacao) {
+    const hint = document.getElementById('tipoServicoLegadoHint');
+    if (!hint) return;
+    hint.textContent = `${_t('Descrição original (OS legada):')} "${solicitacao}"`;
+    hint.style.display = '';
+  }
+
   async function carregarMaquinasETiposDeServico() {
     if (!maquinaCombobox || !tipoServicoCombobox) return;
     try {
@@ -217,6 +231,8 @@ const ServicosModule = (() => {
     clienteCombobox?.clear();
     maquinaCombobox?.clear();
     tipoServicoCombobox?.clear();
+    filtrarTiposDeServicoPorCategoria(null);
+    esconderTipoServicoLegadoHint();
     document.getElementById('modalTitulo').textContent = _t('Nova Ordem de Serviço');
     document.getElementById('btnExcluirServico').style.display = 'none';
     resetNotaDirector();
@@ -238,6 +254,11 @@ const ServicosModule = (() => {
       const maquinaDaOs = maquinasCarregadas.find(m => String(m.id) === String(s.maquinaId));
       filtrarTiposDeServicoPorCategoria(maquinaDaOs ? maquinaDaOs.tipoMedida : null);
       tipoServicoCombobox?.setValue(s.tipoServicoId, s.solicitacao);
+      if (!s.tipoServicoId && s.solicitacao) {
+        mostrarTipoServicoLegadoHint(s.solicitacao);
+      } else {
+        esconderTipoServicoLegadoHint();
+      }
       document.getElementById('quantidade').value      = s.quantidade || '';
       document.getElementById('status').value          = s.status || '';
       document.getElementById('tecnicoResponsavel').value = s.tecnicoResponsavel || '';
