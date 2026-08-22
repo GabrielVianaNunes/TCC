@@ -1,6 +1,7 @@
 package com.zeiss.pilot.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,11 +33,18 @@ class ClienteServiceIntegrationTest {
     @Autowired
     private ServicoService servicoService;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     private ClienteDTO novoCliente(String nome, String cpf) {
         ClienteDTO dto = new ClienteDTO();
         dto.setNome(nome);
         dto.setCpfOuCnpj(cpf);
         return dto;
+    }
+
+    private String colunaBruta(Long id, String coluna) {
+        return jdbcTemplate.queryForObject("SELECT " + coluna + " FROM clientes WHERE id = ?", String.class, id);
     }
 
     @Test
@@ -97,6 +106,37 @@ class ClienteServiceIntegrationTest {
         clienteService.excluir(criado.getId());
 
         assertThrows(RuntimeException.class, () -> clienteService.buscarPorId(criado.getId()));
+    }
+
+    /**
+     * @Convert torna a criptografia transparente na camada de service — um
+     * round-trip que passa não prova, por si só, que a coluna no banco está
+     * cifrada. Este teste lê a coluna bruta via JdbcTemplate (contornando o
+     * AttributeConverter) e confirma o prefixo "enc:v1:" do CryptoConverter,
+     * seguindo o mesmo padrão usado em FieldEncryptionMigrationRunnerIntegrationTest.
+     */
+    @Test
+    void cpfEEnderecoFicamCriptografadosNoBancoMasEmTextoClaroViaService() {
+        String cpfClaro = "123.456.789-01";
+        String enderecoClaro = "Rua das Flores, 42";
+
+        ClienteDTO dto = novoCliente("Cliente Teste Cripto", cpfClaro);
+        dto.setEndereco(enderecoClaro);
+        ClienteDTO criado = clienteService.criar(dto);
+
+        // Via service, os dados continuam em texto claro (comportamento transparente do @Convert).
+        assertEquals(cpfClaro, criado.getCpfOuCnpj());
+        assertEquals(enderecoClaro, criado.getEndereco());
+
+        // Via coluna bruta do banco, os dados devem estar cifrados.
+        String cpfBruto = colunaBruta(criado.getId(), "cpf_ou_cnpj");
+        String enderecoBruto = colunaBruta(criado.getId(), "endereco");
+
+        assertTrue(cpfBruto.startsWith("enc:v1:"), "cpf_ou_cnpj deveria estar cifrado no banco");
+        assertTrue(enderecoBruto.startsWith("enc:v1:"), "endereco deveria estar cifrado no banco");
+
+        assertNotEquals(cpfClaro, cpfBruto);
+        assertNotEquals(enderecoClaro, enderecoBruto);
     }
 
     @Test

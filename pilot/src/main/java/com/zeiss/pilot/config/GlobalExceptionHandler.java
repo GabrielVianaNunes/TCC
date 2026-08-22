@@ -93,6 +93,12 @@ public class GlobalExceptionHandler {
                              "referencia", referencia));
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException ex) {
+        // Mensagem de validação de entrada é definida por nós, não pela infraestrutura.
+        return ResponseEntity.badRequest().body(Map.of("message", ex.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Map<String, String>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         // Devolve só o NOME do parâmetro, nunca o valor recebido nem o tipo esperado.

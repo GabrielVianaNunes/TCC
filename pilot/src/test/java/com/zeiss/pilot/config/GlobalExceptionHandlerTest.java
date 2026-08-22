@@ -95,6 +95,28 @@ class GlobalExceptionHandlerTest {
     }
 
     /**
+     * ServicoService lança IllegalArgumentException quando clienteId não é
+     * informado (mensagem escrita por nós, sem detalhe de infraestrutura). O
+     * handler dedicado deve devolver 400 Bad Request — é erro do chamador,
+     * não uma falha do servidor.
+     */
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void clienteIdAusenteRetorna400() throws Exception {
+        String corpo = """
+                {"cliente":"Cliente Sem ClienteId","solicitacao":"Teste",
+                 "quantidade":1,"status":"1º Contato",
+                 "valor":100.00,"dataCriacao":"2026-08-18"}
+                """;
+
+        mockMvc.perform(post("/api/servicos").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("clienteId é obrigatório para criar uma Ordem de Serviço."));
+    }
+
+    /**
      * Violações de restrição do banco (como UNIQUE constraints) chegam como
      * DataIntegrityViolationException. Quando dois clientes concorrentes passam
      * pela verificação de aplicação e ambos tentam salvar, o perdedor bate na
