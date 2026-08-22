@@ -432,10 +432,11 @@ const Combobox = (() => {
       hiddenEl.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
-    inputEl.addEventListener('focus', () => { filtrar(inputEl.value); openList(); });
-    inputEl.addEventListener('input', () => { filtrar(inputEl.value); openList(); });
+    // Named listener functions so they can be removed in destroy()
+    const onFocus = () => { filtrar(inputEl.value); openList(); };
+    const onInput = () => { filtrar(inputEl.value); openList(); };
 
-    inputEl.addEventListener('keydown', (ev) => {
+    const onKeydown = (ev) => {
       if (!open && (ev.key === 'ArrowDown' || ev.key === 'ArrowUp')) {
         filtrar(inputEl.value);
         openList();
@@ -454,19 +455,19 @@ const Combobox = (() => {
       } else if (ev.key === 'Escape') {
         closeList();
       }
-    });
+    };
 
     // mousedown (não click): dispara antes do blur do input, então
     // selecionar() já roda antes do handler de blur decidir se limpa o
     // campo por falta de correspondência exata.
-    list.addEventListener('mousedown', (ev) => {
+    const onListMousedown = (ev) => {
       const el = ev.target.closest('.combobox__item');
       if (!el) return;
       ev.preventDefault();
       selecionar(Number(el.dataset.index));
-    });
+    };
 
-    inputEl.addEventListener('blur', () => {
+    const onBlur = () => {
       setTimeout(() => {
         if (inputEl.value !== selectedLabel()) {
           inputEl.value = '';
@@ -474,10 +475,19 @@ const Combobox = (() => {
         }
         closeList();
       }, 150);
-    });
+    };
 
-    window.addEventListener('scroll', () => { if (open) position(); }, true);
-    window.addEventListener('resize', () => { if (open) position(); });
+    const onWindowScroll = () => { if (open) position(); };
+    const onWindowResize = () => { if (open) position(); };
+
+    // Attach all listeners
+    inputEl.addEventListener('focus', onFocus);
+    inputEl.addEventListener('input', onInput);
+    inputEl.addEventListener('keydown', onKeydown);
+    inputEl.addEventListener('blur', onBlur);
+    list.addEventListener('mousedown', onListMousedown);
+    window.addEventListener('scroll', onWindowScroll, true);
+    window.addEventListener('resize', onWindowResize);
 
     return {
       setItems(newItems) { allItems = newItems || []; },
@@ -489,7 +499,16 @@ const Combobox = (() => {
         hiddenEl.value = '';
         inputEl.value = '';
       },
-      destroy() { list.remove(); },
+      destroy() {
+        inputEl.removeEventListener('focus', onFocus);
+        inputEl.removeEventListener('input', onInput);
+        inputEl.removeEventListener('keydown', onKeydown);
+        inputEl.removeEventListener('blur', onBlur);
+        list.removeEventListener('mousedown', onListMousedown);
+        window.removeEventListener('scroll', onWindowScroll, true);
+        window.removeEventListener('resize', onWindowResize);
+        list.remove();
+      },
     };
   }
 
