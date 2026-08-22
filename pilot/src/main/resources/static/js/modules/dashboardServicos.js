@@ -13,6 +13,10 @@
       new Date(2000, i, 1).toLocaleString(lang, { month: 'short' })
     );
   }
+  function monthNameLong(mes) {
+    const lang = window.I18n?.lang() || 'pt-BR';
+    return new Date(2000, mes - 1, 1).toLocaleString(lang, { month: 'long' });
+  }
   const ALL_MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 
   let rawData = [];
@@ -65,7 +69,7 @@
     document.getElementById('kpiTotalOS').textContent = totalOS;
     document.getElementById('kpiReceitaTotal').textContent = fmtBRL(totalVal);
     document.getElementById('kpiMediaMensal').textContent = mediaOS;
-    document.getElementById('kpiMelhorMes').textContent = bestMonth.label;
+    document.getElementById('kpiMelhorMes').textContent = monthNameLong(bestMonth.mes);
     const det = document.getElementById('kpiMelhorMesDetail');
     if (det) det.textContent = bestMonth.quantidadeServicos > 0 ? `${bestMonth.quantidadeServicos} OS · ${fmtBRL(bestMonth.valorTotal)}` : 'Sem dados';
   }

@@ -241,12 +241,18 @@
   font-size: clamp(1.25rem, 2vw, 1.75rem);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
-  line-height: 1.1;
+  line-height: 1.15;
   margin-bottom: var(--space-2);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: break-word;
   min-width: 0;
+}
+
+/* Valor monetário: mais dígitos que uma contagem/percentual, e nunca com um
+   espaço para quebrar de forma legível — usa uma escala menor para caber
+   numa linha só mesmo com valores altos, em vez de quebrar no meio do número. */
+.kpi-card__value--money {
+  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+  white-space: nowrap;
 }
 
 .kpi-card__delta {
