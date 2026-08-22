@@ -118,33 +118,46 @@ const ServicosModule = (() => {
     } catch { /* non-fatal */ }
   }
 
-  /* ── Clientes select ── */
-  async function carregarClientesNoSelect() {
-    const select = document.getElementById('clienteId');
-    if (!select) return;
+  /* ── Cliente combobox ── */
+  let clienteCombobox = null;
+
+  function initClienteCombobox() {
+    const inputEl = document.getElementById('clienteBusca');
+    const hiddenEl = document.getElementById('clienteId');
+    if (!inputEl || !hiddenEl) return;
+    clienteCombobox = Combobox.create({
+      inputEl,
+      hiddenEl,
+      items: [],
+      getLabel: c => c.nome,
+      getId: c => c.id,
+      placeholder: _t('Buscar cliente...'),
+      emptyMessage: _t('Nenhum cliente encontrado.'),
+    });
+  }
+
+  async function carregarClientesNoCombobox() {
+    if (!clienteCombobox) return;
     let clientes = [];
     try {
       clientes = await Api.get(CLIENTES_URL);
     } catch { clientes = []; }
-
-    const selecionado = select.value;
     // O rótulo só precisa ajudar a escolher o cliente pelo nome — mostrar
     // CPF/CNPJ aqui expõe o dado a qualquer usuário que abra o formulário de
     // OS, mesmo sem precisar visitar /clientes.
-    select.innerHTML = '<option value="">Selecione um cliente...</option>' +
-      clientes.map(c => `<option value="${c.id}">${escapeHtml(c.nome)}</option>`).join('');
-    if (selecionado) select.value = selecionado;
+    clienteCombobox.setItems(clientes);
   }
 
   /* ── Open Modal (New) ── */
   async function novo() {
     document.getElementById('servicoId').value = '';
     document.getElementById('servicoForm').reset();
+    clienteCombobox?.clear();
     document.getElementById('modalTitulo').textContent = _t('Nova Ordem de Serviço');
     document.getElementById('btnExcluirServico').style.display = 'none';
     resetNotaDirector();
     toggleNotaSection('');
-    await carregarClientesNoSelect();
+    await carregarClientesNoCombobox();
     Modal.open('modalServico');
   }
 
@@ -153,8 +166,8 @@ const ServicosModule = (() => {
     try {
       const s = await Api.get(`${ENDPOINT}/${id}`);
       document.getElementById('servicoId').value       = s.id;
-      await carregarClientesNoSelect();
-      document.getElementById('clienteId').value = s.clienteId || '';
+      await carregarClientesNoCombobox();
+      clienteCombobox?.setValue(s.clienteId, s.clienteNome);
       document.getElementById('solicitacao').value     = s.solicitacao || '';
       document.getElementById('quantidade').value      = s.quantidade || '';
       document.getElementById('status').value          = s.status || '';
@@ -268,9 +281,10 @@ const ServicosModule = (() => {
 
   /* ── Init ── */
   function init() {
+    initClienteCombobox();
     loadServicos(0);
     loadEstagiarios();
-    carregarClientesNoSelect();
+    carregarClientesNoCombobox();
 
     // Stars interaction for Nota do Diretor
     document.querySelectorAll('.nd-star').forEach(btn => {

@@ -296,6 +296,8 @@
     'Editar Edital':                   { 'pt-BR':'Editar Edital',                   'en':'Edit Tender',                         'de':'Ausschreibung bearbeiten'              },
     'Editar OS':                       { 'pt-BR':'Editar OS',                       'en':'Edit WO',                             'de':'AO bearbeiten'                         },
     'Nova Ordem de Serviço':           { 'pt-BR':'Nova Ordem de Serviço',           'en':'New Work Order',                      'de':'Neuer Arbeitsauftrag'                  },
+    'Buscar cliente...':               { 'pt-BR':'Buscar cliente...',               'en':'Search client...',                    'de':'Kunde suchen...'                       },
+    'Nenhum cliente encontrado.':      { 'pt-BR':'Nenhum cliente encontrado.',      'en':'No client found.',                    'de':'Kein Kunde gefunden.'                  },
     'Nenhum registro para exportar.':  { 'pt-BR':'Nenhum registro para exportar.',  'en':'No records to export.',               'de':'Keine Einträge zum Exportieren.'       },
     'registros exportados.':           { 'pt-BR':'registros exportados.',           'en':'records exported.',                   'de':'Einträge exportiert.'                  },
     'Erro ao carregar dados':          { 'pt-BR':'Erro ao carregar dados',          'en':'Error loading data',                  'de':'Fehler beim Laden der Daten'           },
