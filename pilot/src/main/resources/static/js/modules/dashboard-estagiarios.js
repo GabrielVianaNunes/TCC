@@ -456,7 +456,7 @@
     allServicos.forEach(s => {
       const opt = document.createElement('option');
       opt.value = s.id;
-      opt.textContent = `OS #${s.id} — ${s.cliente} (${s.solicitacao})`;
+      opt.textContent = `OS #${s.id} — ${s.clienteNome || s.cliente} (${s.solicitacao})`;
       sel.appendChild(opt);
     });
   }
