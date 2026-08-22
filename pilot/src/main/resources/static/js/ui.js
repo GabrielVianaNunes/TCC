@@ -368,11 +368,14 @@ const Combobox = (() => {
     inputEl.autocomplete = 'off';
     if (placeholder) inputEl.placeholder = placeholder;
 
+    const isRequired = inputEl.hasAttribute('required');
+
     function atualizarValidade() {
+      if (!isRequired) return;
       inputEl.setCustomValidity(hiddenEl.value ? '' : 'Selecione um item da lista.');
     }
 
-    if (inputEl.hasAttribute('required')) atualizarValidade();
+    atualizarValidade();
 
     function selectedLabel() {
       const id = hiddenEl.value;
@@ -424,6 +427,7 @@ const Combobox = (() => {
     }
 
     function marcarAtivo(index) {
+      if (!filtered.length) return;
       activeIndex = index;
       list.querySelectorAll('.combobox__item').forEach((el, i) => {
         const on = i === activeIndex;
@@ -447,7 +451,14 @@ const Combobox = (() => {
 
     // Named listener functions so they can be removed in destroy()
     const onFocus = () => { filtrar(inputEl.value); openList(); };
-    const onInput = () => { filtrar(inputEl.value); openList(); };
+    const onInput = () => {
+      if (hiddenEl.value) {
+        hiddenEl.value = '';
+        atualizarValidade();
+      }
+      filtrar(inputEl.value);
+      openList();
+    };
 
     const onKeydown = (ev) => {
       if (!open && (ev.key === 'ArrowDown' || ev.key === 'ArrowUp')) {
