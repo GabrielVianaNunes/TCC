@@ -368,6 +368,12 @@ const Combobox = (() => {
     inputEl.autocomplete = 'off';
     if (placeholder) inputEl.placeholder = placeholder;
 
+    function atualizarValidade() {
+      inputEl.setCustomValidity(hiddenEl.value ? '' : 'Selecione um item da lista.');
+    }
+
+    if (inputEl.hasAttribute('required')) atualizarValidade();
+
     function selectedLabel() {
       const id = hiddenEl.value;
       if (!id) return '';
@@ -414,11 +420,17 @@ const Combobox = (() => {
       filtered = q ? allItems.filter(i => normalizar(getLabel(i)).includes(q)) : allItems.slice();
       activeIndex = filtered.length ? 0 : -1;
       render();
+      marcarAtivo(activeIndex);
     }
 
     function marcarAtivo(index) {
       activeIndex = index;
-      render();
+      list.querySelectorAll('.combobox__item').forEach((el, i) => {
+        const on = i === activeIndex;
+        el.classList.toggle('combobox__item--active', on);
+        el.setAttribute('aria-selected', on);
+        if (on) el.scrollIntoView({ block: 'nearest' });
+      });
       if (activeIndex >= 0) inputEl.setAttribute('aria-activedescendant', `${listId}-opt-${activeIndex}`);
       else inputEl.removeAttribute('aria-activedescendant');
     }
@@ -429,6 +441,7 @@ const Combobox = (() => {
       hiddenEl.value = getId(item);
       inputEl.value = getLabel(item);
       closeList();
+      atualizarValidade();
       hiddenEl.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
@@ -453,6 +466,8 @@ const Combobox = (() => {
         ev.preventDefault();
         if (activeIndex >= 0) selecionar(activeIndex);
       } else if (ev.key === 'Escape') {
+        ev.preventDefault();
+        ev.stopPropagation();
         closeList();
       }
     };
@@ -472,6 +487,7 @@ const Combobox = (() => {
         if (inputEl.value !== selectedLabel()) {
           inputEl.value = '';
           hiddenEl.value = '';
+          atualizarValidade();
         }
         closeList();
       }, 150);
@@ -494,10 +510,13 @@ const Combobox = (() => {
       setValue(id, label) {
         hiddenEl.value = id != null ? id : '';
         inputEl.value = id != null ? (label || '') : '';
+        atualizarValidade();
       },
       clear() {
         hiddenEl.value = '';
         inputEl.value = '';
+        closeList();
+        atualizarValidade();
       },
       destroy() {
         inputEl.removeEventListener('focus', onFocus);
