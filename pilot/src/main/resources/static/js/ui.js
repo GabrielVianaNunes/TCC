@@ -332,6 +332,170 @@ const EmptyState = {
   }
 };
 
+/* ══════════════════════════════════════════
+   COMBOBOX (busca com seleção restrita à lista)
+══════════════════════════════════════════ */
+const Combobox = (() => {
+  function escapeHtml(str) {
+    return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function normalizar(str) {
+    return (str || '').normalize('NFD').replace(new RegExp('[\\u0300-\\u036f]', 'g'), '').toLowerCase();
+  }
+
+  function create({ inputEl, hiddenEl, items, getLabel, getId, placeholder, emptyMessage }) {
+    let allItems = items || [];
+    let filtered = [];
+    let activeIndex = -1;
+    let open = false;
+
+    const listId = `combobox-list-${Math.random().toString(36).slice(2, 9)}`;
+    // A lista é anexada a document.body (não ao formulário/modal): um
+    // ancestral com transform (.modal__dialog quando aberto) criaria um
+    // novo bloco de contenção para position:fixed e reintroduziria o
+    // recorte do overflow-y:auto do modal.
+    const list = document.createElement('div');
+    list.className = 'combobox__list';
+    list.id = listId;
+    list.setAttribute('role', 'listbox');
+    document.body.appendChild(list);
+
+    inputEl.setAttribute('role', 'combobox');
+    inputEl.setAttribute('aria-expanded', 'false');
+    inputEl.setAttribute('aria-controls', listId);
+    inputEl.setAttribute('aria-autocomplete', 'list');
+    inputEl.autocomplete = 'off';
+    if (placeholder) inputEl.placeholder = placeholder;
+
+    function selectedLabel() {
+      const id = hiddenEl.value;
+      if (!id) return '';
+      const item = allItems.find(i => String(getId(i)) === String(id));
+      return item ? getLabel(item) : '';
+    }
+
+    function position() {
+      const r = inputEl.getBoundingClientRect();
+      list.style.top = `${r.bottom + 4}px`;
+      list.style.left = `${r.left}px`;
+      list.style.width = `${r.width}px`;
+    }
+
+    function render() {
+      if (!filtered.length) {
+        list.innerHTML = `<div class="combobox__empty">${escapeHtml(emptyMessage || 'Nenhum resultado.')}</div>`;
+        return;
+      }
+      list.innerHTML = filtered.map((item, i) => `
+        <div class="combobox__item${i === activeIndex ? ' combobox__item--active' : ''}"
+             role="option" id="${listId}-opt-${i}" data-index="${i}"
+             aria-selected="${i === activeIndex}">${escapeHtml(getLabel(item))}</div>
+      `).join('');
+    }
+
+    function openList() {
+      open = true;
+      position();
+      list.classList.add('combobox__list--open');
+      inputEl.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeList() {
+      open = false;
+      activeIndex = -1;
+      list.classList.remove('combobox__list--open');
+      inputEl.setAttribute('aria-expanded', 'false');
+      inputEl.removeAttribute('aria-activedescendant');
+    }
+
+    function filtrar(query) {
+      const q = normalizar(query);
+      filtered = q ? allItems.filter(i => normalizar(getLabel(i)).includes(q)) : allItems.slice();
+      activeIndex = filtered.length ? 0 : -1;
+      render();
+    }
+
+    function marcarAtivo(index) {
+      activeIndex = index;
+      render();
+      if (activeIndex >= 0) inputEl.setAttribute('aria-activedescendant', `${listId}-opt-${activeIndex}`);
+      else inputEl.removeAttribute('aria-activedescendant');
+    }
+
+    function selecionar(index) {
+      const item = filtered[index];
+      if (!item) return;
+      hiddenEl.value = getId(item);
+      inputEl.value = getLabel(item);
+      closeList();
+      hiddenEl.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    inputEl.addEventListener('focus', () => { filtrar(inputEl.value); openList(); });
+    inputEl.addEventListener('input', () => { filtrar(inputEl.value); openList(); });
+
+    inputEl.addEventListener('keydown', (ev) => {
+      if (!open && (ev.key === 'ArrowDown' || ev.key === 'ArrowUp')) {
+        filtrar(inputEl.value);
+        openList();
+        return;
+      }
+      if (!open) return;
+      if (ev.key === 'ArrowDown') {
+        ev.preventDefault();
+        marcarAtivo(Math.min(activeIndex + 1, filtered.length - 1));
+      } else if (ev.key === 'ArrowUp') {
+        ev.preventDefault();
+        marcarAtivo(Math.max(activeIndex - 1, 0));
+      } else if (ev.key === 'Enter') {
+        ev.preventDefault();
+        if (activeIndex >= 0) selecionar(activeIndex);
+      } else if (ev.key === 'Escape') {
+        closeList();
+      }
+    });
+
+    // mousedown (não click): dispara antes do blur do input, então
+    // selecionar() já roda antes do handler de blur decidir se limpa o
+    // campo por falta de correspondência exata.
+    list.addEventListener('mousedown', (ev) => {
+      const el = ev.target.closest('.combobox__item');
+      if (!el) return;
+      ev.preventDefault();
+      selecionar(Number(el.dataset.index));
+    });
+
+    inputEl.addEventListener('blur', () => {
+      setTimeout(() => {
+        if (inputEl.value !== selectedLabel()) {
+          inputEl.value = '';
+          hiddenEl.value = '';
+        }
+        closeList();
+      }, 150);
+    });
+
+    window.addEventListener('scroll', () => { if (open) position(); }, true);
+    window.addEventListener('resize', () => { if (open) position(); });
+
+    return {
+      setItems(newItems) { allItems = newItems || []; },
+      setValue(id, label) {
+        hiddenEl.value = id != null ? id : '';
+        inputEl.value = id != null ? (label || '') : '';
+      },
+      clear() {
+        hiddenEl.value = '';
+        inputEl.value = '';
+      },
+      destroy() { list.remove(); },
+    };
+  }
+
+  return { create };
+})();
+
 /* ── Exports ── */
 window.Toast     = Toast;
 window.Modal     = Modal;
@@ -339,3 +503,4 @@ window.Confirm   = Confirm;
 window.Skeleton  = Skeleton;
 window.StatusBadge  = StatusBadge;
 window.EmptyState   = EmptyState;
+window.Combobox  = Combobox;

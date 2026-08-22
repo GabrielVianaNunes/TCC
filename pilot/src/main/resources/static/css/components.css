@@ -515,6 +515,51 @@ select.form-control { cursor: pointer; }
 .form-control.is-invalid { border-color: var(--color-danger); }
 .form-control.is-valid   { border-color: var(--color-success); }
 
+/* ── Combobox (busca com seleção restrita à lista) ── */
+.combobox__list {
+  position: fixed;
+  z-index: 450; /* acima de --z-modal (400), abaixo de --z-toast (500) */
+  background: var(--color-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-1);
+  max-height: 240px;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+}
+
+.combobox__list--open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.combobox__item {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.combobox__item:hover,
+.combobox__item--active {
+  background: var(--color-surface-hover);
+}
+
+.combobox__empty {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
 /* ── Search Bar ── */
 .search-bar {
   position: relative;
