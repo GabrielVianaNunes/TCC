@@ -134,6 +134,7 @@ O sistema tem backup automatizado diário do banco (`pg_dump -Fc`) e dos documen
 | Módulo | Descrição |
 |---|---|
 | **Máquinas** | Cadastro de equipamentos, agendamento, manutenção e documentos por máquina |
+| **Clientes** | Cadastro de clientes (nome, CPF/CNPJ único, endereço, telefone, e-mail) com dashboard de ranking de receita por mês/ano; toda Ordem de Serviço se vincula a um cliente cadastrado, em vez de texto livre |
 | **Amostras** | Controle de amostras recebidas para análise/calibração |
 | **Almoxarifado** | Itens e movimentações de estoque |
 | **Estagiários** | Cadastro, notas, dashboard e quadro Kanban de atividades — de Estagiários, Técnicos e Gestores, cada papel vendo só o que tem permissão |
@@ -180,7 +181,7 @@ Autenticação via formulário (Spring Security), com senhas armazenadas com `De
 
 **Endurecimento adicional (18/08/2026):** mensagem de erro nunca expõe detalhe interno ao cliente (handler dedicado às rotas de API, páginas de erro 404/500 estáticas e genéricas), fonte servida localmente (sem CDN público), cookie de sessão com flag `Secure` em produção, e `Content-Security-Policy` (`default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`) em toda resposta.
 
-**Criptografia de dado pessoal no banco (20/08/2026):** CPF/CNPJ e endereço em `servicos` são criptografados com AES-256-GCM (`CryptoConverter`, JPA `AttributeConverter`), de forma transparente — API e UI continuam vendo o valor em texto claro, só a coluna no Postgres guarda a versão cifrada. Dado gravado antes dessa mudança é recriptografado automaticamente, uma única vez, na subida da aplicação (`FieldEncryptionMigrationRunner`). Requer `FIELD_ENCRYPTION_KEY` (ver [`docs/RUNBOOK.md`](docs/RUNBOOK.md)).
+**Criptografia de dado pessoal no banco:** CPF/CNPJ e endereço de `Cliente` são criptografados com AES-256-GCM (`CryptoConverter`, JPA `AttributeConverter`), de forma transparente — API e UI continuam vendo o valor em texto claro, só a coluna no Postgres guarda a versão cifrada. Duplicata de CPF/CNPJ é impedida por um índice cego (`clientes.cpf_ou_cnpj_hash`, SHA-256, `UNIQUE` no banco), já que o nonce aleatório da cifra impede `UNIQUE` na própria coluna criptografada. Requer `FIELD_ENCRYPTION_KEY` (ver [`docs/RUNBOOK.md`](docs/RUNBOOK.md)). Esses dados viveram em `servicos` até 20/08/2026, quando o cadastro de Clientes foi introduzido; as colunas legadas em `servicos` (e os *runners* de migração que as recriptografavam) foram removidas em 22/08/2026, já com todo o dado migrado para `Cliente`.
 
 **Log de auditoria e cobertura de teste de autorização (20/08/2026):** toda escrita (`POST`/`PUT`/`PATCH`/`DELETE`) sob `/api/**` gera uma linha no logger `AUDIT` (usuário, verbo, rota, status), capturando tanto negação grosseira de `SecurityConfig` quanto de `@PreAuthorize` (`AuditLogFilter`, ver [`docs/RUNBOOK.md`](docs/RUNBOOK.md#log-de-auditoria)). `SecurityConfigTest` ganhou cobertura sistemática das regras de papel que ainda não tinham teste (`/api/usuarios/admins`, upload/edição/remoção de documentos gerais e por máquina, criação de evento).
 
