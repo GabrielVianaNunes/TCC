@@ -427,7 +427,11 @@ const Combobox = (() => {
     }
 
     function marcarAtivo(index) {
-      if (!filtered.length) return;
+      if (!filtered.length) {
+        activeIndex = -1;
+        inputEl.removeAttribute('aria-activedescendant');
+        return;
+      }
       activeIndex = index;
       list.querySelectorAll('.combobox__item').forEach((el, i) => {
         const on = i === activeIndex;
