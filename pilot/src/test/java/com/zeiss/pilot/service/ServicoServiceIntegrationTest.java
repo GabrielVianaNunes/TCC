@@ -9,8 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import jakarta.persistence.EntityManager;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +22,6 @@ import com.zeiss.pilot.dto.ClienteDTO;
 import com.zeiss.pilot.dto.ServicoDTO;
 import com.zeiss.pilot.entity.Servico;
 import com.zeiss.pilot.repository.ServicoRepository;
-import com.zeiss.pilot.security.CryptoConverter;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -42,12 +39,6 @@ class ServicoServiceIntegrationTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private CryptoConverter cryptoConverter;
-
-    @Autowired
-    private EntityManager entityManager;
 
     private ServicoDTO novoServico(String cliente) {
         ServicoDTO dto = new ServicoDTO();
@@ -138,62 +129,6 @@ class ServicoServiceIntegrationTest {
     }
 
     /**
-     * ServicoDTO não carrega mais cpfOuCnpj/endereco (campos legados,
-     * removidos do DTO em tarefa anterior desta branch), mas Servico ainda tem
-     * essas colunas (criptografadas), cuja remoção está agendada para uma
-     * migração futura ainda não executada. dto.toEntity() nunca as popula —
-     * sem carregar adiante o valor do registro existente, um save() completo
-     * as zera silenciosamente a cada PUT em /api/servicos, destruindo dado
-     * legado que ainda não foi migrado com segurança para Cliente em todo
-     * ambiente.
-     */
-    @Test
-    void atualizarServicoNaoApagaColunasLegadasCpfOuCnpjEEndereco() {
-        ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Legado Teste", "161.616.161-61"));
-
-        ServicoDTO dto = novoServico("ignorado");
-        dto.setClienteId(cliente.getId());
-        ServicoDTO criado = servicoService.criarServico(dto);
-
-        String cpfLegado = "111.222.333-44";
-        String enderecoLegado = "Rua Legada, 100";
-        // Grava direto na coluna, sem o prefixo "enc:v1:" do CryptoConverter —
-        // simula dado legado gravado antes da coluna passar a ser criptografada,
-        // que o converter lê "como está" (tolerância a dado pré-migração).
-        jdbcTemplate.update("UPDATE servicos SET cpf_ou_cnpj = ?, endereco = ? WHERE id = ?",
-                cpfLegado, enderecoLegado, criado.getId());
-        // Sem isto, o Servico criado acima continua no cache de 1º nível da
-        // persistence context (cpfOuCnpj/endereco = null) e o findById() dentro
-        // de atualizarServico() nem chega a rodar SELECT — devolveria a mesma
-        // instância em memória, mascarando a coluna legada que acabamos de
-        // gravar via JDBC cru. flush()+clear() força o round-trip real pelo banco.
-        entityManager.flush();
-        entityManager.clear();
-
-        ServicoDTO atualizacao = novoServico("ignorado");
-        atualizacao.setClienteId(cliente.getId());
-        atualizacao.setSolicitacao("Calibração revisada");
-        servicoService.atualizarServico(criado.getId(), atualizacao);
-
-        // Idem: sem flush aqui, a leitura bruta abaixo poderia (a depender do
-        // provider) não refletir o save() que acabou de acontecer dentro da
-        // mesma transação/persistence context.
-        entityManager.flush();
-        entityManager.clear();
-
-        String cpfBrutoDepois = colunaBrutaServico(criado.getId(), "cpf_ou_cnpj");
-        String enderecoBrutoDepois = colunaBrutaServico(criado.getId(), "endereco");
-
-        assertNotNull(cpfBrutoDepois, "cpf_ou_cnpj não deveria ser nulado pela atualização da OS");
-        assertNotNull(enderecoBrutoDepois, "endereco não deveria ser nulado pela atualização da OS");
-        // O round-trip de save() sempre recriptografa (nonce novo a cada gravação),
-        // então o byte cru muda — o que importa é que o valor decriptografado
-        // continua sendo o mesmo dado legado, não perdido nem nulado.
-        assertEquals(cpfLegado, cryptoConverter.convertToEntityAttribute(cpfBrutoDepois));
-        assertEquals(enderecoLegado, cryptoConverter.convertToEntityAttribute(enderecoBrutoDepois));
-    }
-
-    /**
      * search() navegava s.clienteEntidade.nome como implicit path expression
      * dentro do WHERE/COALESCE — Hibernate renderiza isso como um INNER JOIN
      * hoisted para o FROM, independente do ramo do OR/COALESCE que realmente
@@ -219,15 +154,11 @@ class ServicoServiceIntegrationTest {
 
     private Long inserirServicoOrfaoSemClienteId(String codigoOs, String nomeCliente) {
         jdbcTemplate.update(
-                "INSERT INTO servicos (codigo_os, cliente, solicitacao, quantidade, status, valor, data_criacao, cpf_ou_cnpj, endereco) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO servicos (codigo_os, cliente, solicitacao, quantidade, status, valor, data_criacao) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)",
                 codigoOs, nomeCliente, "Calibração", 1, "1º Contato", new BigDecimal("100.00"),
-                LocalDate.now(), null, null);
+                LocalDate.now());
         return jdbcTemplate.queryForObject("SELECT id FROM servicos WHERE codigo_os = ?", Long.class, codigoOs);
-    }
-
-    private String colunaBrutaServico(Long id, String coluna) {
-        return jdbcTemplate.queryForObject("SELECT " + coluna + " FROM servicos WHERE id = ?", String.class, id);
     }
 
     private com.zeiss.pilot.dto.ClienteDTO clienteDeTeste(String nome, String cpf) {

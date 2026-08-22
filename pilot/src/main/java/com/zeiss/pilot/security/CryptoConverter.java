@@ -16,10 +16,9 @@ import org.springframework.stereotype.Component;
  * tokenização" de dado pessoal). AES-256-GCM, mesma técnica do backup.
  *
  * <p>Leitura tolerante a dado legado: um valor sem o prefixo {@link #PREFIXO}
- * é devolvido como está, em vez de falhar a descriptografia — é como dado
- * gravado antes desta conversão existir aparece, até {@link
- * FieldEncryptionMigrationRunner} recriptografá-lo (ou até a próxima escrita
- * do registro, que sempre grava já cifrado).
+ * é devolvido como está, em vez de falhar a descriptografia — é assim que
+ * dado gravado antes desta conversão existir aparece, até a próxima escrita
+ * do registro, que sempre grava já cifrado.
  */
 @Converter
 @Component

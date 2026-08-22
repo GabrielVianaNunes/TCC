@@ -124,8 +124,7 @@ class ClienteServiceIntegrationTest {
      * @Convert torna a criptografia transparente na camada de service — um
      * round-trip que passa não prova, por si só, que a coluna no banco está
      * cifrada. Este teste lê a coluna bruta via JdbcTemplate (contornando o
-     * AttributeConverter) e confirma o prefixo "enc:v1:" do CryptoConverter,
-     * seguindo o mesmo padrão usado em FieldEncryptionMigrationRunnerIntegrationTest.
+     * AttributeConverter) e confirma o prefixo "enc:v1:" do CryptoConverter.
      */
     @Test
     void cpfEEnderecoFicamCriptografadosNoBancoMasEmTextoClaroViaService() {
