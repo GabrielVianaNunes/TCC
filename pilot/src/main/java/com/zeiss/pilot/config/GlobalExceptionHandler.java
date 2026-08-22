@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
+import com.zeiss.pilot.exception.ClienteConflitoException;
+
 import java.util.Map;
 import java.util.UUID;
 
@@ -73,6 +75,11 @@ public class GlobalExceptionHandler {
         // Mensagem de negação de acesso é definida por nós, não pela infraestrutura.
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(Map.of("message", ex.getMessage() != null ? ex.getMessage() : "Acesso negado."));
+    }
+
+    @ExceptionHandler(ClienteConflitoException.class)
+    public ResponseEntity<Map<String, String>> handleClienteConflito(ClienteConflitoException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
