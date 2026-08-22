@@ -51,9 +51,13 @@ class GlobalExceptionHandlerTest {
 
     /**
      * Uma violação de restrição do banco chega ao handler como
-     * DataIntegrityViolationException, que é uma RuntimeException. O handler dedicado
-     * retorna 409 Conflict com uma mensagem genérica sem expor nome de tabela, restrição,
-     * colunas ou SQL. A mensagem do driver vai para o log do servidor apenas.
+     * DataIntegrityViolationException, que é uma RuntimeException. Este caso é uma
+     * violação de CHECK constraint (status fora do domínio permitido) — não tem
+     * nada a ver com duplicata de CPF/CNPJ, então o handler dedicado (restrito a
+     * idx_clientes_cpf_hash) não entra em ação, e a exceção cai no tratamento
+     * genérico: 500 Internal Server Error com mensagem genérica, sem expor nome
+     * de tabela, restrição, colunas ou SQL. A mensagem do driver vai para o log
+     * do servidor apenas.
      */
     @Test
     @WithMockUser(roles = "ADMIN")
@@ -73,7 +77,7 @@ class GlobalExceptionHandlerTest {
         mockMvc.perform(post("/api/servicos").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(corpo))
-                .andExpect(status().isConflict())
+                .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.message").value(not(allOf(
                         containsString("servicos"),          // nome da tabela
                         containsString("insert into"),       // o SQL
@@ -117,20 +121,24 @@ class GlobalExceptionHandlerTest {
     }
 
     /**
-     * Violações de restrição do banco (como UNIQUE constraints) chegam como
-     * DataIntegrityViolationException. Quando dois clientes concorrentes passam
-     * pela verificação de aplicação e ambos tentam salvar, o perdedor bate na
-     * restrição do banco. O handler deve retornar 409 Conflict com uma mensagem
-     * genérica — nunca expondo nome de tabela, nome de restrição ou SQL.
+     * Violações da UNIQUE index de CPF/CNPJ (idx_clientes_cpf_hash, criada em
+     * V7__cria_clientes.sql) chegam como DataIntegrityViolationException. Quando
+     * dois clientes concorrentes passam pela verificação de aplicação e ambos
+     * tentam salvar, o perdedor bate na restrição do banco. O handler deve
+     * retornar 409 Conflict com uma mensagem genérica — nunca expondo nome de
+     * tabela, nome de restrição ou SQL. Este é o ÚNICO caso que o handler trata
+     * como duplicata — a causa raiz precisa nomear especificamente essa index.
      */
     @Test
     void violacaoDeIntegridadeRetorna409ComMensagemGenerica() {
         GlobalExceptionHandler handler = new GlobalExceptionHandler();
 
-        // Simula uma violação de restrição UNIQUE no banco (ex: cpf_ou_cnpj_hash duplicado)
+        // Simula uma violação da UNIQUE index de CPF/CNPJ no banco
         DataIntegrityViolationException ex = new DataIntegrityViolationException(
                 "could not execute statement; SQL [insert into clientes (cpf_ou_cnpj_hash, ...) values (?, ...)]; " +
-                "constraint [UK_clientes_cpf_ou_cnpj_hash] violated: unique constraint or index violation");
+                "constraint [idx_clientes_cpf_hash] violated: unique constraint or index violation",
+                new RuntimeException(
+                        "duplicate key value violates unique constraint \"idx_clientes_cpf_hash\""));
 
         ResponseEntity<Map<String, String>> response = handler.handleDataIntegrityViolation(ex);
 

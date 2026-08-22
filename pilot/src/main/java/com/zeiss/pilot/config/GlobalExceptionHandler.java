@@ -83,14 +83,26 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", ex.getMessage()));
     }
 
+    /**
+     * Só a UNIQUE index de CPF/CNPJ ({@code idx_clientes_cpf_hash}, criada em
+     * V7__cria_clientes.sql) vira 409 "duplicata" — é o único caso em que essa
+     * mensagem faz sentido (dois clientes concorrentes passam pela checagem de
+     * aplicação e o perdedor bate na restrição do banco). Qualquer outra
+     * DataIntegrityViolationException (NOT NULL, FK, CHECK — ex.: um valor de
+     * status fora do domínio em /api/servicos) é erro de dado inválido ou bug,
+     * não duplicata, e cai no tratamento genérico (500), igual ao
+     * comportamento antes deste handler existir.
+     */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, String>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        // Violação de restrição do banco (UNIQUE, FK, etc.) não expõe detalhe interno.
-        // A mensagem do driver carrega nome de tabela, restrição, colunas — informação sensível.
-        String referencia = registrarNoLog("Violação de restrição ao salvar dados", ex);
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Map.of("message", "Conflito ao salvar: um registro com os mesmos dados já existe.",
-                             "referencia", referencia));
+        String causaRaiz = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : null;
+        if (causaRaiz != null && causaRaiz.contains("idx_clientes_cpf_hash")) {
+            String referencia = registrarNoLog("Violação de integridade — duplicata de CPF/CNPJ", ex);
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "Conflito ao salvar: um registro com os mesmos dados já existe.",
+                                 "referencia", referencia));
+        }
+        return erroInterno("Violação de integridade de dados", ex);
     }
 
     /**

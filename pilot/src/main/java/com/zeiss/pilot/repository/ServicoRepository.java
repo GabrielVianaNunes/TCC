@@ -17,7 +17,7 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
     Optional<String> buscarMaiorCodigoOsComPrefixo(@Param("prefixo") String prefixo);
 
     @Query("SELECT s FROM Servico s WHERE " +
-           "(:query IS NULL OR :query = '' OR LOWER(s.cliente) LIKE LOWER(CONCAT('%', :query, '%')) " +
+           "(:query IS NULL OR :query = '' OR LOWER(COALESCE(s.clienteEntidade.nome, s.cliente)) LIKE LOWER(CONCAT('%', :query, '%')) " +
            "   OR LOWER(s.solicitacao) LIKE LOWER(CONCAT('%', :query, '%')) " +
            "   OR LOWER(COALESCE(s.tecnicoResponsavel, '')) LIKE LOWER(CONCAT('%', :query, '%'))) " +
            "AND (:status IS NULL OR :status = '' OR s.status = :status)")

@@ -76,6 +76,12 @@ public class ServicoService {
         entity.setClienteEntidade(cliente);
         entity.setCliente(cliente.getNome());
         entity.setCodigoOs(existente.getCodigoOs());
+        // ServicoDTO não carrega mais cpfOuCnpj/endereco (campos legados, ainda
+        // presentes na tabela até uma migração futura remover as colunas) —
+        // dto.toEntity() nunca os popula. Sem repassar o valor já existente,
+        // este save() de objeto completo os zeraria a cada atualização de OS.
+        entity.setCpfOuCnpj(existente.getCpfOuCnpj());
+        entity.setEndereco(existente.getEndereco());
         return ServicoDTO.fromEntity(servicoRepository.save(entity));
     }
 

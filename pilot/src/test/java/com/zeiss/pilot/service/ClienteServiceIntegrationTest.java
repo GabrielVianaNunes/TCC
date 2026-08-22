@@ -91,6 +91,18 @@ class ClienteServiceIntegrationTest {
     }
 
     @Test
+    void criarComCpfNuloLancaIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> clienteService.criar(novoCliente("Cliente Sem CPF", null)));
+    }
+
+    @Test
+    void criarComCpfSomenteCaracteresNaoNumericosLancaIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> clienteService.criar(novoCliente("Cliente CPF Invalido", "abc")));
+    }
+
+    @Test
     void listarDevolveClientesCriados() {
         clienteService.criar(novoCliente("Cliente Teste F", "777.777.777-77"));
 

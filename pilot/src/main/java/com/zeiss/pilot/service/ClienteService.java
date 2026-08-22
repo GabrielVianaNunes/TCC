@@ -80,8 +80,19 @@ public class ClienteService {
         clienteRepository.deleteById(id);
     }
 
+    /**
+     * HashUtil.normalizarDocumento devolve "" tanto para null quanto para
+     * qualquer string sem dígitos — sem essa checagem, um CPF/CNPJ em branco ou
+     * inválido gera hash idêntico para todo cliente nessa condição, causando
+     * falso-409 de duplicata para o segundo caso, ou violação NOT NULL crua do
+     * banco (500) para o primeiro.
+     */
     private String calcularHash(String cpfOuCnpj) {
-        return HashUtil.sha256Hex(HashUtil.normalizarDocumento(cpfOuCnpj));
+        String documentoNormalizado = HashUtil.normalizarDocumento(cpfOuCnpj);
+        if (documentoNormalizado.isBlank()) {
+            throw new IllegalArgumentException("CPF/CNPJ é obrigatório.");
+        }
+        return HashUtil.sha256Hex(documentoNormalizado);
     }
 
     public List<ClienteReceitaDTO> obterRankingReceita() {
