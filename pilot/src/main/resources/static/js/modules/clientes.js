@@ -19,17 +19,6 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  // Dado pessoal sensível (mesmo que criptografado em repouso): não mostrar em
-  // texto claro por padrão para todo papel autenticado (ex.: Estagiário) — só
-  // ao clicar na célula.
-  function maskCpfCnpj(valor) {
-    if (!valor) return '';
-    const digitos = valor.replace(/\D/g, '');
-    if (digitos.length <= 4) return valor; // curto demais para mascarar com proveito
-    const visiveis = digitos.slice(-2);
-    return '*'.repeat(digitos.length - 2) + visiveis;
-  }
-
   async function init() {
     bindEvents();
     await loadClientes();
@@ -79,7 +68,7 @@
     tbody.innerHTML = clientes.map(c => `
       <tr data-id="${c.id}">
         <td>${escapeHtml(c.nome)}</td>
-        <td class="cpf-cnpj-cell" data-real="${escapeHtml(c.cpfOuCnpj)}" title="${_t('Clique para revelar')}" style="cursor:pointer">${escapeHtml(maskCpfCnpj(c.cpfOuCnpj))}</td>
+        <td>${escapeHtml(c.cpfOuCnpj)}</td>
         <td>${escapeHtml(c.telefone || '—')}</td>
         <td>${escapeHtml(c.email || '—')}</td>
         <td>
@@ -87,16 +76,6 @@
           <button class="btn btn--sm btn--danger" data-action="excluir" data-id="${c.id}">${_t('Excluir')}</button>
         </td>
       </tr>`).join('');
-
-    tbody.querySelectorAll('.cpf-cnpj-cell').forEach(td => {
-      const real = td.dataset.real;
-      const masked = maskCpfCnpj(real);
-      td.addEventListener('click', () => {
-        const revelado = td.dataset.revelado === '1';
-        td.textContent = revelado ? masked : real;
-        td.dataset.revelado = revelado ? '0' : '1';
-      });
-    });
 
     tbody.querySelectorAll('[data-action="editar"]').forEach(btn =>
       btn.addEventListener('click', () => editarCliente(btn.dataset.id, clientes)));

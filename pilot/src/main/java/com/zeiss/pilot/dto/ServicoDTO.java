@@ -13,8 +13,6 @@ public class ServicoDTO {
     private String cliente;
     private Long clienteId;
     private String clienteNome;
-    private String clienteCpfOuCnpj;
-    private String clienteEndereco;
     private String solicitacao;
     private int quantidade;
     private String status;
@@ -36,8 +34,6 @@ public class ServicoDTO {
             Cliente c = s.getClienteEntidade();
             dto.setClienteId(c.getId());
             dto.setClienteNome(c.getNome());
-            dto.setClienteCpfOuCnpj(c.getCpfOuCnpj());
-            dto.setClienteEndereco(c.getEndereco());
         }
         dto.setSolicitacao(s.getSolicitacao());
         dto.setQuantidade(s.getQuantidade());
@@ -81,12 +77,6 @@ public class ServicoDTO {
 
     public String getClienteNome() { return clienteNome; }
     public void setClienteNome(String clienteNome) { this.clienteNome = clienteNome; }
-
-    public String getClienteCpfOuCnpj() { return clienteCpfOuCnpj; }
-    public void setClienteCpfOuCnpj(String clienteCpfOuCnpj) { this.clienteCpfOuCnpj = clienteCpfOuCnpj; }
-
-    public String getClienteEndereco() { return clienteEndereco; }
-    public void setClienteEndereco(String clienteEndereco) { this.clienteEndereco = clienteEndereco; }
 
     public String getSolicitacao() { return solicitacao; }
     public void setSolicitacao(String solicitacao) { this.solicitacao = solicitacao; }

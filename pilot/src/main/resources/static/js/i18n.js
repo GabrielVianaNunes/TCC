@@ -1578,7 +1578,7 @@
 
     // ── Clientes ──
     'Clientes':                        { 'pt-BR':'Clientes',                        'en':'Clients',                             'de':'Kunden'                                },
-    '+ Novo Cliente':                  { 'pt-BR':'+ Novo Cliente',                  'en':'+ New Client',                        'de':'+ Neuer Kunde'                         },
+    'Novo Cliente':                    { 'pt-BR':'Novo Cliente',                    'en':'New Client',                          'de':'Neuer Kunde'                           },
     'Clientes cadastrados':            { 'pt-BR':'Clientes cadastrados',            'en':'Registered clients',                  'de':'Registrierte Kunden'                   },
     'Receita por Cliente':             { 'pt-BR':'Receita por Cliente',             'en':'Revenue by Client',                   'de':'Umsatz nach Kunde'                     },
     'Receita (mês)':                   { 'pt-BR':'Receita (mês)',                   'en':'Revenue (month)',                     'de':'Umsatz (Monat)'                        },
