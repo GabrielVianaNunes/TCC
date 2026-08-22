@@ -12,6 +12,8 @@ const ServicosModule = (() => {
   const ENDPOINT_NOTAS = '/api/notas-estagiarios';
   const ENDPOINT_ESTAG = '/api/estagiarios';
   const CLIENTES_URL   = '/api/clientes';
+  const MAQUINAS_URL      = '/api/maquinas';
+  const TIPOS_SERVICO_URL = '/api/tipos-servico';
 
   let notaDiretorValor = null;
   let allEstagiarios   = [];
@@ -143,16 +145,84 @@ const ServicosModule = (() => {
     clienteCombobox.setItems(clientes);
   }
 
+  /* ── Máquina + Tipo de Serviço comboboxes ── */
+  let maquinaCombobox = null;
+  let tipoServicoCombobox = null;
+  let todosOsTiposDeServico = [];
+
+  function initMaquinaETipoServicoCombobox() {
+    const maquinaInput = document.getElementById('maquinaBusca');
+    const maquinaHidden = document.getElementById('maquinaId');
+    const tipoServicoInput = document.getElementById('tipoServicoBusca');
+    const tipoServicoHidden = document.getElementById('tipoServicoId');
+    if (!maquinaInput || !maquinaHidden || !tipoServicoInput || !tipoServicoHidden) return;
+
+    maquinaCombobox = Combobox.create({
+      inputEl: maquinaInput,
+      hiddenEl: maquinaHidden,
+      items: [],
+      getLabel: m => m.nome,
+      getId: m => m.id,
+      placeholder: _t('Buscar máquina...'),
+      emptyMessage: _t('Nenhuma máquina encontrada.'),
+    });
+
+    tipoServicoCombobox = Combobox.create({
+      inputEl: tipoServicoInput,
+      hiddenEl: tipoServicoHidden,
+      items: [],
+      getLabel: t => t.descricao,
+      getId: t => t.id,
+      placeholder: _t('Buscar tipo de serviço...'),
+      emptyMessage: _t('Selecione uma máquina primeiro.'),
+    });
+
+    // Trocar de máquina refiltra o combobox de tipo de serviço pela categoria
+    // (tipoMedida) da máquina escolhida — Combobox dispara 'change' no
+    // hiddenEl só quando o usuário seleciona da lista (selecionar()), não
+    // quando setValue() é chamado programaticamente (fluxo de edição trata
+    // esse caso à parte, ver editar()).
+    maquinaHidden.addEventListener('change', () => {
+      const maquinaSelecionada = maquinasCarregadas.find(m => String(m.id) === String(maquinaHidden.value));
+      filtrarTiposDeServicoPorCategoria(maquinaSelecionada ? maquinaSelecionada.tipoMedida : null);
+    });
+  }
+
+  let maquinasCarregadas = [];
+
+  function filtrarTiposDeServicoPorCategoria(categoria) {
+    if (!tipoServicoCombobox) return;
+    tipoServicoCombobox.clear();
+    const filtrados = categoria
+      ? todosOsTiposDeServico.filter(t => t.categoria === categoria)
+      : [];
+    tipoServicoCombobox.setItems(filtrados);
+  }
+
+  async function carregarMaquinasETiposDeServico() {
+    if (!maquinaCombobox || !tipoServicoCombobox) return;
+    try {
+      maquinasCarregadas = await Api.get(MAQUINAS_URL);
+    } catch { maquinasCarregadas = []; }
+    maquinaCombobox.setItems(maquinasCarregadas);
+    try {
+      todosOsTiposDeServico = await Api.get(TIPOS_SERVICO_URL);
+    } catch { todosOsTiposDeServico = []; }
+  }
+
   /* ── Open Modal (New) ── */
   async function novo() {
     document.getElementById('servicoId').value = '';
     document.getElementById('servicoForm').reset();
     clienteCombobox?.clear();
+    maquinaCombobox?.clear();
+    tipoServicoCombobox?.clear();
     document.getElementById('modalTitulo').textContent = _t('Nova Ordem de Serviço');
     document.getElementById('btnExcluirServico').style.display = 'none';
     resetNotaDirector();
     toggleNotaSection('');
     await carregarClientesNoCombobox();
+    await carregarMaquinasETiposDeServico();
     Modal.open('modalServico');
   }
 
@@ -163,7 +233,11 @@ const ServicosModule = (() => {
       document.getElementById('servicoId').value       = s.id;
       await carregarClientesNoCombobox();
       clienteCombobox?.setValue(s.clienteId, s.clienteNome);
-      document.getElementById('solicitacao').value     = s.solicitacao || '';
+      await carregarMaquinasETiposDeServico();
+      maquinaCombobox?.setValue(s.maquinaId, s.maquinaNome);
+      const maquinaDaOs = maquinasCarregadas.find(m => String(m.id) === String(s.maquinaId));
+      filtrarTiposDeServicoPorCategoria(maquinaDaOs ? maquinaDaOs.tipoMedida : null);
+      tipoServicoCombobox?.setValue(s.tipoServicoId, s.solicitacao);
       document.getElementById('quantidade').value      = s.quantidade || '';
       document.getElementById('status').value          = s.status || '';
       document.getElementById('tecnicoResponsavel').value = s.tecnicoResponsavel || '';
@@ -192,7 +266,8 @@ const ServicosModule = (() => {
     const id = document.getElementById('servicoId').value;
     const payload = {
       clienteId:           document.getElementById('clienteId').value ? Number(document.getElementById('clienteId').value) : null,
-      solicitacao:         document.getElementById('solicitacao').value.trim(),
+      maquinaId:           document.getElementById('maquinaId').value ? Number(document.getElementById('maquinaId').value) : null,
+      tipoServicoId:       document.getElementById('tipoServicoId').value ? Number(document.getElementById('tipoServicoId').value) : null,
       quantidade:          parseInt(document.getElementById('quantidade').value, 10),
       status:              document.getElementById('status').value,
       tecnicoResponsavel:  document.getElementById('tecnicoResponsavel').value.trim(),
@@ -277,9 +352,11 @@ const ServicosModule = (() => {
   /* ── Init ── */
   function init() {
     initClienteCombobox();
+    initMaquinaETipoServicoCombobox();
     loadServicos(0);
     loadEstagiarios();
     carregarClientesNoCombobox();
+    carregarMaquinasETiposDeServico();
 
     // Stars interaction for Nota do Diretor
     document.querySelectorAll('.nd-star').forEach(btn => {
