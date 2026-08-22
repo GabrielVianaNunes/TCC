@@ -362,4 +362,18 @@ class SecurityConfigTest {
         mockMvc.perform(get("/api/maquinas/1/documentos"))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void clientesSemAutenticacaoRedirecionaParaLogin() throws Exception {
+        mockMvc.perform(get("/api/clientes"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", endsWith("/login")));
+    }
+
+    @Test
+    @WithMockUser(roles = "ESTAGIARIO")
+    void clientesAutenticadoComQualquerPapelRetorna200() throws Exception {
+        mockMvc.perform(get("/api/clientes"))
+                .andExpect(status().isOk());
+    }
 }
