@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zeiss.pilot.dto.ClienteDTO;
 import com.zeiss.pilot.exception.ClienteConflitoException;
-import com.zeiss.pilot.repository.ServicoRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -26,9 +25,6 @@ class ClienteServiceIntegrationTest {
 
     @Autowired
     private ClienteService clienteService;
-
-    @Autowired
-    private ServicoRepository servicoRepository;
 
     @Autowired
     private ServicoService servicoService;
@@ -60,16 +56,18 @@ class ClienteServiceIntegrationTest {
     void criarComCpfJaExistenteLancaConflito() {
         clienteService.criar(novoCliente("Cliente Teste B", "222.222.222-22"));
 
-        assertThrows(ClienteConflitoException.class,
+        ClienteConflitoException ex = assertThrows(ClienteConflitoException.class,
                 () -> clienteService.criar(novoCliente("Outro Nome", "222.222.222-22")));
+        assertEquals("Já existe um cliente cadastrado com este CPF/CNPJ.", ex.getMessage());
     }
 
     @Test
     void criarComCpfIgualMasMascaraDiferenteAindaAssimEDetectadoComoDuplicata() {
         clienteService.criar(novoCliente("Cliente Teste C", "333.333.333-33"));
 
-        assertThrows(ClienteConflitoException.class,
+        ClienteConflitoException ex = assertThrows(ClienteConflitoException.class,
                 () -> clienteService.criar(novoCliente("Outro Nome", "33333333333")));
+        assertEquals("Já existe um cliente cadastrado com este CPF/CNPJ.", ex.getMessage());
     }
 
     @Test
@@ -86,20 +84,23 @@ class ClienteServiceIntegrationTest {
         clienteService.criar(novoCliente("Cliente Teste E1", "555.555.555-55"));
         ClienteDTO clienteE2 = clienteService.criar(novoCliente("Cliente Teste E2", "666.666.666-66"));
 
-        assertThrows(ClienteConflitoException.class,
+        ClienteConflitoException ex = assertThrows(ClienteConflitoException.class,
                 () -> clienteService.atualizar(clienteE2.getId(), novoCliente("Cliente Teste E2", "555.555.555-55")));
+        assertEquals("Já existe um cliente cadastrado com este CPF/CNPJ.", ex.getMessage());
     }
 
     @Test
     void criarComCpfNuloLancaIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> clienteService.criar(novoCliente("Cliente Sem CPF", null)));
+        assertEquals("CPF/CNPJ é obrigatório.", ex.getMessage());
     }
 
     @Test
     void criarComCpfSomenteCaracteresNaoNumericosLancaIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> clienteService.criar(novoCliente("Cliente CPF Invalido", "abc")));
+        assertEquals("CPF/CNPJ é obrigatório.", ex.getMessage());
     }
 
     @Test
@@ -117,7 +118,8 @@ class ClienteServiceIntegrationTest {
 
         clienteService.excluir(criado.getId());
 
-        assertThrows(RuntimeException.class, () -> clienteService.buscarPorId(criado.getId()));
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> clienteService.buscarPorId(criado.getId()));
+        assertTrue(ex.getMessage().contains("não encontrado"));
     }
 
     /**
@@ -163,7 +165,8 @@ class ClienteServiceIntegrationTest {
         servico.setDataCriacao(LocalDate.now());
         servicoService.criarServico(servico);
 
-        assertThrows(ClienteConflitoException.class, () -> clienteService.excluir(cliente.getId()));
+        ClienteConflitoException ex = assertThrows(ClienteConflitoException.class, () -> clienteService.excluir(cliente.getId()));
+        assertEquals("Não é possível excluir um cliente com Ordens de Serviço vinculadas.", ex.getMessage());
     }
 
     @Test
