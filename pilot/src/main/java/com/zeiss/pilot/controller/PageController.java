@@ -142,4 +142,9 @@ public class PageController {
     public String paginaQrcodeAvaliacao() {
         return "qrcode-avaliacao";
     }
+
+    @GetMapping("/clientes")
+    public String paginaClientes() {
+        return "clientes";
+    }
 }

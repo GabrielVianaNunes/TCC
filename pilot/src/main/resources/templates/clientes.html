@@ -2,15 +2,13 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Verificação Ambiental CEM — SENAI · Zeiss Metrologia</title>
+  <title>Clientes — ZEISS·PILOT</title>
   <meta name="_csrf" th:content="${_csrf.token}" /><meta name="_csrf_header" th:content="${_csrf.headerName}" />
   <script>!function(){var t=localStorage.getItem("zp-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.style.background=t==="dark"?"#0D1117":"#F0F4F8";}();</script>
   <link rel="stylesheet" href="/css/design-system.css" />
   <link rel="stylesheet" href="/css/layout.css" />
   <link rel="stylesheet" href="/css/components.css" />
-  <link rel="stylesheet" href="/css/verificacao-ambiental.css" />
   <link rel="icon" href="/img/zeiss-logo.png" type="image/png" />
-  <script src="/js/vendor/d3.v7.min.js"></script>
 </head>
 <body>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -28,7 +26,7 @@
         <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         <span class="sidebar__nav-label">Serviços (OS)</span>
       </a>
-      <a href="/clientes" class="sidebar__nav-item" title="Clientes">
+      <a href="/clientes" class="sidebar__nav-item active" title="Clientes">
         <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
         <span class="sidebar__nav-label">Clientes</span>
       </a>
@@ -66,7 +64,7 @@
         <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
         <span class="sidebar__nav-label">Almoxarifado</span>
       </a>
-      <a href="/verificacao-ambiental" class="sidebar__nav-item active" title="Verificação CEM">
+      <a href="/verificacao-ambiental" class="sidebar__nav-item" title="Verificação CEM">
         <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         <span class="sidebar__nav-label">Verificação CEM</span>
       </a>
@@ -115,7 +113,7 @@
     <header class="topbar">
       <div class="topbar__left">
         <button class="topbar__hamburger" id="mobileMenuBtn" aria-label="Abrir menu de navegação"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-        <span class="topbar__breadcrumb"><a href="/">ZEISS·PILOT</a><span class="topbar__breadcrumb-separator">›</span><span style="color:var(--text-primary)">Verificação Ambiental CEM</span></span>
+        <span class="topbar__breadcrumb"><a href="/">ZEISS·PILOT</a><span class="topbar__breadcrumb-separator">›</span><span style="color:var(--text-primary)">Clientes</span></span>
       </div>
       <div class="topbar__right">
         <button class="topbar__icon-btn" id="themeToggle" title="Alternar tema"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></button>
@@ -145,274 +143,96 @@
 
     <div class="content-area">
 
-      <!-- -- KPI Row -- -->
-      <div class="content-grid content-grid--4col mb-6" id="verifKpiGrid">
-        <div class="kpi-card kpi-primary">
-          <div class="kpi-card__left"><div class="kpi-card__label">Verificações (7 dias)</div><div class="kpi-card__value" id="kvTotal">–</div></div>
-          <div class="kpi-card__icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-        </div>
-        <div class="kpi-card kpi-success">
-          <div class="kpi-card__left"><div class="kpi-card__label">Conformes</div><div class="kpi-card__value" id="kvConformes">–</div></div>
-          <div class="kpi-card__icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-        </div>
-        <div class="kpi-card kpi-warning">
-          <div class="kpi-card__left"><div class="kpi-card__label">Não Conformes</div><div class="kpi-card__value" id="kvNaoConformes">–</div></div>
-          <div class="kpi-card__icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-        </div>
-        <div class="kpi-card kpi-accent">
-          <div class="kpi-card__left"><div class="kpi-card__label">Última Leitura (T°)</div><div class="kpi-card__value" id="kvUltimaTemp">–</div></div>
-          <div class="kpi-card__icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg></div>
-        </div>
-      </div>
-
-      <!-- -- Gráfico de histórico -- -->
-      <div class="card mb-6" id="cardChartHistorico">
-        <div class="card__header">
-          <div>
-            <div class="card__title">
-              <svg class="card__title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              Histórico de Temperatura e Umidade
-            </div>
-            <div class="card__subtitle">Últimas verificações registradas</div>
-          </div>
-          <div style="display:flex;gap:var(--space-3);align-items:center">
-            <span class="verif-legend"><span class="verif-legend__dot" style="background:#0033A0"></span>Temperatura (°C)</span>
-            <span class="verif-legend"><span class="verif-legend__dot" style="background:#00A3E0"></span>Umidade (%)</span>
-          </div>
-        </div>
-        <div class="card__body">
-          <div id="chartVerifHistorico" style="min-height:220px"></div>
-        </div>
-      </div>
-
       <!-- -- Cabeçalho -- -->
       <div class="page-header">
         <div class="page-header__left">
-          <h1 class="page-header__title">Verificação Ambiental CEM</h1>
-          <p class="page-header__subtitle">Lista de verificação das condições ambientais do laboratório de metrologia</p>
+          <h1 class="page-header__title">Clientes</h1>
         </div>
         <div class="page-header__actions">
-          <button class="btn btn-secondary" id="btnHistorico">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            Histórico
-          </button>
-          <button class="btn btn-primary" id="btnNovaVerificacao">
+          <button class="btn btn-primary" id="btnNovoCliente">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Nova Verificação
+            + Novo Cliente
           </button>
         </div>
       </div>
 
-      <!-- -- Tabela de registros -- -->
-      <div class="card" id="cardHistorico">
+      <!-- -- Ranking de receita -- -->
+      <div class="card mb-6" id="cardRanking">
         <div class="card__header">
-          <h3 class="card__title">Registros de Verificação</h3>
-          <button class="btn btn-ghost btn--sm" id="btnFecharHistorico">Fechar</button>
+          <h3 class="card__title">Receita por Cliente</h3>
         </div>
         <div class="card__body" style="padding:0">
-          <table class="table" id="tabelaVerificacoes">
+          <table class="table" id="tabelaRanking">
             <thead>
               <tr>
-                <th>Data/Hora</th>
-                <th>Responsável</th>
-                <th>Período</th>
-                <th>Temperatura °C</th>
-                <th>Umidade %</th>
-                <th>Conformidade</th>
-                <th>Resultado</th>
-                <th style="width:100px">Ações</th>
+                <th>Cliente</th>
+                <th>Receita (mês)</th>
+                <th>OS (mês)</th>
+                <th>Receita (ano)</th>
+                <th>OS (ano)</th>
               </tr>
             </thead>
-            <tbody id="tbodyVerificacoes">
-              <tr><td colspan="8" class="table__empty">Carregando...</td></tr>
+            <tbody id="tbodyRanking">
+              <tr><td colspan="5" class="table__empty">Carregando...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- -- Formulário de verificação -- -->
-      <div class="verif-form-wrap" id="formWrap" style="display:none">
-
-        <!-- Cabeçalho do formulário -->
-        <div class="verif-form__header">
-          <div class="verif-form__header-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <div>
-            <h2 class="verif-form__title">Lista de Verificação — Condições Ambientais CEM</h2>
-            <p class="verif-form__subtitle">Preencha todas as perguntas obrigatórias antes de enviar.</p>
-          </div>
+      <!-- -- Tabela de clientes -- -->
+      <div class="card" id="cardClientes">
+        <div class="card__header">
+          <h3 class="card__title">Clientes cadastrados</h3>
         </div>
-
-        <form id="formVerificacao" novalidate autocomplete="off">
-
-          <!-- Pergunta 1 -->
-          <div class="verif-question" id="q1">
-            <div class="verif-question__number">1</div>
-            <div class="verif-question__body">
-              <label class="verif-question__label">Nome do responsável pelo registro: <span class="verif-required">*</span></label>
-              <div class="verif-options" id="q1Options">
-                <!-- preenchido pelo JS -->
-              </div>
-              <div class="verif-other-wrap" id="q1OtherWrap" style="display:none">
-                <input class="verif-other-input" id="q1OtherInput" type="text" placeholder="Digite o nome..." maxlength="100" />
-              </div>
-            </div>
-          </div>
-
-          <!-- Pergunta 2 -->
-          <div class="verif-question" id="q2">
-            <div class="verif-question__number">2</div>
-            <div class="verif-question__body">
-              <label class="verif-question__label">Período do dia: <span class="verif-required">*</span></label>
-              <div class="verif-options">
-                <label class="verif-option">
-                  <input type="radio" name="periodo" value="manha" /> Manhã
-                </label>
-                <label class="verif-option">
-                  <input type="radio" name="periodo" value="tarde" /> Tarde
-                </label>
-                <label class="verif-option">
-                  <input type="radio" name="periodo" value="dia" /> Dia todo
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pergunta 3 -->
-          <div class="verif-question" id="q3">
-            <div class="verif-question__number">3</div>
-            <div class="verif-question__body">
-              <label class="verif-question__label">Temperatura atual (°C): <span class="verif-required">*</span></label>
-              <div class="verif-measure-row">
-                <input class="verif-measure-input" type="number" id="temperatura" name="temperatura" step="0.1" min="10" max="40" placeholder="Ex: 20.5" />
-                <span class="verif-measure-unit">°C</span>
-                <span class="verif-measure-ref">(Padrão: 20 ± 2 °C)</span>
-              </div>
-              <div class="verif-conformidade-row">
-                <label class="verif-option">
-                  <input type="radio" name="tempConforme" value="sim" /> Dentro do padrão
-                </label>
-                <label class="verif-option">
-                  <input type="radio" name="tempConforme" value="nao" /> Fora do padrão
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pergunta 4 -->
-          <div class="verif-question" id="q4">
-            <div class="verif-question__number">4</div>
-            <div class="verif-question__body">
-              <label class="verif-question__label">Umidade relativa atual (%): <span class="verif-required">*</span></label>
-              <div class="verif-measure-row">
-                <input class="verif-measure-input" type="number" id="umidade" name="umidade" step="0.1" min="0" max="100" placeholder="Ex: 55" />
-                <span class="verif-measure-unit">%</span>
-                <span class="verif-measure-ref">(Padrão: 45–65 %)</span>
-              </div>
-              <div class="verif-conformidade-row">
-                <label class="verif-option">
-                  <input type="radio" name="umidConforme" value="sim" /> Dentro do padrão
-                </label>
-                <label class="verif-option">
-                  <input type="radio" name="umidConforme" value="nao" /> Fora do padrão
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pergunta 5 -->
-          <div class="verif-question" id="q5">
-            <div class="verif-question__number">5</div>
-            <div class="verif-question__body">
-              <label class="verif-question__label">Os ar-condicionados estão funcionando corretamente? <span class="verif-required">*</span></label>
-              <div class="verif-options">
-                <label class="verif-option">
-                  <input type="radio" name="arCondicionado" value="sim" /> Sim
-                </label>
-                <label class="verif-option">
-                  <input type="radio" name="arCondicionado" value="nao" /> Não
-                </label>
-                <label class="verif-option">
-                  <input type="radio" name="arCondicionado" value="nao_aplica" /> Não se aplica
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pergunta 6 -->
-          <div class="verif-question" id="q6">
-            <div class="verif-question__number">6</div>
-            <div class="verif-question__body">
-              <label class="verif-question__label">Descreva a não conformidade observada (se houver): <span class="verif-required">*</span></label>
-              <p class="verif-question__hint">Caso tenha ocorrido alguma não conformidade, descreva-a detalhadamente.</p>
-              <textarea class="verif-textarea" id="naoConformidade" name="naoConformidade" rows="4" placeholder="Insira sua resposta" maxlength="1000"></textarea>
-            </div>
-          </div>
-
-          <!-- Pergunta 7 -->
-          <div class="verif-question" id="q7">
-            <div class="verif-question__number">7</div>
-            <div class="verif-question__body">
-              <label class="verif-question__label">Se for final do dia, confirme que todos os aparelhos de ar condicionado, luzes e as 04 máquinas (Prismo, Duramax, O-inspect e Bosello) estão desligadas: <span class="verif-required">*</span></label>
-              <div class="verif-options">
-                <label class="verif-option">
-                  <input type="radio" name="maquinasDesligadas" value="todos" /> Todos desligados
-                </label>
-                <label class="verif-option">
-                  <input type="radio" name="maquinasDesligadas" value="algum" /> Algum permanece ligado
-                </label>
-                <label class="verif-option">
-                  <input type="radio" name="maquinasDesligadas" value="nao_aplica" /> Não se aplica
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pergunta 8 -->
-          <div class="verif-question" id="q8">
-            <div class="verif-question__number">8</div>
-            <div class="verif-question__body">
-              <label class="verif-question__label">A Prismo está sendo utilizada ou será utilizada em até 48 horas? <span class="verif-required">*</span></label>
-              <div class="verif-options">
-                <label class="verif-option">
-                  <input type="radio" name="prismoUso" value="sim" /> Sim
-                </label>
-                <label class="verif-option">
-                  <input type="radio" name="prismoUso" value="nao" /> Não
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Botão de envio -->
-          <div class="verif-submit-row">
-            <span class="verif-required-note"><span class="verif-required">*</span> Campos obrigatórios</span>
-            <button type="submit" class="btn btn-primary verif-submit-btn" id="btnEnviar">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              Enviar Verificação
-            </button>
-          </div>
-
-        </form>
+        <div class="card__body" style="padding:0">
+          <table class="table" id="tabelaClientes">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>CPF/CNPJ</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyClientes">
+              <tr><td colspan="5" class="table__empty">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <!-- -- Modal confirmação de envio -- -->
+      <!-- -- Modal de cadastro/edição -- -->
       <div class="modal-overlay" id="modalOverlay"></div>
-      <div class="modal" id="modalConfirmacao">
+      <div class="modal" id="modalCliente">
         <div class="modal__dialog" style="max-width:480px">
           <div class="modal__header">
-            <h3 class="modal__title">Confirmar envio</h3>
-            <button class="modal__close" id="btnFecharModalConf">&times;</button>
+            <h3 class="modal__title">Cliente</h3>
+            <button class="modal__close" id="btnFecharModalCliente">&times;</button>
           </div>
-          <div class="modal__body">
-            <p style="color:var(--text-secondary);margin-bottom:var(--space-4)">Revise os dados antes de confirmar o envio da verificação ambiental.</p>
-            <div id="resumoVerif" class="verif-resumo"></div>
-          </div>
-          <div class="modal__footer">
-            <button class="btn btn-secondary" id="btnCancelarEnvio">Cancelar</button>
-            <button class="btn btn-primary" id="btnConfirmarEnvio">Confirmar e Enviar</button>
-          </div>
+          <form id="formCliente">
+            <div class="modal__body">
+              <input type="hidden" id="clienteId" />
+              <label class="form-label" for="nome">Nome</label>
+              <input class="form-control" type="text" id="nome" required />
+
+              <label class="form-label" for="cpfOuCnpj">CPF/CNPJ</label>
+              <input class="form-control" type="text" id="cpfOuCnpj" required />
+
+              <label class="form-label" for="endereco">Endereço</label>
+              <input class="form-control" type="text" id="endereco" />
+
+              <label class="form-label" for="telefone">Telefone</label>
+              <input class="form-control" type="text" id="telefone" />
+
+              <label class="form-label" for="email">E-mail</label>
+              <input class="form-control" type="email" id="email" />
+            </div>
+            <div class="modal__footer">
+              <button type="button" class="btn btn-secondary" id="btnCancelarCliente">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -427,6 +247,6 @@
 <script src="/js/core.js"></script>
 <script src="/js/api.js"></script>
 <script src="/js/ui.js"></script><script src="/js/modules/notifications.js"></script>
-<script src="/js/modules/verificacao-ambiental.js"></script>
+<script src="/js/modules/clientes.js"></script>
 </body>
 </html>

@@ -1575,6 +1575,25 @@
     'Mover para ':                                       { 'pt-BR':'Mover para ', 'en':'Move to ', 'de':'Verschieben nach ' },
     'edital(is) encontrado(s)':                          { 'pt-BR':'edital(is) encontrado(s)', 'en':'call(s) found', 'de':'Ausschreibung(en) gefunden' },
     'Selecione o scanner…':                              { 'pt-BR':'Selecione o scanner…', 'en':'Select the scanner…', 'de':'Scanner auswählen…' },
+
+    // ── Clientes ──
+    'Clientes':                        { 'pt-BR':'Clientes',                        'en':'Clients',                             'de':'Kunden'                                },
+    '+ Novo Cliente':                  { 'pt-BR':'+ Novo Cliente',                  'en':'+ New Client',                        'de':'+ Neuer Kunde'                         },
+    'Clientes cadastrados':            { 'pt-BR':'Clientes cadastrados',            'en':'Registered clients',                  'de':'Registrierte Kunden'                   },
+    'Receita por Cliente':             { 'pt-BR':'Receita por Cliente',             'en':'Revenue by Client',                   'de':'Umsatz nach Kunde'                     },
+    'Receita (mês)':                   { 'pt-BR':'Receita (mês)',                   'en':'Revenue (month)',                     'de':'Umsatz (Monat)'                        },
+    'Receita (ano)':                   { 'pt-BR':'Receita (ano)',                   'en':'Revenue (year)',                      'de':'Umsatz (Jahr)'                         },
+    'OS (mês)':                        { 'pt-BR':'OS (mês)',                        'en':'Orders (month)',                      'de':'Aufträge (Monat)'                      },
+    'OS (ano)':                        { 'pt-BR':'OS (ano)',                        'en':'Orders (year)',                       'de':'Aufträge (Jahr)'                       },
+    'Nenhum cliente cadastrado ainda.':{ 'pt-BR':'Nenhum cliente cadastrado ainda.','en':'No clients registered yet.',          'de':'Noch keine Kunden registriert.'        },
+    'Nenhum dado de receita ainda.':   { 'pt-BR':'Nenhum dado de receita ainda.',   'en':'No revenue data yet.',                'de':'Noch keine Umsatzdaten.'               },
+    'Erro ao carregar clientes.':      { 'pt-BR':'Erro ao carregar clientes.',      'en':'Error loading clients.',              'de':'Fehler beim Laden der Kunden.'         },
+    'Erro ao carregar o ranking.':     { 'pt-BR':'Erro ao carregar o ranking.',     'en':'Error loading the ranking.',          'de':'Fehler beim Laden der Rangliste.'      },
+    'Cliente salvo.':                  { 'pt-BR':'Cliente salvo.',                  'en':'Client saved.',                       'de':'Kunde gespeichert.'                    },
+    'Cliente excluído.':               { 'pt-BR':'Cliente excluído.',               'en':'Client deleted.',                     'de':'Kunde gelöscht.'                       },
+    'Tem certeza que deseja excluir este cliente?': { 'pt-BR':'Tem certeza que deseja excluir este cliente?', 'en':'Are you sure you want to delete this client?', 'de':'Möchten Sie diesen Kunden wirklich löschen?' },
+    'Não foi possível excluir este cliente.': { 'pt-BR':'Não foi possível excluir este cliente.', 'en':'This client could not be deleted.', 'de':'Dieser Kunde konnte nicht gelöscht werden.' },
+    'Não foi possível salvar este cliente.':  { 'pt-BR':'Não foi possível salvar este cliente.',  'en':'This client could not be saved.',   'de':'Dieser Kunde konnte nicht gespeichert werden.' },
   };
 
   /* ═══════════════════════════════════════════════════════════════════
