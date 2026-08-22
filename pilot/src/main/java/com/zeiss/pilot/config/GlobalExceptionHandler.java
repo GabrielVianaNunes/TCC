@@ -93,10 +93,20 @@ public class GlobalExceptionHandler {
                              "referencia", referencia));
     }
 
+    /**
+     * Mensagem de validação de entrada é definida por nós, não pela
+     * infraestrutura. Mas alguns services (ex.: DocumentoMaquinaService) usam
+     * IllegalArgumentException também para "não encontrado" — mesmo carve-out
+     * de handleRuntime precisa valer aqui, senão esses endpoints regridem de
+     * 404 para 400 e o frontend, que depende do 404, quebra.
+     */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException ex) {
-        // Mensagem de validação de entrada é definida por nós, não pela infraestrutura.
-        return ResponseEntity.badRequest().body(Map.of("message", ex.getMessage()));
+        String msg = ex.getMessage();
+        if (msg != null && msg.contains("não encontrado")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", msg));
+        }
+        return ResponseEntity.badRequest().body(Map.of("message", msg));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

@@ -150,4 +150,51 @@ class GlobalExceptionHandlerTest {
         assertFalse(msg.contains("constraint"), "Mensagem não deve mencionar restrição");
         assertFalse(msg.contains("SQL"), "Mensagem não deve mencionar SQL");
     }
+
+    /**
+     * DocumentoMaquinaService.buscarDocumento lança IllegalArgumentException com
+     * mensagem "Documento não encontrado: <id>" quando o id não existe. Antes da
+     * correção, esse ponto de chamada regredia de 404 para 400 porque
+     * IllegalArgumentException é mais específica que RuntimeException e passou a
+     * ser roteada para o novo handler, que devolvia 400 incondicionalmente. O
+     * carve-out de "não encontrado" precisa se comportar igual ao de
+     * handleRuntime.
+     *
+     * <p>Nota: DocumentoMaquinaService.buscarMaquina usa a mensagem "Máquina não
+     * encontrada" (forma feminina) — que não contém a substring "não
+     * encontrado" (masculina) e por isso não é coberta por este carve-out, nem
+     * era coberta pelo handleRuntime original antes desta correção existir. É
+     * uma divergência de gênero gramatical pré-existente no próprio
+     * handleRuntime, fora do escopo deste fix, que espelha o padrão exatamente
+     * como está.
+     */
+    @Test
+    void illegalArgumentComNaoEncontradoRetorna404() {
+        GlobalExceptionHandler handler = new GlobalExceptionHandler();
+
+        IllegalArgumentException ex = new IllegalArgumentException("Documento não encontrado: 456");
+
+        ResponseEntity<Map<String, String>> response = handler.handleIllegalArgument(ex);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Documento não encontrado: 456", response.getBody().get("message"));
+    }
+
+    /**
+     * Mensagens de IllegalArgumentException que não são "não encontrado" (ex.:
+     * validação de entrada do ServicoService) continuam devolvendo 400, como
+     * pretendido pela correção original.
+     */
+    @Test
+    void illegalArgumentSemNaoEncontradoRetorna400() {
+        GlobalExceptionHandler handler = new GlobalExceptionHandler();
+
+        IllegalArgumentException ex = new IllegalArgumentException(
+                "clienteId é obrigatório para criar uma Ordem de Serviço.");
+
+        ResponseEntity<Map<String, String>> response = handler.handleIllegalArgument(ex);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("clienteId é obrigatório para criar uma Ordem de Serviço.", response.getBody().get("message"));
+    }
 }
