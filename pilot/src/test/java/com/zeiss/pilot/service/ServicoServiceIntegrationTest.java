@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.persistence.EntityManager;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,6 +45,9 @@ class ServicoServiceIntegrationTest {
 
     @Autowired
     private CryptoConverter cryptoConverter;
+
+    @Autowired
+    private EntityManager entityManager;
 
     private ServicoDTO novoServico(String cliente) {
         ServicoDTO dto = new ServicoDTO();
@@ -157,11 +162,24 @@ class ServicoServiceIntegrationTest {
         // que o converter lê "como está" (tolerância a dado pré-migração).
         jdbcTemplate.update("UPDATE servicos SET cpf_ou_cnpj = ?, endereco = ? WHERE id = ?",
                 cpfLegado, enderecoLegado, criado.getId());
+        // Sem isto, o Servico criado acima continua no cache de 1º nível da
+        // persistence context (cpfOuCnpj/endereco = null) e o findById() dentro
+        // de atualizarServico() nem chega a rodar SELECT — devolveria a mesma
+        // instância em memória, mascarando a coluna legada que acabamos de
+        // gravar via JDBC cru. flush()+clear() força o round-trip real pelo banco.
+        entityManager.flush();
+        entityManager.clear();
 
         ServicoDTO atualizacao = novoServico("ignorado");
         atualizacao.setClienteId(cliente.getId());
         atualizacao.setSolicitacao("Calibração revisada");
         servicoService.atualizarServico(criado.getId(), atualizacao);
+
+        // Idem: sem flush aqui, a leitura bruta abaixo poderia (a depender do
+        // provider) não refletir o save() que acabou de acontecer dentro da
+        // mesma transação/persistence context.
+        entityManager.flush();
+        entityManager.clear();
 
         String cpfBrutoDepois = colunaBrutaServico(criado.getId(), "cpf_ou_cnpj");
         String enderecoBrutoDepois = colunaBrutaServico(criado.getId(), "endereco");
@@ -173,6 +191,39 @@ class ServicoServiceIntegrationTest {
         // continua sendo o mesmo dado legado, não perdido nem nulado.
         assertEquals(cpfLegado, cryptoConverter.convertToEntityAttribute(cpfBrutoDepois));
         assertEquals(enderecoLegado, cryptoConverter.convertToEntityAttribute(enderecoBrutoDepois));
+    }
+
+    /**
+     * search() navegava s.clienteEntidade.nome como implicit path expression
+     * dentro do WHERE/COALESCE — Hibernate renderiza isso como um INNER JOIN
+     * hoisted para o FROM, independente do ramo do OR/COALESCE que realmente
+     * precisa dele. Resultado: toda Servico com cliente_id NULL (OS legada,
+     * anterior à V7__cria_clientes.sql, ou cujo CPF/CNPJ não bateu na migração)
+     * some da listagem inteira — inclusive de "listar tudo" (query = null),
+     * não só da busca por nome. O fix troca para um LEFT JOIN explícito.
+     */
+    @Test
+    void searchListaOsOrfaSemClienteVinculadoTantoNaListagemGeralQuantoPorNomeLegado() {
+        String nomeLegado = "Cliente Orfao Sem Vinculo XYZ";
+        Long servicoOrfaoId = inserirServicoOrfaoSemClienteId("OS-ORFA-0001", nomeLegado);
+
+        Page<Servico> listagemGeral = servicoRepository.search(null, null, PageRequest.of(0, 200));
+        assertTrue(listagemGeral.getContent().stream().anyMatch(s -> s.getId().equals(servicoOrfaoId)),
+                "Servico com cliente_id NULL deveria aparecer na listagem geral (query=null) — "
+                        + "um INNER JOIN implícito no path clienteEntidade.nome o excluiria silenciosamente");
+
+        Page<Servico> buscaPorNomeLegado = servicoRepository.search("Orfao Sem Vinculo", null, PageRequest.of(0, 50));
+        assertTrue(buscaPorNomeLegado.getContent().stream().anyMatch(s -> s.getId().equals(servicoOrfaoId)),
+                "Busca pelo nome legado (fallback do COALESCE) deveria encontrar a OS órfã");
+    }
+
+    private Long inserirServicoOrfaoSemClienteId(String codigoOs, String nomeCliente) {
+        jdbcTemplate.update(
+                "INSERT INTO servicos (codigo_os, cliente, solicitacao, quantidade, status, valor, data_criacao, cpf_ou_cnpj, endereco) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                codigoOs, nomeCliente, "Calibração", 1, "1º Contato", new BigDecimal("100.00"),
+                LocalDate.now(), null, null);
+        return jdbcTemplate.queryForObject("SELECT id FROM servicos WHERE codigo_os = ?", Long.class, codigoOs);
     }
 
     private String colunaBrutaServico(Long id, String coluna) {
