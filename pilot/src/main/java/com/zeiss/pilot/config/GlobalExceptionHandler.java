@@ -12,6 +12,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.validation.FieldError;
 
 import com.zeiss.pilot.exception.ClienteConflitoException;
 
@@ -132,9 +133,28 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
         String mensagens = ex.getBindingResult().getFieldErrors().stream()
-                .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
+                .map(erro -> erro.getField() + ": " + mensagemSeguraDoCampo(erro))
                 .collect(java.util.stream.Collectors.joining("; "));
+        if (mensagens.isBlank()) {
+            mensagens = "Dados inválidos.";
+        }
         return ResponseEntity.badRequest().body(Map.of("message", mensagens));
+    }
+
+    /**
+     * "typeMismatch" é o código que o Spring usa quando a conversão de tipo
+     * falha no binding de @ModelAttribute — a mensagem padrão inclui o valor
+     * recebido e o tipo Java esperado, o mesmo detalhe de infraestrutura que
+     * handleTypeMismatch (logo abaixo) deliberadamente nunca devolve. Nossas
+     * próprias anotações (@Nome, @CpfOuCnpj, @Telefone) nunca geram esse
+     * código, mas o handler precisa se defender de qualquer FieldError que
+     * apareça no futuro por esse caminho.
+     */
+    private String mensagemSeguraDoCampo(FieldError erro) {
+        if ("typeMismatch".equals(erro.getCode())) {
+            return "valor inválido";
+        }
+        return erro.getDefaultMessage();
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

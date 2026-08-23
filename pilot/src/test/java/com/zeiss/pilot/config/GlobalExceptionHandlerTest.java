@@ -256,4 +256,30 @@ class GlobalExceptionHandlerTest {
         assertTrue(msg.contains("telefone"));
         assertTrue(msg.contains("telefone inválido"));
     }
+
+    /**
+     * "typeMismatch" (produzido pelo Spring quando o binding de tipo falha)
+     * carrega o valor recebido e o tipo esperado na própria mensagem padrão —
+     * o mesmo detalhe de infraestrutura que handleTypeMismatch já evita.
+     */
+    @Test
+    void erroDeValidacaoComTypeMismatchNaoVazaValorNemTipo() {
+        GlobalExceptionHandler handler = new GlobalExceptionHandler();
+
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(new Object(), "objeto");
+        FieldError erroDeTipo = new FieldError("objeto", "dataPrevista", "abc-invalido", false,
+                new String[]{"typeMismatch"}, null,
+                "Failed to convert property value of type 'java.lang.String' to required type 'java.time.LocalDate' for property 'dataPrevista'");
+        bindingResult.addError(erroDeTipo);
+
+        MethodArgumentNotValidException ex = Mockito.mock(MethodArgumentNotValidException.class);
+        Mockito.when(ex.getBindingResult()).thenReturn(bindingResult);
+
+        ResponseEntity<Map<String, String>> response = handler.handleValidationErrors(ex);
+
+        String msg = response.getBody().get("message");
+        assertFalse(msg.contains("abc-invalido"), "não deveria vazar o valor recebido");
+        assertFalse(msg.contains("LocalDate"), "não deveria vazar o tipo esperado");
+        assertFalse(msg.contains("java.lang"), "não deveria vazar o tipo Java");
+    }
 }

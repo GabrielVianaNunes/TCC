@@ -558,6 +558,22 @@ const FieldRules = (() => {
     return (str || '').replace(/\D/g, '');
   }
 
+  function contarDigitosAte(str, pos) {
+    return str.slice(0, pos).replace(/\D/g, '').length;
+  }
+
+  function posicaoAposNDigitos(str, n) {
+    if (n <= 0) return 0;
+    let contados = 0;
+    for (let i = 0; i < str.length; i++) {
+      if (/\d/.test(str[i])) {
+        contados++;
+        if (contados === n) return i + 1;
+      }
+    }
+    return str.length;
+  }
+
   /* ── Máscara de CPF/CNPJ ────────────────────────────────────── */
   function formatarCpfCnpj(digitos) {
     if (digitos.length <= 11) {
@@ -576,8 +592,12 @@ const FieldRules = (() => {
   function maskCpfCnpj(inputEl) {
     if (!inputEl) return;
     inputEl.addEventListener('input', () => {
+      const posAntes = inputEl.selectionStart ?? inputEl.value.length;
+      const digitosAntesDoCursor = contarDigitosAte(inputEl.value, posAntes);
       const digitos = somenteDigitos(inputEl.value).slice(0, 14);
       inputEl.value = formatarCpfCnpj(digitos);
+      const novaPos = posicaoAposNDigitos(inputEl.value, digitosAntesDoCursor);
+      inputEl.setSelectionRange(novaPos, novaPos);
     });
   }
 
@@ -596,15 +616,20 @@ const FieldRules = (() => {
   function maskTelefone(inputEl) {
     if (!inputEl) return;
     inputEl.addEventListener('input', () => {
+      const posAntes = inputEl.selectionStart ?? inputEl.value.length;
+      const digitosAntesDoCursor = contarDigitosAte(inputEl.value, posAntes);
       const digitos = somenteDigitos(inputEl.value).slice(0, 11);
       inputEl.value = formatarTelefone(digitos);
+      const novaPos = posicaoAposNDigitos(inputEl.value, digitosAntesDoCursor);
+      inputEl.setSelectionRange(novaPos, novaPos);
     });
   }
 
   /* ── Máscara de moeda (padrão caixa eletrônico: digita da direita
      pra esquerda, os últimos 2 dígitos são sempre os centavos) ──── */
   function formatarMoeda(digitos) {
-    const centavos = parseInt(digitos || '0', 10);
+    if (!digitos) return '';
+    const centavos = parseInt(digitos.slice(0, 15), 10);
     const valor = centavos / 100;
     return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
@@ -670,6 +695,14 @@ const FieldRules = (() => {
     return cnpj === cnpj.slice(0, 12) + d1 + d2;
   }
 
+  /**
+   * true/false — dígito verificador real (mod-11), aceita com ou sem
+   * máscara. Diferente do lado Java (CpfOuCnpjValidator), que devolve true
+   * para valor em branco (lá, @NotBlank cuida de obrigatoriedade
+   * separadamente) — aqui é um predicado puro, então string vazia devolve
+   * false. Quem for usar isso pra validar um campo opcional precisa checar
+   * "está vazio" antes de chamar esta função, não depois.
+   */
   function cpfCnpjValido(valor) {
     const digitos = somenteDigitos(valor);
     if (digitos.length === 11) return cpfValido(digitos);
