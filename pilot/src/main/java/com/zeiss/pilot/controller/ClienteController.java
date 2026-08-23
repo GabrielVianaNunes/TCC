@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import com.zeiss.pilot.dto.ClienteDTO;
 import com.zeiss.pilot.service.ClienteService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
@@ -29,12 +31,12 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> criar(@RequestBody ClienteDTO dto) {
+    public ResponseEntity<ClienteDTO> criar(@Valid @RequestBody ClienteDTO dto) {
         return ResponseEntity.ok(clienteService.criar(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> atualizar(@PathVariable Long id, @RequestBody ClienteDTO dto) {
+    public ResponseEntity<ClienteDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ClienteDTO dto) {
         return ResponseEntity.ok(clienteService.atualizar(id, dto));
     }
 

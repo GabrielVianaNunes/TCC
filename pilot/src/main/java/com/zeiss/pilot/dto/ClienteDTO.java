@@ -3,15 +3,35 @@ package com.zeiss.pilot.dto;
 import java.time.LocalDate;
 
 import com.zeiss.pilot.entity.Cliente;
+import com.zeiss.pilot.validation.CpfOuCnpj;
+import com.zeiss.pilot.validation.Nome;
+import com.zeiss.pilot.validation.Telefone;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 public class ClienteDTO {
 
     private Long id;
+
+    @NotBlank(message = "Nome é obrigatório.")
+    @Nome
     private String nome;
+
+    @NotBlank(message = "CPF ou CNPJ é obrigatório.")
+    @CpfOuCnpj
     private String cpfOuCnpj;
+
+    @NotBlank(message = "Endereço é obrigatório.")
     private String endereco;
+
+    @NotBlank(message = "Telefone é obrigatório.")
+    @Telefone
     private String telefone;
+
+    @Email(message = "E-mail inválido.")
     private String email;
+
     private LocalDate dataCadastro;
 
     public ClienteDTO() {}

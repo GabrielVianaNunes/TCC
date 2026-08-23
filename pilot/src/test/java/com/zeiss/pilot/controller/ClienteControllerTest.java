@@ -33,7 +33,7 @@ class ClienteControllerTest {
     @WithMockUser(roles = "ESTAGIARIO")
     void criarClienteComCpfDuplicadoRetorna409ViaController() throws Exception {
         String primeiroCorpo = """
-                {"nome":"Cliente Controller A","cpfOuCnpj":"171.717.171-71"}
+                {"nome":"Cliente Controller A","cpfOuCnpj":"123.456.789-09","telefone":"(11) 98888-7777","endereco":"Rua Teste, 1"}
                 """;
         mockMvc.perform(post("/api/clientes").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -41,11 +41,59 @@ class ClienteControllerTest {
                 .andExpect(status().isOk());
 
         String segundoCorpo = """
-                {"nome":"Cliente Controller B","cpfOuCnpj":"171.717.171-71"}
+                {"nome":"Cliente Controller B","cpfOuCnpj":"123.456.789-09","telefone":"(11) 97777-6666","endereco":"Rua Teste, 2"}
                 """;
         mockMvc.perform(post("/api/clientes").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(segundoCorpo))
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithMockUser(roles = "ESTAGIARIO")
+    void criarClienteSemTelefoneRetorna400() throws Exception {
+        String corpo = """
+                {"nome":"Cliente Sem Telefone","cpfOuCnpj":"529.982.247-25","endereco":"Rua Teste, 3"}
+                """;
+        mockMvc.perform(post("/api/clientes").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(roles = "ESTAGIARIO")
+    void criarClienteComCpfInvalidoRetorna400() throws Exception {
+        String corpo = """
+                {"nome":"Cliente CPF Ruim","cpfOuCnpj":"111.111.111-11","telefone":"(11) 90000-0000","endereco":"Rua Teste, 4"}
+                """;
+        mockMvc.perform(post("/api/clientes").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(roles = "ESTAGIARIO")
+    void criarClienteComNomeContendoNumeroRetorna400() throws Exception {
+        String corpo = """
+                {"nome":"Cliente123","cpfOuCnpj":"111.444.777-35","telefone":"(11) 90000-1111","endereco":"Rua Teste, 5"}
+                """;
+        mockMvc.perform(post("/api/clientes").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(roles = "ESTAGIARIO")
+    void criarClienteComPayloadCompletoEValidoRetorna200() throws Exception {
+        String corpo = """
+                {"nome":"Indústria Completa Ltda.","cpfOuCnpj":"11.222.333/0001-81","telefone":"(41) 3055-1234","endereco":"Av. Brasil, 900","email":"contato@industriacompleta.com.br"}
+                """;
+        mockMvc.perform(post("/api/clientes").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isOk());
     }
 }

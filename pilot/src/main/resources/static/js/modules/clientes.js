@@ -30,6 +30,9 @@
     document.getElementById('btnCancelarCliente')?.addEventListener('click', fecharModal);
     document.getElementById('btnFecharModalCliente')?.addEventListener('click', fecharModal);
     document.getElementById('formCliente')?.addEventListener('submit', salvarCliente);
+    Valid?.somenteLetras?.(document.getElementById('nome'));
+    Mask?.cpfCnpj?.(document.getElementById('cpfOuCnpj'));
+    Mask?.telefone?.(document.getElementById('telefone'));
   }
 
   function abrirModalNovo() {
