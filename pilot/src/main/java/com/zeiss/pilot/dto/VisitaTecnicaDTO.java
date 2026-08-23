@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 
 import com.zeiss.pilot.entity.VisitaTecnica;
 import com.zeiss.pilot.validation.Nome;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class VisitaTecnicaDTO {
 
@@ -18,12 +20,24 @@ public class VisitaTecnicaDTO {
     @NotBlank(message = "Empresa é obrigatória.")
     @Nome
     private String empresaInstituicao;
+    @NotNull(message = "Data solicitada é obrigatória.")
     private LocalDate dataSolicitada;
+
     private LocalDate dataAgendada;
+
+    @NotNull(message = "Visita realizada é obrigatório.")
     private Boolean visitaRealizada;
+
+    @NotNull(message = "Quantidade de visitantes é obrigatória.")
+    @Min(value = 1, message = "Quantidade de visitantes deve ser no mínimo 1.")
     private Integer quantidadeVisitantes;
+
+    @NotBlank(message = "Local é obrigatório.")
     private String localVisita;
+
+    @NotBlank(message = "Telefone é obrigatório.")
     private String telefones;
+
     private String observacao;
     private LocalDateTime createdAt;
 

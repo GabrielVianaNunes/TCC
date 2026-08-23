@@ -77,4 +77,76 @@ class VisitaTecnicaControllerTest {
                         .content(corpo))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @WithMockUser
+    void criarVisitaSemDataSolicitadaRetorna400() throws Exception {
+        String corpo = """
+                {"responsavel":"Maria Souza","empresaInstituicao":"Fundação Educacional Exemplo","localVisita":"Sala 3","quantidadeVisitantes":15,"telefones":"(48) 99999-0000","visitaRealizada":false}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void criarVisitaSemLocalVisitaRetorna400() throws Exception {
+        String corpo = """
+                {"responsavel":"Maria Souza","empresaInstituicao":"Fundação Educacional Exemplo","dataSolicitada":"2026-09-01","quantidadeVisitantes":15,"telefones":"(48) 99999-0000","visitaRealizada":false}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void criarVisitaSemQuantidadeVisitantesRetorna400() throws Exception {
+        String corpo = """
+                {"responsavel":"Maria Souza","empresaInstituicao":"Fundação Educacional Exemplo","dataSolicitada":"2026-09-01","localVisita":"Sala 3","telefones":"(48) 99999-0000","visitaRealizada":false}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void criarVisitaSemTelefonesRetorna400() throws Exception {
+        String corpo = """
+                {"responsavel":"Maria Souza","empresaInstituicao":"Fundação Educacional Exemplo","dataSolicitada":"2026-09-01","localVisita":"Sala 3","quantidadeVisitantes":15,"visitaRealizada":false}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void criarVisitaSemVisitaRealizadaRetorna400() throws Exception {
+        String corpo = """
+                {"responsavel":"Maria Souza","empresaInstituicao":"Fundação Educacional Exemplo","dataSolicitada":"2026-09-01","localVisita":"Sala 3","quantidadeVisitantes":15,"telefones":"(48) 99999-0000"}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void criarVisitaComQuantidadeZeroRetorna400() throws Exception {
+        String corpo = """
+                {"responsavel":"Maria Souza","empresaInstituicao":"Fundação Educacional Exemplo","dataSolicitada":"2026-09-01","localVisita":"Sala 3","quantidadeVisitantes":0,"telefones":"(48) 99999-0000","visitaRealizada":false}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
 }
