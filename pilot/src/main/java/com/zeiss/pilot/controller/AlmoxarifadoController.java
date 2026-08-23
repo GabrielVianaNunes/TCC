@@ -3,6 +3,7 @@ package com.zeiss.pilot.controller;
 import com.zeiss.pilot.dto.ItemAlmoxarifadoDTO;
 import com.zeiss.pilot.dto.MovimentacaoAlmoxarifadoDTO;
 import com.zeiss.pilot.service.AlmoxarifadoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +25,13 @@ public class AlmoxarifadoController {
     }
 
     @PostMapping("/itens")
-    public ResponseEntity<ItemAlmoxarifadoDTO> criarItem(@RequestBody ItemAlmoxarifadoDTO dto) {
+    public ResponseEntity<ItemAlmoxarifadoDTO> criarItem(@Valid @RequestBody ItemAlmoxarifadoDTO dto) {
         return ResponseEntity.ok(service.salvarItem(dto));
     }
 
     @PutMapping("/itens/{id}")
     public ResponseEntity<ItemAlmoxarifadoDTO> atualizarItem(@PathVariable Long id,
-                                                              @RequestBody ItemAlmoxarifadoDTO dto) {
+                                                              @Valid @RequestBody ItemAlmoxarifadoDTO dto) {
         return ResponseEntity.ok(service.atualizarItem(id, dto));
     }
 
@@ -51,7 +52,7 @@ public class AlmoxarifadoController {
 
     @PostMapping("/movimentacoes")
     public ResponseEntity<MovimentacaoAlmoxarifadoDTO> registrarMovimentacao(
-            @RequestBody MovimentacaoAlmoxarifadoDTO dto) {
+            @Valid @RequestBody MovimentacaoAlmoxarifadoDTO dto) {
         return ResponseEntity.ok(service.registrarMovimentacao(dto));
     }
 }

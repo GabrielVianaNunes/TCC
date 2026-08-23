@@ -3,13 +3,30 @@ package com.zeiss.pilot.dto;
 import com.zeiss.pilot.entity.MovimentacaoAlmoxarifado;
 import java.time.LocalDateTime;
 
+import com.zeiss.pilot.validation.Nome;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
 public class MovimentacaoAlmoxarifadoDTO {
 
     private Long id;
+
+    @NotNull(message = "Item é obrigatório.")
     private Long itemId;
+
+    @NotBlank(message = "Tipo é obrigatório.")
+    @Pattern(regexp = "entrada|saida", message = "Tipo deve ser entrada ou saida.")
     private String tipo;
+
+    @Min(value = 1, message = "Quantidade deve ser no mínimo 1.")
     private int quantidade;
+
+    @NotBlank(message = "Responsável é obrigatório.")
+    @Nome
     private String responsavel;
+
     private String motivo;
     private LocalDateTime data;
 

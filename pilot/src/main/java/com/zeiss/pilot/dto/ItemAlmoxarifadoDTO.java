@@ -2,14 +2,28 @@ package com.zeiss.pilot.dto;
 
 import com.zeiss.pilot.entity.ItemAlmoxarifado;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
 public class ItemAlmoxarifadoDTO {
 
     private Long id;
+
+    @NotBlank(message = "Nome é obrigatório.")
     private String nome;
+
+    @NotBlank(message = "Categoria é obrigatória.")
     private String categoria;
+
+    @NotBlank(message = "Unidade é obrigatória.")
     private String unidade;
+
+    @Min(value = 0, message = "Quantidade atual não pode ser negativa.")
     private int quantidadeAtual;
+
+    @Min(value = 0, message = "Estoque mínimo não pode ser negativo.")
     private int estoqueMinimo;
+
     private String localizacao;
     private String observacao;
 

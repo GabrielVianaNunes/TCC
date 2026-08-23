@@ -501,6 +501,7 @@
 
   // ── Bind de eventos ───────────────────────────────────────────────────────
   function bindEvents() {
+    Valid?.somenteLetras?.(document.getElementById('movResponsavel'));
     // Filtros
     document.getElementById('searchInput')?.addEventListener('input', applyFilters);
     document.getElementById('filterCategoria')?.addEventListener('change', applyFilters);
