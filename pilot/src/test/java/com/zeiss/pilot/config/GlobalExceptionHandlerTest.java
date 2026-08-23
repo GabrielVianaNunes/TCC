@@ -13,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,11 +94,14 @@ class GlobalExceptionHandlerTest {
         Long tipoServicoId = tipoServicoRepository.save(tipoServico).getId();
 
         // 'status' fora do CHECK servicos_status_check -> violação no INSERT
+        // tecnicoResponsavel/dataPrevista precisam vir preenchidos (Fase 2:
+        // @NotBlank/@NotNull em ServicoDTO) para o payload passar do @Valid e
+        // chegar até o INSERT que dispara a violação de CHECK constraint.
         String corpo = """
                 {"cliente":"Cliente Teste Handler","clienteId":%d,"maquinaId":%d,"tipoServicoId":%d,"solicitacao":"Teste",
-                 "quantidade":1,"status":"STATUS_QUE_NAO_EXISTE",
-                 "valor":100.00,"dataCriacao":"2026-08-18"}
-                """.formatted(clienteId, maquinaId, tipoServicoId);
+                 "quantidade":1,"status":"STATUS_QUE_NAO_EXISTE","tecnicoResponsavel":"Carlos Andrade",
+                 "valor":100.00,"dataCriacao":"2026-08-18","dataPrevista":"%s"}
+                """.formatted(clienteId, maquinaId, tipoServicoId, LocalDate.now().plusDays(7));
 
         mockMvc.perform(post("/api/servicos").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -131,11 +136,15 @@ class GlobalExceptionHandlerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void clienteIdAusenteRetorna400() throws Exception {
+        // tecnicoResponsavel/dataPrevista precisam vir preenchidos (Fase 2:
+        // @NotBlank/@NotNull em ServicoDTO) para que o payload passe do @Valid
+        // e a ausência de clienteId seja o que de fato barra a criação, via
+        // IllegalArgumentException manual em ServicoService.
         String corpo = """
                 {"cliente":"Cliente Sem ClienteId","solicitacao":"Teste",
-                 "quantidade":1,"status":"1º Contato",
-                 "valor":100.00,"dataCriacao":"2026-08-18"}
-                """;
+                 "quantidade":1,"status":"1º Contato","tecnicoResponsavel":"Carlos Andrade",
+                 "valor":100.00,"dataCriacao":"2026-08-18","dataPrevista":"%s"}
+                """.formatted(LocalDate.now().plusDays(7));
 
         mockMvc.perform(post("/api/servicos").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
