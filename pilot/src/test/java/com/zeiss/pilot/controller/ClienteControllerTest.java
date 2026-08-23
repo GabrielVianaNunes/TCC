@@ -110,7 +110,7 @@ class ClienteControllerTest {
     @WithMockUser(roles = "ESTAGIARIO")
     void criarClienteSemEnderecoRetorna400() throws Exception {
         String corpo = """
-                {"nome":"Cliente Sem Endereco","cpfOuCnpj":"105.929.780-30","telefone":"(11) 90000-2222"}
+                {"nome":"Cliente Sem Endereco","cpfOuCnpj":"105.929.780-95","telefone":"(11) 90000-2222"}
                 """;
         mockMvc.perform(post("/api/clientes").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -123,7 +123,7 @@ class ClienteControllerTest {
     void atualizarClienteComTelefoneEmBrancoRetorna400() throws Exception {
         Cliente existente = new Cliente();
         existente.setNome("Cliente Para Atualizar");
-        existente.setCpfOuCnpj("398.951.930-60");
+        existente.setCpfOuCnpj("398.951.930-17");
         existente.setEndereco("Rua Teste, 6");
         existente.setTelefone("(11) 90000-3333");
         existente.setCpfOuCnpjHash("hash-cliente-put-test");
@@ -131,7 +131,7 @@ class ClienteControllerTest {
         Long id = clienteRepository.save(existente).getId();
 
         String corpoAtualizacao = """
-                {"nome":"Cliente Para Atualizar","cpfOuCnpj":"398.951.930-60","telefone":"","endereco":"Rua Teste, 6"}
+                {"nome":"Cliente Para Atualizar","cpfOuCnpj":"398.951.930-17","telefone":"","endereco":"Rua Teste, 6"}
                 """;
         mockMvc.perform(put("/api/clientes/" + id).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
