@@ -20,12 +20,13 @@ public class VisitaTecnicaDTO {
     @NotBlank(message = "Empresa é obrigatória.")
     @Nome
     private String empresaInstituicao;
+
     @NotNull(message = "Data solicitada é obrigatória.")
     private LocalDate dataSolicitada;
 
     private LocalDate dataAgendada;
 
-    @NotNull(message = "Visita realizada é obrigatório.")
+    @NotNull(message = "Visita realizada é obrigatória.")
     private Boolean visitaRealizada;
 
     @NotNull(message = "Quantidade de visitantes é obrigatória.")

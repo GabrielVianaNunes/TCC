@@ -16,8 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Cobertura HTTP (via controller real) de POST /api/visitas-tecnicas —
- * confirma que @Valid dispara em VisitaTecnicaDTO na Fase 3a
- * (responsavel, empresaInstituicao).
+ * confirma que @Valid dispara em VisitaTecnicaDTO na Fase 3a (responsavel,
+ * empresaInstituicao, dataSolicitada, localVisita, quantidadeVisitantes,
+ * telefones, visitaRealizada).
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,7 +35,7 @@ class VisitaTecnicaControllerTest {
     @WithMockUser
     void criarVisitaSemResponsavelRetorna400() throws Exception {
         String corpo = """
-                {"empresaInstituicao":"Empresa Teste"}
+                {"empresaInstituicao":"Empresa Teste","dataSolicitada":"2026-09-01","localVisita":"Sala 3","quantidadeVisitantes":15,"telefones":"(48) 99999-0000","visitaRealizada":false}
                 """;
         mockMvc.perform(post(ENDPOINT).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -46,7 +47,7 @@ class VisitaTecnicaControllerTest {
     @WithMockUser
     void criarVisitaSemEmpresaRetorna400() throws Exception {
         String corpo = """
-                {"responsavel":"Maria Souza"}
+                {"responsavel":"Maria Souza","dataSolicitada":"2026-09-01","localVisita":"Sala 3","quantidadeVisitantes":15,"telefones":"(48) 99999-0000","visitaRealizada":false}
                 """;
         mockMvc.perform(post(ENDPOINT).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -58,7 +59,7 @@ class VisitaTecnicaControllerTest {
     @WithMockUser
     void criarVisitaComResponsavelContendoNumeroRetorna400() throws Exception {
         String corpo = """
-                {"responsavel":"Tecnico99","empresaInstituicao":"Empresa Teste"}
+                {"responsavel":"Tecnico99","empresaInstituicao":"Empresa Teste","dataSolicitada":"2026-09-01","localVisita":"Sala 3","quantidadeVisitantes":15,"telefones":"(48) 99999-0000","visitaRealizada":false}
                 """;
         mockMvc.perform(post(ENDPOINT).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
