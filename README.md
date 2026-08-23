@@ -26,7 +26,7 @@ Sistema de gestão para o Centro de Excelência em Metrologia (CEM) do SENAI Zei
 
 ## Stack
 
-- **Backend:** Java 21 + Spring Boot 3.4 (Web, Data JPA, Security, Actuator)
+- **Backend:** Java 21 + Spring Boot 3.4 (Web, Data JPA, Security, Actuator, Validation)
 - **Banco de dados:** PostgreSQL
 - **Frontend:** Thymeleaf (server-side) + HTML/CSS/JS estático (sem framework SPA)
 - **Build:** Maven (via wrapper `mvnw` / `mvnw.cmd`)
@@ -184,6 +184,8 @@ Autenticação via formulário (Spring Security), com senhas armazenadas com `De
 **Criptografia de dado pessoal no banco:** CPF/CNPJ e endereço de `Cliente` são criptografados com AES-256-GCM (`CryptoConverter`, JPA `AttributeConverter`), de forma transparente — API e UI continuam vendo o valor em texto claro, só a coluna no Postgres guarda a versão cifrada. Duplicata de CPF/CNPJ é impedida por um índice cego (`clientes.cpf_ou_cnpj_hash`, SHA-256, `UNIQUE` no banco), já que o nonce aleatório da cifra impede `UNIQUE` na própria coluna criptografada. Requer `FIELD_ENCRYPTION_KEY` (ver [`docs/RUNBOOK.md`](docs/RUNBOOK.md)). Esses dados viveram em `servicos` até 20/08/2026, quando o cadastro de Clientes foi introduzido; as colunas legadas em `servicos` (e os *runners* de migração que as recriptografavam) foram removidas em 22/08/2026, já com todo o dado migrado para `Cliente`.
 
 **Log de auditoria e cobertura de teste de autorização (20/08/2026):** toda escrita (`POST`/`PUT`/`PATCH`/`DELETE`) sob `/api/**` gera uma linha no logger `AUDIT` (usuário, verbo, rota, status), capturando tanto negação grosseira de `SecurityConfig` quanto de `@PreAuthorize` (`AuditLogFilter`, ver [`docs/RUNBOOK.md`](docs/RUNBOOK.md#log-de-auditoria)). `SecurityConfigTest` ganhou cobertura sistemática das regras de papel que ainda não tinham teste (`/api/usuarios/admins`, upload/edição/remoção de documentos gerais e por máquina, criação de evento).
+
+**Normalização e validação de campos (infraestrutura, 23/08/2026):** máscaras e validações reutilizáveis de nome, CPF/CNPJ (dígito verificador mod-11 real) e telefone — `window.Mask`/`window.Valid` em `ui.js` no frontend, anotações Bean Validation (`@Nome`, `@CpfOuCnpj`, `@Telefone`, pacote `com.zeiss.pilot.validation`) no backend. Ainda não ligado a nenhum formulário — é a base que os próximos formulários (Clientes, Usuários, Serviços e o resto) vão passar a usar.
 
 ## Estrutura do repositório
 
