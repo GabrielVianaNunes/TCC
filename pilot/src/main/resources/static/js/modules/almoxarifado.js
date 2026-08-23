@@ -301,7 +301,7 @@
     const localizacao = document.getElementById('itemLocalizacao').value.trim();
     const observacao  = document.getElementById('itemObs').value.trim();
 
-    if (!nome || !categoria || !unidade || isNaN(estoqueMin)) {
+    if (!nome || !categoria || !unidade || isNaN(estoqueMin) || (editingItemId === null && isNaN(qtdInicial))) {
       Toast.error(_t('Preencha todos os campos obrigatórios.'));
       return;
     }
