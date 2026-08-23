@@ -549,6 +549,148 @@ const Combobox = (() => {
   return { create };
 })();
 
+/* ══════════════════════════════════════════
+   MÁSCARAS E VALIDAÇÕES DE CAMPO
+   (nome, CPF/CNPJ, telefone, moeda)
+══════════════════════════════════════════ */
+const FieldRules = (() => {
+  function somenteDigitos(str) {
+    return (str || '').replace(/\D/g, '');
+  }
+
+  /* ── Máscara de CPF/CNPJ ────────────────────────────────────── */
+  function formatarCpfCnpj(digitos) {
+    if (digitos.length <= 11) {
+      return digitos
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    }
+    return digitos
+      .replace(/(\d{2})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1/$2')
+      .replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+  }
+
+  function maskCpfCnpj(inputEl) {
+    if (!inputEl) return;
+    inputEl.addEventListener('input', () => {
+      const digitos = somenteDigitos(inputEl.value).slice(0, 14);
+      inputEl.value = formatarCpfCnpj(digitos);
+    });
+  }
+
+  /* ── Máscara de telefone ────────────────────────────────────── */
+  function formatarTelefone(digitos) {
+    if (digitos.length <= 10) {
+      return digitos
+        .replace(/(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{4})(\d{1,4})$/, '$1-$2');
+    }
+    return digitos
+      .replace(/(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d{1,4})$/, '$1-$2');
+  }
+
+  function maskTelefone(inputEl) {
+    if (!inputEl) return;
+    inputEl.addEventListener('input', () => {
+      const digitos = somenteDigitos(inputEl.value).slice(0, 11);
+      inputEl.value = formatarTelefone(digitos);
+    });
+  }
+
+  /* ── Máscara de moeda (padrão caixa eletrônico: digita da direita
+     pra esquerda, os últimos 2 dígitos são sempre os centavos) ──── */
+  function formatarMoeda(digitos) {
+    const centavos = parseInt(digitos || '0', 10);
+    const valor = centavos / 100;
+    return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function maskMoeda(inputEl) {
+    if (!inputEl) return;
+    inputEl.addEventListener('input', () => {
+      const digitos = somenteDigitos(inputEl.value);
+      inputEl.value = formatarMoeda(digitos);
+    });
+  }
+
+  /* ── Bloqueio de tecla por categoria ────────────────────────── */
+  const REGEX_LETRAS = /^[\p{L} '.&-]$/u;
+  const REGEX_NUMEROS = /^[0-9]$/;
+
+  function bloquearTeclasQueNaoBatem(inputEl, regex) {
+    inputEl.addEventListener('keydown', (ev) => {
+      // Deixa passar teclas de controle (backspace, setas, Tab, atalhos)
+      if (ev.ctrlKey || ev.metaKey || ev.altKey || ev.key.length > 1) return;
+      if (!regex.test(ev.key)) ev.preventDefault();
+    });
+  }
+
+  function somenteLetras(inputEl) {
+    if (!inputEl) return;
+    bloquearTeclasQueNaoBatem(inputEl, REGEX_LETRAS);
+  }
+
+  function somenteNumeros(inputEl) {
+    if (!inputEl) return;
+    bloquearTeclasQueNaoBatem(inputEl, REGEX_NUMEROS);
+  }
+
+  /* ── Validação de CPF/CNPJ (dígito verificador real, mod-11) ──
+     Mesmo algoritmo de CpfOuCnpjUtil.java no backend — inclui a regra de
+     rejeitar sequência de dígitos todos iguais (111.111.111-11 passa no
+     mod-11 puro, mas é um CPF conhecido como inválido). */
+  function calcularDigito(base, pesos) {
+    let soma = 0;
+    for (let i = 0; i < pesos.length; i++) {
+      soma += Number(base[i]) * pesos[i];
+    }
+    const resto = soma % 11;
+    return resto < 2 ? 0 : 11 - resto;
+  }
+
+  function todosDigitosIguais(digitos) {
+    return digitos.split('').every(d => d === digitos[0]);
+  }
+
+  function cpfValido(cpf) {
+    if (todosDigitosIguais(cpf)) return false;
+    const d1 = calcularDigito(cpf, [10, 9, 8, 7, 6, 5, 4, 3, 2]);
+    const d2 = calcularDigito(cpf.slice(0, 9) + d1, [11, 10, 9, 8, 7, 6, 5, 4, 3, 2]);
+    return cpf === cpf.slice(0, 9) + d1 + d2;
+  }
+
+  function cnpjValido(cnpj) {
+    if (todosDigitosIguais(cnpj)) return false;
+    const d1 = calcularDigito(cnpj, [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
+    const d2 = calcularDigito(cnpj.slice(0, 12) + d1, [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
+    return cnpj === cnpj.slice(0, 12) + d1 + d2;
+  }
+
+  function cpfCnpjValido(valor) {
+    const digitos = somenteDigitos(valor);
+    if (digitos.length === 11) return cpfValido(digitos);
+    if (digitos.length === 14) return cnpjValido(digitos);
+    return false;
+  }
+
+  return {
+    Mask: {
+      cpfCnpj: maskCpfCnpj,
+      telefone: maskTelefone,
+      moeda: maskMoeda,
+    },
+    Valid: {
+      somenteLetras,
+      somenteNumeros,
+      cpfCnpjValido,
+    },
+  };
+})();
+
 /* ── Exports ── */
 window.Toast     = Toast;
 window.Modal     = Modal;
@@ -557,3 +699,5 @@ window.Skeleton  = Skeleton;
 window.StatusBadge  = StatusBadge;
 window.EmptyState   = EmptyState;
 window.Combobox  = Combobox;
+window.Mask  = FieldRules.Mask;
+window.Valid = FieldRules.Valid;
