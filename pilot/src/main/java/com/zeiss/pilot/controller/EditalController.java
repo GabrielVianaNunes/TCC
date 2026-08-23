@@ -2,6 +2,8 @@ package com.zeiss.pilot.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +39,7 @@ public class EditalController {
     }
 
     @PostMapping
-    public ResponseEntity<EditalDTO> criarEdital(@RequestBody EditalDTO editalDTO) {
+    public ResponseEntity<EditalDTO> criarEdital(@Valid @RequestBody EditalDTO editalDTO) {
         try {
             return ResponseEntity.ok(editalService.criarEdital(editalDTO));
         } catch (Exception e) {
@@ -46,7 +48,7 @@ public class EditalController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EditalDTO> atualizarEdital(@PathVariable Long id, @RequestBody EditalDTO editalDTO) {
+    public ResponseEntity<EditalDTO> atualizarEdital(@PathVariable Long id, @Valid @RequestBody EditalDTO editalDTO) {
         try {
             editalDTO.setId(id);
             return ResponseEntity.ok(editalService.atualizarEdital(id, editalDTO));

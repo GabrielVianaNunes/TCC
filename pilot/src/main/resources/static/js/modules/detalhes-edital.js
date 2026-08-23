@@ -40,15 +40,15 @@
 
   function populate(e) {
     // <title>
-    document.title = `${e.nome} — Editais · SENAI Zeiss`;
+    document.title = `${e.nomeEdital} — Editais · SENAI Zeiss`;
 
     // breadcrumb + heading
-    setText('editalBreadcrumb', e.nome);
-    setText('editalTitulo',     e.nome);
+    setText('editalBreadcrumb', e.nomeEdital);
+    setText('editalTitulo',     e.nomeEdital);
     setText('editalIdSpan',     `#${e.id}`);
 
     // Detail fields
-    setText('editalNomeDetalhe', e.nome);
+    setText('editalNomeDetalhe', e.nomeEdital);
     setText('editalFornecedora', e.instituicaoFornecedora);
     setText('editalParceira',    e.instituicaoParceira);
     setText('editalValor',       fmtCurrency(e.valor));

@@ -3,15 +3,32 @@ package com.zeiss.pilot.dto;
 import java.math.BigDecimal;
 
 import com.zeiss.pilot.entity.Edital;
+import com.zeiss.pilot.validation.Nome;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class EditalDTO {
 
     private Long id;
+
+    @NotBlank(message = "Nome do edital é obrigatório.")
     private String nomeEdital;
+
+    @NotBlank(message = "Instituição fornecedora é obrigatória.")
+    @Nome
     private String instituicaoFornecedora;
+
+    @Nome
     private String instituicaoParceira;
+
+    @NotBlank(message = "Status é obrigatório.")
     private String status;
+
+    @NotNull(message = "Valor é obrigatório.")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Valor deve ser maior que zero.")
     private BigDecimal valor;
+
     private String observacao;
 
     // Construtor padrão (sem argumentos) - Necessário para o Jackson

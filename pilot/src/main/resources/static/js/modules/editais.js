@@ -38,7 +38,7 @@
     const st = document.getElementById('filtroStatus').value;
 
     filtered = allItems.filter(e => {
-      const matchQ  = !q  || (e.nome || '').toLowerCase().includes(q)
+      const matchQ  = !q  || (e.nomeEdital || '').toLowerCase().includes(q)
                           || (e.instituicaoFornecedora || '').toLowerCase().includes(q)
                           || (e.instituicaoParceira || '').toLowerCase().includes(q);
       const matchSt = !st || e.status === st;
@@ -64,7 +64,7 @@
 
     tbody.innerHTML = page.map(e => `
       <tr>
-        <td><strong>${e.nome || '—'}</strong></td>
+        <td><strong>${e.nomeEdital || '—'}</strong></td>
         <td>${e.instituicaoFornecedora || '—'}</td>
         <td>${e.instituicaoParceira || '—'}</td>
         <td>${e.valor != null ? ZP.Fmt.currency(e.valor) : '—'}</td>
@@ -96,7 +96,7 @@
     try {
       const e = await Api.get(`${API_URL}/${id}`);
       document.getElementById('editalId').value = e.id;
-      document.getElementById('nome').value = e.nome || '';
+      document.getElementById('nome').value = e.nomeEdital || '';
       document.getElementById('instituicaoFornecedora').value = e.instituicaoFornecedora || '';
       document.getElementById('instituicaoParceira').value = e.instituicaoParceira || '';
       document.getElementById('valor').value = e.valor != null ? e.valor : '';
@@ -112,7 +112,7 @@
   async function salvar() {
     const id = document.getElementById('editalId').value;
     const body = {
-      nome: document.getElementById('nome').value,
+      nomeEdital: document.getElementById('nome').value,
       instituicaoFornecedora: document.getElementById('instituicaoFornecedora').value,
       instituicaoParceira: document.getElementById('instituicaoParceira').value,
       valor: document.getElementById('valor').value ? parseFloat(document.getElementById('valor').value) : null,
@@ -162,6 +162,8 @@
   /* ── Init ───────────────────────────────────────────────────── */
   function init() {
     loadEditais();
+    Valid?.somenteLetras?.(document.getElementById('instituicaoFornecedora'));
+    Valid?.somenteLetras?.(document.getElementById('instituicaoParceira'));
     document.getElementById('btnNovoEdital').addEventListener('click', abrirModalNovo);
     document.getElementById('btnSalvarEdital').addEventListener('click', salvar);
     document.getElementById('btnExcluirEdital').addEventListener('click', excluir);
