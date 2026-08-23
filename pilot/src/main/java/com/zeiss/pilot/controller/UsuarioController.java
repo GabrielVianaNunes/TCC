@@ -22,6 +22,8 @@ import com.zeiss.pilot.dto.UsuarioDTO;
 import com.zeiss.pilot.entity.Usuario;
 import com.zeiss.pilot.service.UsuarioService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
@@ -63,12 +65,12 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioDTO> criarUsuario(@Valid @RequestBody Usuario usuario) {
         return ResponseEntity.ok(usuarioService.criarUsuario(usuario, usuarioLogado()));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
         return ResponseEntity.ok(usuarioService.atualizarUsuario(id, usuario, usuarioLogado()));
     }
 

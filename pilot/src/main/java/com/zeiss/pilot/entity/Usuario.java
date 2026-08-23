@@ -2,12 +2,17 @@ package com.zeiss.pilot.entity;
 
 import java.time.LocalDateTime;
 
+import com.zeiss.pilot.validation.Nome;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "usuarios")
@@ -18,18 +23,24 @@ public class Usuario {
     private Long id;
 
     @Column(nullable = false, length = 150)
+    @NotBlank(message = "Nome é obrigatório.")
+    @Nome
     private String nome;
 
     @Column(nullable = false, unique = true, length = 150)
+    @NotBlank(message = "E-mail é obrigatório.")
+    @Email(message = "E-mail inválido.")
     private String email;
 
     @Column(nullable = false, length = 255)
+    @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres.")
     private String senha;
 
     @Column(nullable = false, length = 50)
     private String role = "CLIENTE";
 
     @Column(length = 50)
+    @NotBlank(message = "Cargo é obrigatório.")
     private String cargo;
 
     @Column(name = "data_criacao")

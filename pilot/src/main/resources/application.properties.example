@@ -45,6 +45,16 @@ spring.flyway.baseline-version=1
 
 spring.jpa.hibernate.ddl-auto=validate
 
+# A Fase 2 da normalização de campos anota a entidade Usuario com Bean
+# Validation (@NotBlank, @Nome, etc). Sem isso, o Hibernate valida a
+# entidade de novo sozinho a cada flush — e isso quebra o AdminInitializer,
+# que cria o admin de bootstrap com cargo=null de propósito, salvando
+# direto via usuarioRepository.save() sem passar pelo controller/@Valid.
+# Com "none", a validação só dispara onde ela é pedida explicitamente
+# (@Valid no @RequestBody do controller) — mesmo comportamento que
+# ClienteDTO/ServicoDTO já têm, por não serem @Entity.
+spring.jpa.properties.jakarta.persistence.validation.mode=none
+
 # Backup automatizado (Etapa 8)
 backup.pg-dump-path=${BACKUP_PG_DUMP_PATH:pg_dump}
 backup.s3.endpoint=${BACKUP_S3_ENDPOINT:}

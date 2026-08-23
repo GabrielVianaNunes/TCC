@@ -356,6 +356,7 @@
         .forEach(o => o.remove());
     }
     loadUsuarios();
+    Valid?.somenteLetras?.(document.getElementById('nome'));
     document.getElementById('btnNovoUsuario').addEventListener('click', abrirModalNovo);
     document.getElementById('btnSalvarUsuario').addEventListener('click', salvar);
     document.getElementById('btnExcluirUsuario').addEventListener('click', excluir);
