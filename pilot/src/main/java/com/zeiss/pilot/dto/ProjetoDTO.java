@@ -3,17 +3,25 @@ package com.zeiss.pilot.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+
 public class ProjetoDTO {
 
     private Long id;
+    @NotBlank(message = "Nome do projeto é obrigatório.")
     private String nomeProjeto;
     private String objetivo;
     private String atividades;
     private Long responsavelId;
     private String responsavelNome;
+    @NotBlank(message = "Prioridade é obrigatória.")
     private String prioridade;
+    @DecimalMin(value = "0.0", inclusive = false, message = "Custo anual previsto deve ser maior que zero.")
     private BigDecimal custoAnualPrevisto;
+    @DecimalMin(value = "0.0", inclusive = false, message = "Retorno previsto deve ser maior que zero.")
     private BigDecimal retornoPrevisto;
+    @NotBlank(message = "Status é obrigatório.")
     private String status;
     private String observacao;
     private LocalDate previsaoInicio;

@@ -107,8 +107,8 @@ const ProjetosModule = (() => {
       document.getElementById('atividades').value     = p.atividades || '';
       document.getElementById('responsavelId').value  = p.responsavelId || '';
       document.getElementById('prioridade').value     = p.prioridade || 'Alta';
-      document.getElementById('custoAnualPrevisto').value = p.custoAnualPrevisto || '';
-      document.getElementById('retornoPrevisto').value    = p.retornoPrevisto || '';
+      document.getElementById('custoAnualPrevisto').value = Mask.numeroParaMoeda(p.custoAnualPrevisto);
+      document.getElementById('retornoPrevisto').value    = Mask.numeroParaMoeda(p.retornoPrevisto);
       document.getElementById('status').value         = p.status || '';
       document.getElementById('observacao').value     = p.observacao || '';
       document.getElementById('previsaoInicio').value = p.previsaoInicio ? p.previsaoInicio.split('T')[0] : '';
@@ -126,15 +126,14 @@ const ProjetosModule = (() => {
     if (!form.checkValidity()) { form.reportValidity(); return; }
 
     const id = document.getElementById('projetoId').value;
-    const parseDecimal = v => { const n = parseFloat(String(v).trim()); return isNaN(n) ? null : n; };
     const payload = {
       nomeProjeto:      document.getElementById('nomeProjeto').value.trim(),
       objetivo:         document.getElementById('objetivo').value.trim(),
       atividades:       document.getElementById('atividades').value.trim(),
       responsavelId:    parseInt(document.getElementById('responsavelId').value) || null,
       prioridade:       document.getElementById('prioridade').value,
-      custoAnualPrevisto: parseDecimal(document.getElementById('custoAnualPrevisto').value),
-      retornoPrevisto:  parseDecimal(document.getElementById('retornoPrevisto').value),
+      custoAnualPrevisto: Mask.moedaParaNumero(document.getElementById('custoAnualPrevisto').value),
+      retornoPrevisto:  Mask.moedaParaNumero(document.getElementById('retornoPrevisto').value),
       status:           document.getElementById('status').value,
       observacao:       document.getElementById('observacao').value.trim(),
       previsaoInicio:   document.getElementById('previsaoInicio').value || null,
@@ -168,6 +167,8 @@ const ProjetosModule = (() => {
   function init() {
     loadAdmins();
     loadProjetos();
+    Mask?.moeda?.(document.getElementById('custoAnualPrevisto'));
+    Mask?.moeda?.(document.getElementById('retornoPrevisto'));
 
     document.getElementById('btnAbrirModal')?.addEventListener('click', novo);
     document.getElementById('btnSalvarProjeto')?.addEventListener('click', salvar);

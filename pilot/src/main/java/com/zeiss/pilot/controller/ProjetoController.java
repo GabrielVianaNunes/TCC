@@ -3,6 +3,8 @@ package com.zeiss.pilot.controller;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,12 +40,12 @@ public class ProjetoController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjetoDTO> criarProjeto(@RequestBody ProjetoDTO dto) {
+    public ResponseEntity<ProjetoDTO> criarProjeto(@Valid @RequestBody ProjetoDTO dto) {
         return ResponseEntity.ok(projetoService.criarProjeto(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjetoDTO> atualizarProjeto(@PathVariable Long id, @RequestBody ProjetoDTO dto) {
+    public ResponseEntity<ProjetoDTO> atualizarProjeto(@PathVariable Long id, @Valid @RequestBody ProjetoDTO dto) {
         ProjetoDTO atualizado = projetoService.atualizarProjeto(id, dto);
         return (atualizado != null) ? ResponseEntity.ok(atualizado) : ResponseEntity.notFound().build();
     }
