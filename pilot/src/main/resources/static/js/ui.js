@@ -642,6 +642,20 @@ const FieldRules = (() => {
     });
   }
 
+  /** "1.234,56" (exibido) -> 1234.56 (number, pronto pro JSON) — null se vazio/inválido. */
+  function moedaParaNumero(valorExibido) {
+    if (!valorExibido) return null;
+    const limpo = valorExibido.replace(/\./g, '').replace(',', '.');
+    const numero = parseFloat(limpo);
+    return Number.isNaN(numero) ? null : numero;
+  }
+
+  /** 1234.56 (number, vindo da API) -> "1.234,56" (pronto pra popular o campo mascarado). */
+  function numeroParaMoeda(valorNumerico) {
+    if (valorNumerico == null) return '';
+    return valorNumerico.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
   /* ── Bloqueio de tecla por categoria ────────────────────────── */
   const REGEX_LETRAS = /^[\p{L} '.&-]$/u;
   const REGEX_NUMEROS = /^[0-9]$/;
@@ -715,6 +729,8 @@ const FieldRules = (() => {
       cpfCnpj: maskCpfCnpj,
       telefone: maskTelefone,
       moeda: maskMoeda,
+      moedaParaNumero,
+      numeroParaMoeda,
     },
     Valid: {
       somenteLetras,
