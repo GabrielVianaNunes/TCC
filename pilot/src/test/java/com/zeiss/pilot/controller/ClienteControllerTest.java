@@ -2,7 +2,10 @@ package com.zeiss.pilot.controller;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.zeiss.pilot.entity.Cliente;
+import com.zeiss.pilot.repository.ClienteRepository;
 
 /**
  * Cobertura HTTP (via controller real) de POST /api/clientes — complementa o
@@ -28,6 +34,9 @@ class ClienteControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @Test
     @WithMockUser(roles = "ESTAGIARIO")
@@ -95,5 +104,38 @@ class ClienteControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(corpo))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "ESTAGIARIO")
+    void criarClienteSemEnderecoRetorna400() throws Exception {
+        String corpo = """
+                {"nome":"Cliente Sem Endereco","cpfOuCnpj":"105.929.780-30","telefone":"(11) 90000-2222"}
+                """;
+        mockMvc.perform(post("/api/clientes").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(roles = "ESTAGIARIO")
+    void atualizarClienteComTelefoneEmBrancoRetorna400() throws Exception {
+        Cliente existente = new Cliente();
+        existente.setNome("Cliente Para Atualizar");
+        existente.setCpfOuCnpj("398.951.930-60");
+        existente.setEndereco("Rua Teste, 6");
+        existente.setTelefone("(11) 90000-3333");
+        existente.setCpfOuCnpjHash("hash-cliente-put-test");
+        existente.setDataCadastro(LocalDate.now());
+        Long id = clienteRepository.save(existente).getId();
+
+        String corpoAtualizacao = """
+                {"nome":"Cliente Para Atualizar","cpfOuCnpj":"398.951.930-60","telefone":"","endereco":"Rua Teste, 6"}
+                """;
+        mockMvc.perform(put("/api/clientes/" + id).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpoAtualizacao))
+                .andExpect(status().isBadRequest());
     }
 }

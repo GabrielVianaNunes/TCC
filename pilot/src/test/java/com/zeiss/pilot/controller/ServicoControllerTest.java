@@ -2,6 +2,7 @@ package com.zeiss.pilot.controller;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
@@ -19,9 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zeiss.pilot.entity.Cliente;
 import com.zeiss.pilot.entity.Maquina;
+import com.zeiss.pilot.entity.Servico;
 import com.zeiss.pilot.entity.TipoServico;
 import com.zeiss.pilot.repository.ClienteRepository;
 import com.zeiss.pilot.repository.MaquinaRepository;
+import com.zeiss.pilot.repository.ServicoRepository;
 import com.zeiss.pilot.repository.TipoServicoRepository;
 
 /**
@@ -46,6 +49,9 @@ class ServicoControllerTest {
 
     @Autowired
     private TipoServicoRepository tipoServicoRepository;
+
+    @Autowired
+    private ServicoRepository servicoRepository;
 
     private Long clienteId;
     private Long maquinaId;
@@ -196,6 +202,81 @@ class ServicoControllerTest {
         mockMvc.perform(post("/api/servicos").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void criarServicoComStatusEmBrancoRetorna400() throws Exception {
+        String corpo = """
+                {
+                  "clienteId": %d,
+                  "maquinaId": %d,
+                  "tipoServicoId": %d,
+                  "quantidade": 1,
+                  "status": "",
+                  "tecnicoResponsavel": "Carlos Andrade",
+                  "valor": 1500.00,
+                  "dataPrevista": "%s"
+                }
+                """.formatted(clienteId, maquinaId, tipoServicoId, LocalDate.now().plusDays(7));
+        mockMvc.perform(post("/api/servicos").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void criarServicoComQuantidadeAbaixoDoMinimoRetorna400() throws Exception {
+        String corpo = """
+                {
+                  "clienteId": %d,
+                  "maquinaId": %d,
+                  "tipoServicoId": %d,
+                  "quantidade": 0,
+                  "status": "1º Contato",
+                  "tecnicoResponsavel": "Carlos Andrade",
+                  "valor": 1500.00,
+                  "dataPrevista": "%s"
+                }
+                """.formatted(clienteId, maquinaId, tipoServicoId, LocalDate.now().plusDays(7));
+        mockMvc.perform(post("/api/servicos").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void atualizarServicoComTecnicoResponsavelEmBrancoRetorna400() throws Exception {
+        Servico existente = new Servico();
+        existente.setCodigoOs("OS-TESTE-PUT-001");
+        existente.setCliente("Cliente Servico Controller");
+        existente.setSolicitacao("Calibração de teste");
+        existente.setQuantidade(1);
+        existente.setStatus("1º Contato");
+        existente.setTecnicoResponsavel("Carlos Andrade");
+        existente.setValor(new java.math.BigDecimal("1500.00"));
+        existente.setDataCriacao(LocalDate.now());
+        existente.setDataPrevista(LocalDate.now().plusDays(7));
+        Long id = servicoRepository.save(existente).getId();
+
+        String corpoAtualizacao = """
+                {
+                  "clienteId": %d,
+                  "maquinaId": %d,
+                  "tipoServicoId": %d,
+                  "quantidade": 1,
+                  "status": "1º Contato",
+                  "tecnicoResponsavel": "",
+                  "valor": 1500.00,
+                  "dataPrevista": "%s"
+                }
+                """.formatted(clienteId, maquinaId, tipoServicoId, LocalDate.now().plusDays(7));
+        mockMvc.perform(put("/api/servicos/" + id).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpoAtualizacao))
                 .andExpect(status().isBadRequest());
     }
 }
