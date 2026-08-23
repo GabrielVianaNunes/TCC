@@ -62,6 +62,13 @@
   }
 
   /* ── Checkers ──────────────────────────────────────────────── */
+  // Cada checker gera um alerta POR ITEM (id inclui o id do registro), não um
+  // alerta agregado por categoria. Um alerta agregado ("3 documentos
+  // vencidos") só tem um id de dispensa fixo — dispensar uma vez suprime a
+  // categoria inteira para sempre em localStorage, mesmo que os documentos
+  // específicos vencidos mudem depois. Por item, dispensar um documento não
+  // afeta os outros, e um documento novo que vier a vencer aparece com seu
+  // próprio id, nunca antes dispensado.
   async function checkDocumentos(alerts) {
     try {
       const data = await Api.get('/api/documentos', { size: 500 });
@@ -71,31 +78,32 @@
 
       // Suporta tanto "dataVencimento" (Thymeleaf) quanto "dataExpiracao" (mock server)
       const getExp = d => d.dataVencimento || d.dataExpiracao || null;
+      const getNome = d => d.nomeArquivo || d.nome || _t('Documento');
+      const fmtData = iso => window.ZP?.Fmt?.date ? window.ZP.Fmt.date(iso) : iso;
 
-      const expirados = docs.filter(d => getExp(d) && new Date(getExp(d)) < today);
-      const vencendo  = docs.filter(d => {
+      docs.forEach(d => {
         const exp = getExp(d);
-        if (!exp) return false;
+        if (!exp) return;
         const dt = new Date(exp);
-        return dt >= today && dt <= in30;
-      });
-
-      if (expirados.length) alerts.push({
-        id: 'docs-expired',
-        type: 'danger',
-        title: `${expirados.length} ${_t('documento')}${expirados.length > 1 ? 's' : ''} ${expirados.length > 1 ? _t('vencidos') : _t('vencido')}`,
-        desc: _t('Documentos expirados requerem atenção imediata.'),
-        href: '/documentos',
-        linkText: _t('Ver documentos')
-      });
-
-      if (vencendo.length) alerts.push({
-        id: 'docs-expiring',
-        type: 'warning',
-        title: `${vencendo.length} ${_t('documento')}${vencendo.length > 1 ? 's' : ''} ${vencendo.length > 1 ? _t('vencem em 30 dias') : _t('vence em 30 dias')}`,
-        desc: _t('Renove antes do vencimento para manter a conformidade.'),
-        href: '/documentos',
-        linkText: _t('Ver documentos')
+        if (dt < today) {
+          alerts.push({
+            id: `doc-expired-${d.id}`,
+            type: 'danger',
+            title: getNome(d),
+            desc: `${_t('Vencido em')} ${fmtData(exp)}`,
+            href: '/documentos',
+            linkText: _t('Ver documentos')
+          });
+        } else if (dt <= in30) {
+          alerts.push({
+            id: `doc-expiring-${d.id}`,
+            type: 'warning',
+            title: getNome(d),
+            desc: `${_t('Vence em')} ${fmtData(exp)}`,
+            href: '/documentos',
+            linkText: _t('Ver documentos')
+          });
+        }
       });
     } catch { /* ignore */ }
   }
@@ -107,15 +115,18 @@
       // Suporta tanto campos do mock (quantidadeAtual/estoqueMinimo) quanto do backend (quantidade/minimo)
       const getQtd = i => i.quantidadeAtual  ?? i.quantidade  ?? null;
       const getMin = i => i.estoqueMinimo    ?? i.minimo      ?? null;
-      const critical = items.filter(i => getQtd(i) != null && getMin(i) != null && getQtd(i) <= getMin(i));
-      if (critical.length) alerts.push({
-        id: 'stock-critical',
-        type: 'warning',
-        title: `${critical.length} ${critical.length > 1 ? _t('itens') : _t('item')} ${_t('com estoque crítico')}`,
-        desc: critical.slice(0, 2).map(i => i.nome || i.descricao).filter(Boolean).join(', ') + (critical.length > 2 ? '…' : ''),
-        href: '/almoxarifado',
-        linkText: _t('Ver almoxarifado')
-      });
+
+      items.filter(i => getQtd(i) != null && getMin(i) != null && getQtd(i) <= getMin(i))
+        .forEach(i => {
+          alerts.push({
+            id: `stock-${i.id}`,
+            type: 'warning',
+            title: i.nome || i.descricao || _t('Item'),
+            desc: `${_t('Estoque atual')}: ${getQtd(i)} (${_t('mínimo')}: ${getMin(i)})`,
+            href: '/almoxarifado',
+            linkText: _t('Ver almoxarifado')
+          });
+        });
     } catch { /* ignore */ }
   }
 
@@ -123,15 +134,18 @@
     try {
       const data = await Api.get('/api/maquinas', { size: 500 });
       const items = Array.isArray(data) ? data : (data.content || []);
-      const manut = items.filter(i => (i.status || '').toLowerCase().includes('manutenção'));
-      if (manut.length) alerts.push({
-        id: 'machines-maintenance',
-        type: 'info',
-        title: `${manut.length} ${_t('máquina')}${manut.length > 1 ? 's' : ''} ${_t('em manutenção')}`,
-        desc: manut.slice(0, 2).map(i => i.nome || i.modelo).filter(Boolean).join(', ') + (manut.length > 2 ? '…' : ''),
-        href: '/maquinas',
-        linkText: _t('Ver máquinas')
-      });
+
+      items.filter(i => (i.status || '').toLowerCase().includes('manutenção'))
+        .forEach(i => {
+          alerts.push({
+            id: `machine-${i.id}`,
+            type: 'info',
+            title: i.nome || i.modelo || _t('Máquina'),
+            desc: _t('Manutenção'),
+            href: '/maquinas',
+            linkText: _t('Ver máquinas')
+          });
+        });
     } catch { /* ignore */ }
   }
 
@@ -189,8 +203,14 @@
   document.addEventListener('DOMContentLoaded', async () => {
     await new Promise(r => setTimeout(r, 400)); // slight defer so API calls happen after page modules init
     const counts = [];
+    // Mesma regra de load(): documentos gerais são Admin-only no backend
+    // (GET incluído no @PreAuthorize desde a restrição de acesso) — chamar
+    // sem checar o papel aqui faz todo usuário não-Admin bater numa rota que
+    // sempre vai devolver 403 a cada carregamento de página, à toa.
+    if (window.ZP?.Auth?.ready) await window.ZP.Auth.ready();
+    const isAdmin = (window.ZP?.Auth?.role ? window.ZP.Auth.role() : 'ADMIN') === 'ADMIN';
     await Promise.allSettled([
-      checkDocumentos(counts),
+      ...(isAdmin ? [checkDocumentos(counts)] : []),
       checkAlmoxarifado(counts),
       checkMaquinas(counts),
     ]);
