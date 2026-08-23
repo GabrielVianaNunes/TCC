@@ -2,6 +2,7 @@ package com.zeiss.pilot.controller;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -14,10 +15,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.zeiss.pilot.entity.Projeto;
+import com.zeiss.pilot.repository.ProjetoRepository;
+
 /**
  * Cobertura HTTP (via controller real) de POST /api/projetos — confirma
- * que @Valid dispara em ProjetoDTO na Fase 3a (nomeProjeto,
- * custoAnualPrevisto, retornoPrevisto).
+ * que @Valid dispara em ProjetoDTO na Fase 3a (nomeProjeto, prioridade,
+ * status, custoAnualPrevisto, retornoPrevisto).
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -27,6 +31,9 @@ class ProjetoControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ProjetoRepository projetoRepository;
 
     private static final String ENDPOINT = "/api/projetos";
 
@@ -112,5 +119,23 @@ class ProjetoControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(corpo))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void atualizarProjetoSemPrioridadeRetorna400() throws Exception {
+        Projeto existente = new Projeto();
+        existente.setNomeProjeto("Projeto Original");
+        existente.setPrioridade("Alta");
+        existente.setStatus("A iniciar");
+        Long id = projetoRepository.save(existente).getId();
+
+        String corpoAtualizacao = """
+                {"nomeProjeto":"Projeto Original","status":"A iniciar"}
+                """;
+        mockMvc.perform(put(ENDPOINT + "/" + id).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpoAtualizacao))
+                .andExpect(status().isBadRequest());
     }
 }

@@ -2,6 +2,7 @@ package com.zeiss.pilot.controller;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.zeiss.pilot.entity.Edital;
+import com.zeiss.pilot.repository.EditalRepository;
 
 /**
  * Cobertura HTTP (via controller real) de POST /api/editais — confirma que
@@ -27,6 +31,9 @@ class EditalControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private EditalRepository editalRepository;
 
     private static final String ENDPOINT = "/api/editais";
 
@@ -112,5 +119,36 @@ class EditalControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(corpo))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void criarEditalComInstituicaoParceiraContendoNumeroRetorna400() throws Exception {
+        String corpo = """
+                {"nomeEdital":"Edital Teste","status":"Aguardando aprovação","instituicaoFornecedora":"FINEP","instituicaoParceira":"SENAI99","valor":10000.00}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void atualizarEditalSemNomeRetorna400() throws Exception {
+        Edital existente = new Edital();
+        existente.setNomeEdital("Edital Original");
+        existente.setInstituicaoFornecedora("FINEP");
+        existente.setStatus("Aguardando aprovação");
+        existente.setValor(new java.math.BigDecimal("10000.00"));
+        Long id = editalRepository.save(existente).getId();
+
+        String corpoAtualizacao = """
+                {"status":"Aguardando aprovação","instituicaoFornecedora":"FINEP","valor":10000.00}
+                """;
+        mockMvc.perform(put(ENDPOINT + "/" + id).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpoAtualizacao))
+                .andExpect(status().isBadRequest());
     }
 }

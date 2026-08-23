@@ -110,6 +110,9 @@
 
   /* ── Save ───────────────────────────────────────────────────── */
   async function salvar() {
+    const form = document.getElementById('visitaForm');
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+
     const id = document.getElementById('visitaId').value;
     const body = {
       responsavel: document.getElementById('responsavel').value,

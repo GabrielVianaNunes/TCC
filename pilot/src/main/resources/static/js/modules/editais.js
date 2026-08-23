@@ -110,6 +110,9 @@
 
   /* ── Save ───────────────────────────────────────────────────── */
   async function salvar() {
+    const form = document.getElementById('editalForm');
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+
     const id = document.getElementById('editalId').value;
     const body = {
       nomeEdital: document.getElementById('nome').value,
