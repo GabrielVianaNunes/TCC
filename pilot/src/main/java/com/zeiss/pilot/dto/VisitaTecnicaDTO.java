@@ -4,11 +4,19 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.zeiss.pilot.entity.VisitaTecnica;
+import com.zeiss.pilot.validation.Nome;
+import jakarta.validation.constraints.NotBlank;
 
 public class VisitaTecnicaDTO {
 
     private Long id;
+
+    @NotBlank(message = "Responsável é obrigatório.")
+    @Nome
     private String responsavel;
+
+    @NotBlank(message = "Empresa é obrigatória.")
+    @Nome
     private String empresaInstituicao;
     private LocalDate dataSolicitada;
     private LocalDate dataAgendada;

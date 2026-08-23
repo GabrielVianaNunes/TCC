@@ -17,6 +17,8 @@ import com.zeiss.pilot.dto.VisitaTecnicaDTO;
 import com.zeiss.pilot.entity.VisitaTecnica;
 import com.zeiss.pilot.service.VisitaTecnicaService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/visitas-tecnicas")
 public class VisitaTecnicaController {
@@ -45,14 +47,14 @@ public class VisitaTecnicaController {
     }
 
     @PostMapping
-    public ResponseEntity<VisitaTecnicaDTO> salvarVisita(@RequestBody VisitaTecnicaDTO dto) {
+    public ResponseEntity<VisitaTecnicaDTO> salvarVisita(@Valid @RequestBody VisitaTecnicaDTO dto) {
         VisitaTecnica entidade = dto.toEntity();
         VisitaTecnica salvo = service.salvarVisita(entidade);
         return ResponseEntity.ok(VisitaTecnicaDTO.fromEntity(salvo));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VisitaTecnicaDTO> atualizarVisita(@PathVariable Long id, @RequestBody VisitaTecnicaDTO dto) {
+    public ResponseEntity<VisitaTecnicaDTO> atualizarVisita(@PathVariable Long id, @Valid @RequestBody VisitaTecnicaDTO dto) {
         VisitaTecnica entidade = dto.toEntity();
         entidade.setId(id);
         VisitaTecnica atualizado = service.salvarVisita(entidade);

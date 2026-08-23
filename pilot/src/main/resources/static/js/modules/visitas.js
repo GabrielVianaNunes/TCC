@@ -166,6 +166,8 @@
   /* ── Init ───────────────────────────────────────────────────── */
   function init() {
     loadVisitas();
+    Valid?.somenteLetras?.(document.getElementById('responsavel'));
+    Valid?.somenteLetras?.(document.getElementById('empresa'));
     document.getElementById('btnNovaVisita').addEventListener('click', abrirModalNovo);
     document.getElementById('btnSalvarVisita').addEventListener('click', salvar);
     document.getElementById('btnExcluirVisita').addEventListener('click', excluir);
