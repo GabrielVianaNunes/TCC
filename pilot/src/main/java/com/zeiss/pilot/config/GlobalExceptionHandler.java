@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -119,6 +120,21 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", msg));
         }
         return ResponseEntity.badRequest().body(Map.of("message", msg));
+    }
+
+    /**
+     * Lançada pelo Spring quando uma validação declarativa (@Valid num
+     * @RequestBody anotado com @Nome/@CpfOuCnpj/@Telefone/@NotBlank etc.)
+     * falha. As mensagens de cada campo já são as que escrevemos nas próprias
+     * anotações — sem detalhe de infraestrutura, então não precisam do
+     * tratamento de "referência de log" que os erros de banco recebem.
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
+        String mensagens = ex.getBindingResult().getFieldErrors().stream()
+                .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
+                .collect(java.util.stream.Collectors.joining("; "));
+        return ResponseEntity.badRequest().body(Map.of("message", mensagens));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +26,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.zeiss.pilot.dto.ClienteDTO;
 import com.zeiss.pilot.entity.Maquina;
@@ -224,5 +228,32 @@ class GlobalExceptionHandlerTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("clienteId é obrigatório para criar uma Ordem de Serviço.", response.getBody().get("message"));
+    }
+
+    /**
+     * MethodArgumentNotValidException carrega um BindingResult com um
+     * FieldError por campo que falhou — o handler precisa juntar todos numa
+     * mensagem só, com o nome do campo e a mensagem da própria anotação
+     * (não uma mensagem genérica de "dado inválido").
+     */
+    @Test
+    void erroDeValidacaoBeanRetorna400ComMensagensDosCamposQueFalharam() {
+        GlobalExceptionHandler handler = new GlobalExceptionHandler();
+
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(new Object(), "objeto");
+        bindingResult.addError(new FieldError("objeto", "nome", "deve conter apenas letras, espaço, hífen, apóstrofo, ponto ou &"));
+        bindingResult.addError(new FieldError("objeto", "telefone", "telefone inválido"));
+
+        MethodArgumentNotValidException ex = Mockito.mock(MethodArgumentNotValidException.class);
+        Mockito.when(ex.getBindingResult()).thenReturn(bindingResult);
+
+        ResponseEntity<Map<String, String>> response = handler.handleValidationErrors(ex);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        String msg = response.getBody().get("message");
+        assertTrue(msg.contains("nome"));
+        assertTrue(msg.contains("deve conter apenas letras"));
+        assertTrue(msg.contains("telefone"));
+        assertTrue(msg.contains("telefone inválido"));
     }
 }
