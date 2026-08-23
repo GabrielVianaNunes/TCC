@@ -2,6 +2,13 @@ package com.zeiss.pilot.dto;
 
 import com.zeiss.pilot.entity.Cliente;
 import com.zeiss.pilot.entity.Servico;
+import com.zeiss.pilot.validation.Nome;
+
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,12 +24,27 @@ public class ServicoDTO {
     private String maquinaNome;
     private Long tipoServicoId;
     private String solicitacao;
+
+    @Min(value = 1, message = "Quantidade deve ser no mínimo 1.")
+    @Max(value = 100000, message = "Quantidade deve ser no máximo 100000.")
     private int quantidade;
+
+    @NotBlank(message = "Status é obrigatório.")
     private String status;
+
+    @NotBlank(message = "Técnico responsável é obrigatório.")
+    @Nome
     private String tecnicoResponsavel;
+
+    @NotNull(message = "Valor é obrigatório.")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Valor deve ser maior que zero.")
     private BigDecimal valor;
+
     private LocalDate dataCriacao;
+
+    @NotNull(message = "Data prevista é obrigatória.")
     private LocalDate dataPrevista;
+
     private LocalDate dataRealizada;
     private String observacao;
 

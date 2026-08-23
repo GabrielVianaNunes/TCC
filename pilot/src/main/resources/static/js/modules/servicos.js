@@ -262,7 +262,7 @@ const ServicosModule = (() => {
       document.getElementById('quantidade').value      = s.quantidade || '';
       document.getElementById('status').value          = s.status || '';
       document.getElementById('tecnicoResponsavel').value = s.tecnicoResponsavel || '';
-      document.getElementById('valor').value           = s.valor || '';
+      document.getElementById('valor').value           = Mask.numeroParaMoeda(s.valor);
       document.getElementById('dataPrevista').value    = s.dataPrevista ? s.dataPrevista.split('T')[0] : '';
       document.getElementById('dataRealizada').value   = s.dataRealizada ? s.dataRealizada.split('T')[0] : '';
       document.getElementById('observacao').value      = s.observacao || '';
@@ -292,7 +292,7 @@ const ServicosModule = (() => {
       quantidade:          parseInt(document.getElementById('quantidade').value, 10),
       status:              document.getElementById('status').value,
       tecnicoResponsavel:  document.getElementById('tecnicoResponsavel').value.trim(),
-      valor:               document.getElementById('valor').value.trim(),
+      valor:               Mask.moedaParaNumero(document.getElementById('valor').value),
       dataPrevista:        document.getElementById('dataPrevista').value || null,
       dataRealizada:       document.getElementById('dataRealizada').value || null,
       observacao:          document.getElementById('observacao').value.trim()
@@ -378,6 +378,8 @@ const ServicosModule = (() => {
     loadEstagiarios();
     carregarClientesNoCombobox();
     carregarMaquinasETiposDeServico();
+    Valid?.somenteLetras?.(document.getElementById('tecnicoResponsavel'));
+    Mask?.moeda?.(document.getElementById('valor'));
 
     // Stars interaction for Nota do Diretor
     document.querySelectorAll('.nd-star').forEach(btn => {

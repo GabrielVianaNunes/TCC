@@ -2,6 +2,7 @@ package com.zeiss.pilot.controller;
 
 import com.zeiss.pilot.dto.ServicoDTO;
 import com.zeiss.pilot.service.ServicoService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,12 +32,12 @@ public class ServicoController {
     }
 
     @PostMapping
-    public ResponseEntity<ServicoDTO> criarServico(@RequestBody ServicoDTO dto) {
+    public ResponseEntity<ServicoDTO> criarServico(@Valid @RequestBody ServicoDTO dto) {
         return ResponseEntity.ok(servicoService.criarServico(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ServicoDTO> atualizarServico(@PathVariable Long id, @RequestBody ServicoDTO dto) {
+    public ResponseEntity<ServicoDTO> atualizarServico(@PathVariable Long id, @Valid @RequestBody ServicoDTO dto) {
         return ResponseEntity.ok(servicoService.atualizarServico(id, dto));
     }
 
