@@ -1,6 +1,10 @@
 package com.zeiss.pilot.dto;
 
 import com.zeiss.pilot.entity.Amostra;
+import com.zeiss.pilot.validation.Nome;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -9,20 +13,40 @@ import java.util.Map;
 public class AmostraDTO {
 
     private Long id;
+
+    @NotNull(message = "Data do recebimento é obrigatória.")
     private LocalDate dataEntrada;
+
+    @NotBlank(message = "Horário do recebimento é obrigatório.")
     private String horario;
+
+    @NotBlank(message = "Responsável pelo recebimento é obrigatório.")
+    @Nome
     private String responsavel;
+
     private String formaRecebimento;
+
+    @NotBlank(message = "Cliente / empresa é obrigatório.")
     private String cliente;
+
+    @Nome
     private String respEnvio;
+
     private String telEmail;
     private String servicoRef;
     private String obsRecebimento;
     private String codigoCEM;
     private String codigoCliente;
+
+    @NotBlank(message = "Descrição da peça é obrigatória.")
     private String descricao;
+
+    @Min(value = 1, message = "Quantidade deve ser no mínimo 1.")
     private int quantidade;
+
+    @NotBlank(message = "Unidade é obrigatória.")
     private String unidade;
+
     private LocalDate dataDevPrevista;
     private boolean temDesenho;
     private boolean temCAD;
@@ -38,7 +62,10 @@ public class AmostraDTO {
     private String codigoAtribuido;
     private String formaIdentificacao;
     private String localArmazenamento;
+
+    @Nome
     private String respArmazenamento;
+
     private String condicaoAmbiental;
     private String condicaoRequerida;
     private boolean fragil;
@@ -50,27 +77,45 @@ public class AmostraDTO {
     private String tipoDivergencia;
     private String descDivergencia;
     private String impactoTecnico;
+
+    @Nome
     private String respTecnico;
+
     private String decisaoTecnica;
     private String abrirNC;
     private String justificativa;
     private String clienteComunicado;
     private String formaComunicacao;
     private LocalDate dataComunicacao;
+
+    @Nome
     private String respContato;
+
     private String autorizouRessalva;
     private String classificacao;
     private String justificativaAceite;
     private String seraDevolvida;
     private String seraRetida;
     private String formaDevolucao;
+
+    @Nome
     private String respDevolucao;
+
     private String obsDevolucao;
+
+    @Nome
     private String assRecebimento;
+
     private LocalDate assRecebimentoData;
+
+    @Nome
     private String assTecnico;
+
     private LocalDate assTecnicoData;
+
+    @Nome
     private String assAprovacao;
+
     private LocalDate assAprovacaoData;
     private String observacao;
     private String status;

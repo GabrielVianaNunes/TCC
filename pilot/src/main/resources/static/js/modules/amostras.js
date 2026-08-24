@@ -13,6 +13,7 @@
   let allAmostras      = [];
   let filteredAmostras = [];
   let editingId        = null;
+  let editingStatus     = null;
   let devItemId        = null;
   let anexoItemId      = null;
   let deleteItemId     = null;
@@ -321,6 +322,7 @@
   function validateStep(step) {
     if (step === 1) {
       if (!val('amostraDataEntrada')) { Toast.error(_t('Informe a data do recebimento.')); return false; }
+      if (!val('amostraHorario'))     { Toast.error(_t('Informe o horário do recebimento.')); return false; }
       if (!val('amostraResponsavel')) { Toast.error(_t('Informe o responsável pelo recebimento.')); return false; }
       if (!val('amostraCliente'))     { Toast.error(_t('Informe o cliente / empresa.')); return false; }
       if (!val('amostraDesc'))        { Toast.error(_t('Informe a descrição da peça.')); return false; }
@@ -559,6 +561,7 @@
     try {
       const a = await Api.get(`${API_AMOSTRAS}/${id}`);
       editingId = id;
+      editingStatus = a.status;
       document.getElementById('modalAmostraTitle').textContent = _t('Editar Recebimento');
       resetForm();
       fillForm(a);
@@ -572,7 +575,7 @@
   async function salvarAmostra() {
     const payload = readPayload();
 
-    if (!payload.dataEntrada || !payload.responsavel || !payload.cliente ||
+    if (!payload.dataEntrada || !payload.horario || !payload.responsavel || !payload.cliente ||
         !payload.descricao || payload.quantidade < 1 || !payload.unidade) {
       Toast.error(_t('Preencha os campos obrigatórios (etapa 1).'));
       goToStep(1);
@@ -588,6 +591,7 @@
         Toast.success(_t('Recebimento registrado com sucesso!'));
         load(0);
       } else {
+        payload.status = editingStatus;
         await Api.put(`${API_AMOSTRAS}/${editingId}`, payload);
         Toast.success(_t('Registro atualizado.'));
         load(currentPage);

@@ -2,6 +2,7 @@ package com.zeiss.pilot.controller;
 
 import com.zeiss.pilot.dto.AmostraDTO;
 import com.zeiss.pilot.service.AmostraService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,12 +39,12 @@ public class AmostraController {
     }
 
     @PostMapping
-    public ResponseEntity<AmostraDTO> criar(@RequestBody AmostraDTO dto) {
+    public ResponseEntity<AmostraDTO> criar(@Valid @RequestBody AmostraDTO dto) {
         return ResponseEntity.ok(service.salvar(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AmostraDTO> atualizar(@PathVariable Long id, @RequestBody AmostraDTO dto) {
+    public ResponseEntity<AmostraDTO> atualizar(@PathVariable Long id, @Valid @RequestBody AmostraDTO dto) {
         return ResponseEntity.ok(service.atualizar(id, dto));
     }
 
