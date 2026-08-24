@@ -1,14 +1,22 @@
 package com.zeiss.pilot.dto;
 
 import com.zeiss.pilot.entity.AgendamentoMaquina;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class AgendamentoMaquinaDTO {
 
     private Long id;
     private Long maquinaId;
+
+    @NotBlank(message = "Usuário é obrigatório")
     private String usuario;
+
+    @NotNull(message = "Data/hora de início é obrigatória")
     private LocalDateTime dataInicio;
+
+    @NotNull(message = "Data/hora de fim é obrigatória")
     private LocalDateTime dataFim;
     private String motivo;
     private boolean confirmado;

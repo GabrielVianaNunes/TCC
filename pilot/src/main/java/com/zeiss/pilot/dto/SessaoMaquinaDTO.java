@@ -1,13 +1,19 @@
 package com.zeiss.pilot.dto;
 
 import com.zeiss.pilot.entity.SessaoMaquina;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class SessaoMaquinaDTO {
 
     private Long id;
     private Long maquinaId;
+
+    @NotBlank(message = "Usuário responsável é obrigatório")
     private String usuario;
+
+    @NotNull(message = "Data/hora de ligação é obrigatória")
     private LocalDateTime dataLigada;
     private LocalDateTime dataDesligada;
     private Double horasUso;

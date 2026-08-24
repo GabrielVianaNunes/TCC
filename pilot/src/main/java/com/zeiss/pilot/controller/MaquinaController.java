@@ -5,6 +5,7 @@ import com.zeiss.pilot.dto.ManutencaoMaquinaDTO;
 import com.zeiss.pilot.dto.MaquinaDTO;
 import com.zeiss.pilot.dto.SessaoMaquinaDTO;
 import com.zeiss.pilot.service.MaquinaService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,14 +56,14 @@ public class MaquinaController {
 
     @PostMapping("/{maquinaId}/sessoes")
     public ResponseEntity<SessaoMaquinaDTO> criarSessao(@PathVariable Long maquinaId,
-                                                         @RequestBody SessaoMaquinaDTO dto) {
+                                                         @Valid @RequestBody SessaoMaquinaDTO dto) {
         return ResponseEntity.ok(service.criarSessao(maquinaId, dto));
     }
 
     @PatchMapping("/{maquinaId}/sessoes/{id}")
     public ResponseEntity<SessaoMaquinaDTO> atualizarSessao(@PathVariable Long maquinaId,
                                                               @PathVariable Long id,
-                                                              @RequestBody SessaoMaquinaDTO dto) {
+                                                              @Valid @RequestBody SessaoMaquinaDTO dto) {
         return ResponseEntity.ok(service.atualizarSessao(id, dto));
     }
 
@@ -81,14 +82,14 @@ public class MaquinaController {
 
     @PostMapping("/{maquinaId}/manutencoes")
     public ResponseEntity<ManutencaoMaquinaDTO> criarManutencao(@PathVariable Long maquinaId,
-                                                                  @RequestBody ManutencaoMaquinaDTO dto) {
+                                                                  @Valid @RequestBody ManutencaoMaquinaDTO dto) {
         return ResponseEntity.ok(service.criarManutencao(maquinaId, dto));
     }
 
     @PatchMapping("/{maquinaId}/manutencoes/{id}")
     public ResponseEntity<ManutencaoMaquinaDTO> atualizarManutencao(@PathVariable Long maquinaId,
                                                                       @PathVariable Long id,
-                                                                      @RequestBody ManutencaoMaquinaDTO dto) {
+                                                                      @Valid @RequestBody ManutencaoMaquinaDTO dto) {
         return ResponseEntity.ok(service.atualizarManutencao(id, dto));
     }
 
@@ -107,14 +108,14 @@ public class MaquinaController {
 
     @PostMapping("/{maquinaId}/agendamentos")
     public ResponseEntity<AgendamentoMaquinaDTO> criarAgendamento(@PathVariable Long maquinaId,
-                                                                    @RequestBody AgendamentoMaquinaDTO dto) {
+                                                                    @Valid @RequestBody AgendamentoMaquinaDTO dto) {
         return ResponseEntity.ok(service.criarAgendamento(maquinaId, dto));
     }
 
     @PatchMapping("/{maquinaId}/agendamentos/{id}")
     public ResponseEntity<AgendamentoMaquinaDTO> atualizarAgendamento(@PathVariable Long maquinaId,
                                                                         @PathVariable Long id,
-                                                                        @RequestBody AgendamentoMaquinaDTO dto) {
+                                                                        @Valid @RequestBody AgendamentoMaquinaDTO dto) {
         return ResponseEntity.ok(service.atualizarAgendamento(id, dto));
     }
 
