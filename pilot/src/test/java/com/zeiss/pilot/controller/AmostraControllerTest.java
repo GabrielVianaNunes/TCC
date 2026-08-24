@@ -234,4 +234,86 @@ class AmostraControllerTest {
         Amostra atualizada = amostraRepository.findById(amostraId).orElseThrow();
         org.junit.jupiter.api.Assertions.assertEquals("Em custódia", atualizada.getStatus());
     }
+
+    // ── @Pattern em seleção fechada (Task 2) ──
+
+    @Test
+    @WithMockUser
+    void criarComFormaRecebimentoInvalidaRetorna400() throws Exception {
+        String corpo = """
+                {"dataEntrada":"2026-08-24","horario":"10:00","responsavel":"João Pereira",
+                 "cliente":"ACME Ltda","descricao":"Peça de teste","quantidade":1,"unidade":"un",
+                 "formaRecebimento":"Drone"}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void criarComCondicaoContendoValorInvalidoRetorna400() throws Exception {
+        String corpo = """
+                {"dataEntrada":"2026-08-24","horario":"10:00","responsavel":"João Pereira",
+                 "cliente":"ACME Ltda","descricao":"Peça de teste","quantidade":1,"unidade":"un",
+                 "condicao":{"pecaConforme":"TALVEZ"}}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void criarComFotoContendoValorInvalidoRetorna400() throws Exception {
+        String corpo = """
+                {"dataEntrada":"2026-08-24","horario":"10:00","responsavel":"João Pereira",
+                 "cliente":"ACME Ltda","descricao":"Peça de teste","quantidade":1,"unidade":"un",
+                 "fotos":{"embalagem":"TALVEZ"}}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void criarComCondicaoVaziaRetorna200() throws Exception {
+        String corpo = """
+                {"dataEntrada":"2026-08-24","horario":"10:00","responsavel":"João Pereira",
+                 "cliente":"ACME Ltda","descricao":"Peça de teste","quantidade":1,"unidade":"un",
+                 "condicao":{"pecaConforme":"","quantidadeCorreta":"SIM"},
+                 "fotos":{"embalagem":""}}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void criarComTodasSecoesPreenchidasRetorna200() throws Exception {
+        String corpo = """
+                {"dataEntrada":"2026-08-24","horario":"10:00","responsavel":"João Pereira",
+                 "cliente":"ACME Ltda","descricao":"Peça de teste","quantidade":1,"unidade":"un",
+                 "formaRecebimento":"Correios",
+                 "condicao":{"pecaConforme":"SIM","quantidadeCorreta":"SIM","embalagemIntegra":"SIM",
+                             "semDanoTransporte":"SIM","pecaLimpa":"SIM","semContaminacao":"SIM",
+                             "identificacao":"SIM","documentos":"N/A","permiteExecucao":"SIM"},
+                 "fotos":{"embalagem":"SIM","pecaAntes":"SIM","etiqueta":"NÃO","danos":"NÃO"},
+                 "condicaoAmbiental":"Sim","houveDivergencia":"Não","tipoDivergencia":"Outro",
+                 "impactoTecnico":"Não","decisaoTecnica":"Aceito normalmente","abrirNC":"Não",
+                 "clienteComunicado":"Sim","formaComunicacao":"E-mail","autorizouRessalva":"N/A",
+                 "classificacao":"Aceito","seraDevolvida":"Sim","seraRetida":"Não",
+                 "formaDevolucao":"Correios"}
+                """;
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isOk());
+    }
 }

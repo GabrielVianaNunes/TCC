@@ -5,6 +5,7 @@ import com.zeiss.pilot.validation.Nome;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,8 @@ public class AmostraDTO {
     @Nome
     private String responsavel;
 
+    @Pattern(regexp = "^$|Pessoalmente|Entregadora|Correios|Motoboy|Outro",
+            message = "Forma de recebimento inválida.")
     private String formaRecebimento;
 
     @NotBlank(message = "Cliente / empresa é obrigatório.")
@@ -55,9 +58,9 @@ public class AmostraDTO {
     private String obsTecnicas;
     private List<String> servicos;
     private String objetivoCliente;
-    private Map<String, String> condicao;
+    private Map<String, @Pattern(regexp = "^$|SIM|NÃO|N/A", message = "Valor de condição inválido.") String> condicao;
     private String obsCondicao;
-    private Map<String, String> fotos;
+    private Map<String, @Pattern(regexp = "^$|SIM|NÃO", message = "Valor de registro fotográfico inválido.") String> fotos;
     private String pathFotos;
     private String codigoAtribuido;
     private String formaIdentificacao;
@@ -66,6 +69,7 @@ public class AmostraDTO {
     @Nome
     private String respArmazenamento;
 
+    @Pattern(regexp = "^$|Não|Sim", message = "Condição ambiental inválida.")
     private String condicaoAmbiental;
     private String condicaoRequerida;
     private boolean fragil;
@@ -73,29 +77,57 @@ public class AmostraDTO {
     private boolean embalagemEspecial;
     private boolean identifPreservada;
     private String obsArmazenamento;
+
+    @Pattern(regexp = "^$|Não|Sim", message = "Houve divergência inválido.")
     private String houveDivergencia;
+
+    @Pattern(regexp = "^$|Quantidade incorreta|Dano de transporte|Peça errada|Documentação ausente|Embalagem danificada|Outro",
+            message = "Tipo de divergência inválido.")
     private String tipoDivergencia;
+
     private String descDivergencia;
+
+    @Pattern(regexp = "^$|Não|Sim", message = "Impacto técnico inválido.")
     private String impactoTecnico;
 
     @Nome
     private String respTecnico;
 
+    @Pattern(regexp = "^$|Aceito com ressalva|Aceito normalmente|Aguardando decisão|Devolver ao cliente",
+            message = "Decisão técnica inválida.")
     private String decisaoTecnica;
+
+    @Pattern(regexp = "^$|Não|Sim", message = "Abrir NC inválido.")
     private String abrirNC;
+
     private String justificativa;
+
+    @Pattern(regexp = "^$|Sim|Não", message = "Cliente comunicado inválido.")
     private String clienteComunicado;
+
+    @Pattern(regexp = "^$|E-mail|Telefone|WhatsApp|Presencial", message = "Forma de comunicação inválida.")
     private String formaComunicacao;
+
     private LocalDate dataComunicacao;
 
     @Nome
     private String respContato;
 
+    @Pattern(regexp = "^$|Sim|Não|N/A", message = "Autorizou ressalva inválido.")
     private String autorizouRessalva;
+
+    @Pattern(regexp = "^$|Aceito|Aceito com ressalva|Recusado", message = "Classificação inválida.")
     private String classificacao;
+
     private String justificativaAceite;
+
+    @Pattern(regexp = "^$|Sim|Não", message = "Será devolvida inválido.")
     private String seraDevolvida;
+
+    @Pattern(regexp = "^$|Sim|Não", message = "Será retida inválido.")
     private String seraRetida;
+
+    @Pattern(regexp = "^$|Retirada pelo cliente|Entregadora|Correios|Motoboy", message = "Forma de devolução inválida.")
     private String formaDevolucao;
 
     @Nome
