@@ -12,8 +12,9 @@
 
   let allAmostras      = [];
   let filteredAmostras = [];
-  let editingId        = null;
-  let editingStatus     = null;
+  let editingId               = null;
+  let editingStatus           = null;
+  let editingDataDevRealizada = null;
   let devItemId        = null;
   let anexoItemId      = null;
   let deleteItemId     = null;
@@ -550,6 +551,8 @@
   // ── Abrir modal nova amostra ──────────────────────────────────────────────
   function openNovaAmostra() {
     editingId = null;
+    editingStatus = null;
+    editingDataDevRealizada = null;
     document.getElementById('modalAmostraTitle').textContent = _t('Novo Recebimento de Peças');
     resetForm();
     setVal('amostraDataEntrada', todayISO());
@@ -562,6 +565,7 @@
       const a = await Api.get(`${API_AMOSTRAS}/${id}`);
       editingId = id;
       editingStatus = a.status;
+      editingDataDevRealizada = a.dataDevRealizada;
       document.getElementById('modalAmostraTitle').textContent = _t('Editar Recebimento');
       resetForm();
       fillForm(a);
@@ -592,6 +596,7 @@
         load(0);
       } else {
         payload.status = editingStatus;
+        payload.dataDevRealizada = editingDataDevRealizada;
         await Api.put(`${API_AMOSTRAS}/${editingId}`, payload);
         Toast.success(_t('Registro atualizado.'));
         load(currentPage);
