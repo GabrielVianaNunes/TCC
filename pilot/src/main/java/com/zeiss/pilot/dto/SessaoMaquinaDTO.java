@@ -10,10 +10,10 @@ public class SessaoMaquinaDTO {
     private Long id;
     private Long maquinaId;
 
-    @NotBlank(message = "Usuário responsável é obrigatório")
+    @NotBlank(message = "Usuário responsável é obrigatório.")
     private String usuario;
 
-    @NotNull(message = "Data/hora de ligação é obrigatória")
+    @NotNull(message = "Data/hora de ligação é obrigatória.")
     private LocalDateTime dataLigada;
     private LocalDateTime dataDesligada;
     private Double horasUso;

@@ -11,21 +11,21 @@ public class ManutencaoMaquinaDTO {
     private Long id;
     private Long maquinaId;
 
-    @NotBlank(message = "Tipo de manutenção é obrigatório")
+    @NotBlank(message = "Tipo de manutenção é obrigatório.")
     @Pattern(regexp = "Revisão Geral|Revisão de Ponteiras|Limpeza",
-            message = "Tipo de manutenção deve ser Revisão Geral, Revisão de Ponteiras ou Limpeza")
+            message = "Tipo de manutenção deve ser Revisão Geral, Revisão de Ponteiras ou Limpeza.")
     private String tipo;
 
-    @NotBlank(message = "Responsável é obrigatório")
+    @NotBlank(message = "Responsável é obrigatório.")
     private String responsavel;
 
-    @NotNull(message = "Data realizada é obrigatória")
+    @NotNull(message = "Data realizada é obrigatória.")
     private LocalDate data;
 
     private LocalDate proximaData;
 
     @Pattern(regexp = "Concluída|Em andamento|Agendada",
-            message = "Status deve ser Concluída, Em andamento ou Agendada")
+            message = "Status deve ser Concluída, Em andamento ou Agendada.")
     private String status;
     private String observacao;
 

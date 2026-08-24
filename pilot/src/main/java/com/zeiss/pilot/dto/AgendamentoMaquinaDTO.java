@@ -10,13 +10,13 @@ public class AgendamentoMaquinaDTO {
     private Long id;
     private Long maquinaId;
 
-    @NotBlank(message = "Usuário é obrigatório")
+    @NotBlank(message = "Usuário é obrigatório.")
     private String usuario;
 
-    @NotNull(message = "Data/hora de início é obrigatória")
+    @NotNull(message = "Data/hora de início é obrigatória.")
     private LocalDateTime dataInicio;
 
-    @NotNull(message = "Data/hora de fim é obrigatória")
+    @NotNull(message = "Data/hora de fim é obrigatória.")
     private LocalDateTime dataFim;
     private String motivo;
     private boolean confirmado;
