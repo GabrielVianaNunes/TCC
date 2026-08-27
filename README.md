@@ -134,7 +134,7 @@ O sistema tem backup automatizado diário do banco (`pg_dump -Fc`) e dos documen
 | Módulo | Descrição |
 |---|---|
 | **Máquinas** | Cadastro de equipamentos, agendamento, manutenção e documentos por máquina; cada Ordem de Serviço escolhe uma máquina e, em seguida, um tipo de serviço do catálogo real da Zeiss para a categoria daquela máquina (CMM, multissensor óptico ou tomografia computadorizada), em vez de texto livre |
-| **Clientes** | Cadastro de clientes (nome, CPF/CNPJ único, endereço, telefone, e-mail) com dashboard de ranking de receita por mês/ano; toda Ordem de Serviço se vincula a um cliente cadastrado, em vez de texto livre |
+| **Clientes** | Cadastro de clientes (nome, CPF/CNPJ único, endereço, telefone, e-mail); toda Ordem de Serviço se vincula a um cliente cadastrado, em vez de texto livre. Dashboard dedicado de receita por cliente — mês específico ou ano completo, só vendas fechadas |
 | **Amostras** | Controle de amostras recebidas para análise/calibração |
 | **Almoxarifado** | Itens e movimentações de estoque |
 | **Estagiários** | Cadastro, notas, dashboard e quadro Kanban de atividades — de Estagiários, Técnicos e Gestores, cada papel vendo só o que tem permissão |
