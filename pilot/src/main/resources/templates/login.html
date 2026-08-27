@@ -69,8 +69,9 @@
   <!-- ════ RIGHT ─ Form Panel ════ -->
   <main class="login-form-panel">
     <!-- Âncora do seletor de idioma (i18n.js monta aqui quando não há topbar)
-         e do botão de tema — a tela de login não tem topbar. -->
-    <div id="_langMount" style="display:flex;justify-content:flex-end;align-items:center;gap:var(--space-2);margin-bottom:var(--space-4)">
+         e do botão de tema — a tela de login não tem topbar, então fica fixo
+         no canto superior direito da tela em vez de embutido no fluxo do form. -->
+    <div id="_langMount" class="login-topbar-actions">
       <button type="button" id="themeToggle" class="topbar__icon-btn"
               title="Modo Escuro" aria-label="Modo Escuro"
               style="display:flex;align-items:center;justify-content:center;width:36px;height:36px">

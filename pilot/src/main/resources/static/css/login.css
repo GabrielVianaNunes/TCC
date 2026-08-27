@@ -139,6 +139,20 @@
   justify-content: center;
   padding: var(--space-8);
   background: var(--color-surface);
+  position: relative;
+}
+
+/* ── Idioma / tema — fixo no canto superior direito da tela, fora do fluxo
+   do formulário (antes ficava embutido acima do login-box e herdava o
+   centering vertical do painel, flutuando no meio da tela). ── */
+.login-topbar-actions {
+  position: fixed;
+  top: var(--space-6);
+  right: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  z-index: var(--z-topbar);
 }
 
 .login-box {
@@ -337,7 +351,7 @@
   .login-page { grid-template-columns: 1fr; }
   .login-brand { display: none; }
   .login-form-panel { padding: var(--space-6); background: var(--color-bg); }
-}
+}
 
 /* O Chrome pinta um fundo branco proprio em campo autopreenchido, o que
    quebra o tema escuro. Nao da para sobrescrever `background` nesse estado,
