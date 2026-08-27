@@ -277,6 +277,8 @@ class ClienteServiceIntegrationTest {
 
         assertEquals(0, java.math.BigDecimal.ZERO.compareTo(linha.getReceitaMes()));
         assertEquals(0, linha.getQtdOsMes());
+        assertEquals(0, java.math.BigDecimal.ZERO.compareTo(linha.getReceitaAno()));
+        assertEquals(0, linha.getQtdOsAno());
     }
 
     @Test
