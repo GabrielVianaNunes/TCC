@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.zeiss.pilot.dto.ClienteDTO;
 import com.zeiss.pilot.dto.ClienteReceitaDTO;
+import com.zeiss.pilot.dto.ClienteReceitaMensalDTO;
 import com.zeiss.pilot.entity.Cliente;
 import com.zeiss.pilot.exception.ClienteConflitoException;
 import com.zeiss.pilot.repository.ClienteReceitaAgregado;
@@ -116,6 +117,10 @@ public class ClienteService {
                 })
                 .sorted((a, b) -> b.getReceitaAno().compareTo(a.getReceitaAno()))
                 .toList();
+    }
+
+    public List<ClienteReceitaMensalDTO> obterReceitaMensalDetalhada() {
+        return servicoRepository.calcularReceitaMensalPorCliente();
     }
 
     private Map<Long, ClienteReceitaAgregado> indexarPorCliente(List<ClienteReceitaAgregado> agregados) {

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zeiss.pilot.dto.ClienteReceitaDTO;
+import com.zeiss.pilot.dto.ClienteReceitaMensalDTO;
 import com.zeiss.pilot.dto.EventoRelatorioDTO;
 import com.zeiss.pilot.dto.RelatorioMensalDTO;
 import com.zeiss.pilot.service.ClienteService;
@@ -39,5 +40,10 @@ public class RelatorioController {
     @GetMapping("/clientes/relatorio")
     public ResponseEntity<List<ClienteReceitaDTO>> getRelatorioClientes() {
         return ResponseEntity.ok(clienteService.obterRankingReceita());
+    }
+
+    @GetMapping("/clientes/dashboard/dados")
+    public ResponseEntity<List<ClienteReceitaMensalDTO>> getReceitaMensalClientes() {
+        return ResponseEntity.ok(clienteService.obterReceitaMensalDetalhada());
     }
 }

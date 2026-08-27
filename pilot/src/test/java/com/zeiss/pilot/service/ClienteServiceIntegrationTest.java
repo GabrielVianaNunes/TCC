@@ -207,7 +207,7 @@ class ClienteServiceIntegrationTest {
         servico1.setTipoServicoId(tipoServicoId);
         servico1.setSolicitacao("Calibração");
         servico1.setQuantidade(1);
-        servico1.setStatus("1º Contato");
+        servico1.setStatus("Venda finalizada");
         servico1.setValor(new java.math.BigDecimal("500.00"));
         servico1.setDataCriacao(LocalDate.now());
         servicoService.criarServico(servico1);
@@ -218,7 +218,7 @@ class ClienteServiceIntegrationTest {
         servico2.setTipoServicoId(tipoServicoId);
         servico2.setSolicitacao("Digitalização");
         servico2.setQuantidade(1);
-        servico2.setStatus("1º Contato");
+        servico2.setStatus("Venda finalizada");
         servico2.setValor(new java.math.BigDecimal("300.00"));
         servico2.setDataCriacao(LocalDate.now());
         servicoService.criarServico(servico2);
@@ -249,5 +249,76 @@ class ClienteServiceIntegrationTest {
 
         assertEquals(0, java.math.BigDecimal.ZERO.compareTo(linha.getReceitaMes()));
         assertEquals(0, linha.getQtdOsMes());
+    }
+
+    @Test
+    void rankingDeReceitaIgnoraOsQueNaoSaoVendaFinalizada() {
+        ClienteDTO cliente = clienteService.criar(novoCliente("Cliente Pipeline Aberto", "151.515.151-51"));
+        Long maquinaId = maquinaDeTeste();
+        Long tipoServicoId = tipoServicoDeTeste();
+
+        com.zeiss.pilot.dto.ServicoDTO servico = new com.zeiss.pilot.dto.ServicoDTO();
+        servico.setClienteId(cliente.getId());
+        servico.setMaquinaId(maquinaId);
+        servico.setTipoServicoId(tipoServicoId);
+        servico.setSolicitacao("Calibração");
+        servico.setQuantidade(1);
+        servico.setStatus("Negociação");
+        servico.setValor(new java.math.BigDecimal("999.00"));
+        servico.setDataCriacao(LocalDate.now());
+        servicoService.criarServico(servico);
+
+        List<com.zeiss.pilot.dto.ClienteReceitaDTO> ranking = clienteService.obterRankingReceita();
+
+        com.zeiss.pilot.dto.ClienteReceitaDTO linha = ranking.stream()
+                .filter(r -> r.getClienteId().equals(cliente.getId()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Cliente deveria aparecer no ranking (com receita zero)"));
+
+        assertEquals(0, java.math.BigDecimal.ZERO.compareTo(linha.getReceitaMes()));
+        assertEquals(0, linha.getQtdOsMes());
+    }
+
+    @Test
+    void receitaMensalDetalhadaAgrupaPorClienteAnoEMes() {
+        ClienteDTO cliente = clienteService.criar(novoCliente("Cliente Mensal Teste", "161.616.161-61"));
+        Long maquinaId = maquinaDeTeste();
+        Long tipoServicoId = tipoServicoDeTeste();
+
+        com.zeiss.pilot.dto.ServicoDTO vendaFechada = new com.zeiss.pilot.dto.ServicoDTO();
+        vendaFechada.setClienteId(cliente.getId());
+        vendaFechada.setMaquinaId(maquinaId);
+        vendaFechada.setTipoServicoId(tipoServicoId);
+        vendaFechada.setSolicitacao("Calibração");
+        vendaFechada.setQuantidade(1);
+        vendaFechada.setStatus("Venda finalizada");
+        vendaFechada.setValor(new java.math.BigDecimal("1200.00"));
+        vendaFechada.setDataCriacao(LocalDate.of(2024, 3, 15));
+        servicoService.criarServico(vendaFechada);
+
+        com.zeiss.pilot.dto.ServicoDTO emNegociacao = new com.zeiss.pilot.dto.ServicoDTO();
+        emNegociacao.setClienteId(cliente.getId());
+        emNegociacao.setMaquinaId(maquinaId);
+        emNegociacao.setTipoServicoId(tipoServicoId);
+        emNegociacao.setSolicitacao("Digitalização");
+        emNegociacao.setQuantidade(1);
+        emNegociacao.setStatus("Negociação");
+        emNegociacao.setValor(new java.math.BigDecimal("5000.00"));
+        emNegociacao.setDataCriacao(LocalDate.of(2024, 3, 20));
+        servicoService.criarServico(emNegociacao);
+
+        List<com.zeiss.pilot.dto.ClienteReceitaMensalDTO> detalhado = clienteService.obterReceitaMensalDetalhada();
+
+        List<com.zeiss.pilot.dto.ClienteReceitaMensalDTO> linhasDoCliente = detalhado.stream()
+                .filter(r -> r.getClienteId().equals(cliente.getId()))
+                .toList();
+
+        assertEquals(1, linhasDoCliente.size(),
+                "Só a linha de março/2024 (Venda finalizada) deveria existir — a de Negociação não conta");
+        com.zeiss.pilot.dto.ClienteReceitaMensalDTO linha = linhasDoCliente.get(0);
+        assertEquals(2024, linha.getAno());
+        assertEquals(3, linha.getMes());
+        assertEquals(0, new java.math.BigDecimal("1200.00").compareTo(linha.getReceita()));
+        assertEquals(1, linha.getQtdOs());
     }
 }

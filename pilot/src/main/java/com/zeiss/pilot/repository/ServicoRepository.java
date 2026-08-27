@@ -1,5 +1,6 @@
 package com.zeiss.pilot.repository;
 
+import com.zeiss.pilot.dto.ClienteReceitaMensalDTO;
 import com.zeiss.pilot.dto.RelatorioMensalDTO;
 import com.zeiss.pilot.entity.Servico;
 import org.springframework.data.domain.Page;
@@ -30,13 +31,19 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
     boolean existsByClienteEntidadeId(Long clienteId);
 
     @Query("SELECT s.clienteEntidade.id as clienteId, COALESCE(SUM(s.valor), 0) as receita, COUNT(s) as qtd "
-           + "FROM Servico s WHERE s.clienteEntidade IS NOT NULL "
+           + "FROM Servico s WHERE s.clienteEntidade IS NOT NULL AND s.status = 'Venda finalizada' "
            + "AND YEAR(s.dataCriacao) = :ano AND MONTH(s.dataCriacao) = :mes "
            + "GROUP BY s.clienteEntidade.id")
     List<ClienteReceitaAgregado> calcularReceitaPorClienteNoMes(@Param("ano") int ano, @Param("mes") int mes);
 
     @Query("SELECT s.clienteEntidade.id as clienteId, COALESCE(SUM(s.valor), 0) as receita, COUNT(s) as qtd "
-           + "FROM Servico s WHERE s.clienteEntidade IS NOT NULL AND YEAR(s.dataCriacao) = :ano "
+           + "FROM Servico s WHERE s.clienteEntidade IS NOT NULL AND s.status = 'Venda finalizada' AND YEAR(s.dataCriacao) = :ano "
            + "GROUP BY s.clienteEntidade.id")
     List<ClienteReceitaAgregado> calcularReceitaPorClienteNoAno(@Param("ano") int ano);
+
+    @Query("SELECT new com.zeiss.pilot.dto.ClienteReceitaMensalDTO(s.clienteEntidade.id, s.clienteEntidade.nome, YEAR(s.dataCriacao), MONTH(s.dataCriacao), SUM(s.valor), COUNT(s)) "
+           + "FROM Servico s WHERE s.clienteEntidade IS NOT NULL AND s.status = 'Venda finalizada' "
+           + "GROUP BY s.clienteEntidade.id, s.clienteEntidade.nome, YEAR(s.dataCriacao), MONTH(s.dataCriacao) "
+           + "ORDER BY YEAR(s.dataCriacao), MONTH(s.dataCriacao)")
+    List<ClienteReceitaMensalDTO> calcularReceitaMensalPorCliente();
 }
