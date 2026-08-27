@@ -39,7 +39,8 @@ class PageControllerSmokeTest {
             "/maquinas",
             "/verificacao-ambiental",
             "/kanban-estagiarios",
-            "/dashboard-estagiarios"
+            "/dashboard-estagiarios",
+            "/dashboard-clientes"
     })
     @WithMockUser(roles = "ADMIN")
     void paginaAutenticadaRendorizaComSucesso(String rota) throws Exception {

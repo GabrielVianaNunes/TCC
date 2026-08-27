@@ -147,4 +147,9 @@ public class PageController {
     public String paginaClientes() {
         return "clientes";
     }
+
+    @GetMapping("/dashboard-clientes")
+    public String paginaDashboardClientes() {
+        return "dashboard-clientes";
+    }
 }

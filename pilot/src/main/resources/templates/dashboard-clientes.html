@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Serviços — SENAI · Zeiss Metrologia</title>
-  <meta name="_csrf"        th:content="${_csrf.token}" />
+  <title>Dashboard de Clientes — SENAI · Zeiss Metrologia</title>
+  <meta name="_csrf" th:content="${_csrf.token}" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   <script>!function(){var t=localStorage.getItem("zp-theme")||"light";document.documentElement.setAttribute("data-theme",t);document.documentElement.style.background=t==="dark"?"#0D1117":"#F0F4F8";}();</script>
   <link rel="stylesheet" href="/css/design-system.css" />
@@ -15,16 +15,8 @@
 <body>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="app-shell">
-
-  <!-- SIDEBAR (shared pattern) -->
   <nav class="sidebar" id="sidebar">
-    <div class="sidebar__brand">
-      <img class="sidebar__brand-logo" src="/img/CentroMetrologia-logo.png" alt="Logo" />
-      <div class="sidebar__brand-text">
-        <span class="sidebar__brand-title">ZEISS·PILOT</span>
-        <span class="sidebar__brand-subtitle">Metrologia SENAI</span>
-      </div>
-    </div>
+    <div class="sidebar__brand"><img class="sidebar__brand-logo" src="/img/CentroMetrologia-logo.png" alt="Logo" /><div class="sidebar__brand-text"><span class="sidebar__brand-title">ZEISS·PILOT</span><span class="sidebar__brand-subtitle">Metrologia SENAI</span></div></div>
         <div class="sidebar__nav" id="sidebarNav">
       <span class="sidebar__section-label">Principal</span>
       <a href="/" class="sidebar__nav-item" title="Dashboard">
@@ -32,7 +24,7 @@
         <span class="sidebar__nav-label">Dashboard</span>
       </a>
       <span class="sidebar__section-label">Atendimento</span>
-      <a href="/servicos" class="sidebar__nav-item active" title="Serviços (OS)">
+      <a href="/servicos" class="sidebar__nav-item" title="Serviços (OS)">
         <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         <span class="sidebar__nav-label">Serviços (OS)</span>
       </a>
@@ -83,7 +75,7 @@
         <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         <span class="sidebar__nav-label">Relatório Serviços</span>
       </a>
-      <a href="/dashboard-clientes" class="sidebar__nav-item" title="Dashboard Clientes">
+      <a href="/dashboard-clientes" class="sidebar__nav-item active" title="Dashboard Clientes">
         <svg class="sidebar__nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
         <span class="sidebar__nav-label">Dashboard Clientes</span>
       </a>
@@ -124,30 +116,12 @@
   </nav>
 
   <div class="app-main">
-    <!-- Topbar -->
     <header class="topbar">
-      <div class="topbar__left">
-        <button class="topbar__hamburger" id="mobileMenuBtn" aria-label="Abrir menu de navegação">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-        <span class="topbar__breadcrumb">
-          <a href="/">ZEISS·PILOT</a>
-          <span class="topbar__breadcrumb-separator">›</span>
-          <span style="color:var(--text-primary)">Serviços (OS)</span>
-        </span>
-      </div>
+      <div class="topbar__left"><button class="topbar__hamburger" id="mobileMenuBtn" aria-label="Abrir menu de navegação"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button><span class="topbar__breadcrumb"><a href="/">ZEISS·PILOT</a><span class="topbar__breadcrumb-separator">›</span><a href="/clientes">Clientes</a><span class="topbar__breadcrumb-separator">›</span><span style="color:var(--text-primary)">Dashboard</span></span></div>
       <div class="topbar__right">
-        <button class="topbar__icon-btn" id="themeToggle" title="Alternar tema">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
-        </button>
+        <button class="topbar__icon-btn" id="themeToggle" title="Alternar tema"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></button>
         <div class="topbar__divider"></div>
-        <div class="topbar__user-wrap" id="userMenuWrap">
-          <div class="topbar__user" id="userMenuBtn" role="button" tabindex="0" aria-label="Menu do usuário" aria-haspopup="true">
-            <div class="topbar__user-avatar">U</div>
-            <span class="topbar__user-name" th:text="${#authentication?.name}">Usuário</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-                    <div class="topbar__dropdown">
+        <div class="topbar__user-wrap" id="userMenuWrap"><div class="topbar__user" id="userMenuBtn" role="button" tabindex="0" aria-label="Menu do usuário" aria-haspopup="true"><div class="topbar__user-avatar">U</div><span class="topbar__user-name" th:text="${#authentication?.name}">Usuário</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)"><polyline points="6 9 12 15 18 9"/></svg></div>          <div class="topbar__dropdown">
             <div class="topbar__dropdown-user">
               <div class="topbar__dropdown-avatar" id="dropdownAvatar">U</div>
               <div>
@@ -171,193 +145,102 @@
     </header>
 
     <div class="content-area">
-      <!-- Page Header -->
       <div class="page-header">
         <div class="page-header__left">
-          <h1 class="page-header__title">Ordens de Serviço</h1>
-          <p class="page-header__subtitle">Gerenciamento de serviços e pipeline de vendas</p>
-        </div>
-        <div class="page-header__actions">
-          <a href="/servicos/relatorio-servicos" class="btn btn-secondary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            Dashboards
+          <a href="/clientes" class="btn btn-ghost btn-sm" style="margin-bottom:0.5rem">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12,19 5,12 12,5"/></svg>
+            Voltar
           </a>
-          <button class="btn btn-primary" id="btnNovoServico">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Nova OS
-          </button>
+          <h1 class="page-header__title">Dashboard de Clientes</h1>
+          <p class="page-header__subtitle">Receita por cliente — mês específico ou ano completo</p>
+        </div>
+        <div class="page-header__actions" style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+          <div style="display:flex;gap:1rem;align-items:center;font-size:0.85rem">
+            <label style="display:flex;align-items:center;gap:0.35rem;cursor:pointer">
+              <input type="radio" name="modoVisao" id="modoMes" value="mes" checked />
+              Mês específico
+            </label>
+            <label style="display:flex;align-items:center;gap:0.35rem;cursor:pointer">
+              <input type="radio" name="modoVisao" id="modoAno" value="ano" />
+              Ano completo
+            </label>
+          </div>
+          <span id="filtroMesWrap">
+            <select class="filter-toolbar__select" id="filtroMes" style="min-width:130px"><!-- Populado via JS --></select>
+          </span>
+          <select class="filter-toolbar__select" id="filtroAno" style="min-width:110px"><!-- Populado via JS --></select>
         </div>
       </div>
 
-      <!-- Filter Toolbar + Table -->
-      <div class="filter-toolbar">
-        <div class="search-bar">
-          <svg class="search-bar__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input class="form-control search-bar__input" type="text" id="campoBusca" placeholder="Buscar cliente, solicitação, técnico..." />
+      <!-- KPI Cards -->
+      <div class="content-grid content-grid--4col" style="margin-bottom:1.5rem">
+        <div class="card kpi-card">
+          <div class="kpi-card__label">Receita Total</div>
+          <div class="kpi-card__value kpi-card__value--money" id="kpiReceitaTotal"><span class="skeleton skeleton--text" style="width:100px;height:28px"></span></div>
         </div>
-        <div class="filter-toolbar__group">
-          <label>Status:</label>
-          <select class="filter-toolbar__select" id="filtroStatus">
-            <option value="">Todos</option>
-            <option>Elaboração de proposta</option>
-            <option>Negociação</option>
-            <option>Venda finalizada</option>
-            <option>Desistiu</option>
-          </select>
+        <div class="card kpi-card">
+          <div class="kpi-card__label">Total de OS</div>
+          <div class="kpi-card__value" id="kpiTotalOS"><span class="skeleton skeleton--text" style="width:60px;height:28px"></span></div>
         </div>
-        <div class="filter-toolbar__spacer"></div>
-        <button class="btn btn-ghost btn-sm" id="btnLimparFiltros">Limpar filtros</button>
+        <div class="card kpi-card">
+          <div class="kpi-card__label">Cliente Líder</div>
+          <div class="kpi-card__value" id="kpiClienteLider"><span class="skeleton skeleton--text" style="width:100px;height:28px"></span></div>
+          <div class="kpi-card__detail" id="kpiClienteLiderDetail"></div>
+        </div>
+        <div class="card kpi-card">
+          <div class="kpi-card__label">Ticket Médio</div>
+          <div class="kpi-card__value" id="kpiTicketMedio"><span class="skeleton skeleton--text" style="width:80px;height:28px"></span></div>
+        </div>
       </div>
 
-      <div class="table-container" style="border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg);border-top:none">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Cliente</th>
-              <th>Solicitação</th>
-              <th>Qtd.</th>
-              <th>Status</th>
-              <th>Técnico</th>
-              <th>Data Prevista</th>
-              <th class="perm-financial">Valor</th>
-              <th>Observação</th>
-              <th class="actions-cell">Ações</th>
-            </tr>
-          </thead>
-          <tbody id="tabelaServicos"></tbody>
-        </table>
+      <!-- Chart -->
+      <div class="card" style="padding:1.5rem;margin-bottom:1.5rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <h3 style="font-size:0.9rem;font-weight:600;color:var(--text-primary)">Ranking de Receita por Cliente</h3>
+        </div>
+        <div id="chartRankingClientes" style="width:100%;min-height:240px;display:flex;align-items:center;justify-content:center">
+          <span class="skeleton" style="width:100%;height:240px;border-radius:var(--border-radius)"></span>
+        </div>
       </div>
 
-      <div class="pagination" id="paginacaoContainer">
-        <span class="pagination__info" id="paginacaoInfo">—</span>
-        <button class="pagination__btn" id="btnAnterior" disabled>‹ Anterior</button>
-        <span class="pagination__btn active" id="paginaAtual">1</span>
-        <button class="pagination__btn" id="btnProximo">Próxima ›</button>
+      <!-- Table -->
+      <div class="card">
+        <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-color)">
+          <h3 style="font-size:0.9rem;font-weight:600;color:var(--text-primary)">Detalhamento por Cliente</h3>
+        </div>
+        <div class="table-container" style="border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg);border-top:none">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th style="text-align:right">Receita (R$)</th>
+                <th style="text-align:right">Qtd. OS</th>
+                <th>Participação</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaClientesRanking">
+              <tr><td colspan="4" class="text-center" style="padding:2rem"><span class="skeleton skeleton--text" style="width:180px;margin:auto"></span></td></tr>
+            </tbody>
+            <tfoot id="tabelaClientesTotal" style="display:none">
+              <tr style="font-weight:700;background:var(--color-surface-alt)">
+                <td>TOTAL</td>
+                <td id="totalReceitaClientesFoot" style="text-align:right"></td>
+                <td id="totalOSClientesFoot" style="text-align:right"></td>
+                <td>100%</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
+    </div><!-- /content-area -->
+  </div><!-- /app-main -->
+</div><!-- /app-shell -->
 
-<!-- ════ MODAL ════ -->
-<div class="modal" id="modalServico">
-  <div class="modal__dialog">
-    <div class="modal__header">
-      <h3 class="modal__title" id="modalTitulo">Nova Ordem de Serviço</h3>
-      <button class="modal__close" data-modal-close="modalServico">✕</button>
-    </div>
-    <div class="modal__body">
-      <form id="servicoForm">
-        <input type="hidden" id="servicoId" />
-
-        <div class="form-group">
-          <label class="form-label form-label--required" for="clienteBusca">Cliente</label>
-          <input class="form-control" type="text" id="clienteBusca" required />
-          <input type="hidden" id="clienteId" />
-          <button type="button" class="btn btn--sm" id="btnClienteRapido">+ Cadastrar novo cliente</button>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label form-label--required" for="maquinaBusca">Máquina</label>
-          <input class="form-control" type="text" id="maquinaBusca" required />
-          <input type="hidden" id="maquinaId" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label form-label--required" for="tipoServicoBusca">Descrição do Serviço</label>
-          <input class="form-control" type="text" id="tipoServicoBusca" required />
-          <input type="hidden" id="tipoServicoId" />
-          <p class="form-hint" id="tipoServicoLegadoHint" style="display:none"></p>
-        </div>
-
-        <div class="form-grid form-grid--2col">
-          <div class="form-group">
-            <label class="form-label form-label--required" for="quantidade">Quantidade</label>
-            <input class="form-control" type="number" id="quantidade" placeholder="Qtd." min="1" max="100000" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label form-label--required" for="status">Status</label>
-            <select class="form-control" id="status" required>
-              <option value="">Selecione...</option>
-              <option>Elaboração de proposta</option>
-              <option>Negociação</option>
-              <option>Venda finalizada</option>
-              <option>Desistiu</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-grid form-grid--2col">
-          <div class="form-group">
-            <label class="form-label form-label--required" for="tecnicoResponsavel">Técnico Responsável</label>
-            <input class="form-control" type="text" id="tecnicoResponsavel" placeholder="Nome do técnico" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label form-label--required" for="valor">Valor (R$)</label>
-            <input class="form-control" type="text" id="valor" placeholder="ex: 2500,00" required />
-          </div>
-        </div>
-
-        <div class="form-grid form-grid--2col">
-          <div class="form-group">
-            <label class="form-label form-label--required" for="dataPrevista">Data de Execução Prevista</label>
-            <input class="form-control" type="date" id="dataPrevista" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="dataRealizada">Data de Execução Realizada</label>
-            <input class="form-control" type="date" id="dataRealizada" />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="observacao">Observação</label>
-          <textarea class="form-control" id="observacao" rows="3" placeholder="Informações adicionais (opcional)"></textarea>
-        </div>
-
-        <!-- ── Nota do Diretor (visível apenas em OS concluída) ── -->
-        <div id="notaDiretorSection" style="display:none;margin-top:var(--space-2)">
-          <div style="height:1px;background:var(--border-color);margin-bottom:var(--space-4)"></div>
-          <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-3)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
-            <span style="font-size:var(--font-size-sm);font-weight:var(--font-weight-semibold);color:var(--text-primary)">Avaliação do Estagiário</span>
-          </div>
-          <div class="form-grid form-grid--2col">
-            <div class="form-group">
-              <label class="form-label" for="notaDiretorEstagiario">Estagiário responsável</label>
-              <select class="form-control" id="notaDiretorEstagiario">
-                <option value="">Nenhum / Não aplicável</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Nota (1 a 5)</label>
-              <div id="notaDiretorStars" style="display:flex;gap:var(--space-2);align-items:center;height:38px">
-                <button type="button" class="nd-star" data-val="1" style="font-size:24px;background:none;border:none;cursor:pointer;color:var(--border-color);transition:color .1s;line-height:1">★</button>
-                <button type="button" class="nd-star" data-val="2" style="font-size:24px;background:none;border:none;cursor:pointer;color:var(--border-color);transition:color .1s;line-height:1">★</button>
-                <button type="button" class="nd-star" data-val="3" style="font-size:24px;background:none;border:none;cursor:pointer;color:var(--border-color);transition:color .1s;line-height:1">★</button>
-                <button type="button" class="nd-star" data-val="4" style="font-size:24px;background:none;border:none;cursor:pointer;color:var(--border-color);transition:color .1s;line-height:1">★</button>
-                <button type="button" class="nd-star" data-val="5" style="font-size:24px;background:none;border:none;cursor:pointer;color:var(--border-color);transition:color .1s;line-height:1">★</button>
-              </div>
-              <input type="hidden" id="notaDiretorValor" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="notaDiretorComentario">Comentário da avaliação</label>
-            <textarea class="form-control" id="notaDiretorComentario" rows="2" placeholder="Descreva o desempenho observado pelo estagiário neste serviço..."></textarea>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="modal__footer">
-      <button class="btn btn-danger" id="btnExcluirServico" style="display:none;margin-right:auto">Excluir OS</button>
-      <button class="btn btn-secondary" data-modal-close="modalServico">Cancelar</button>
-      <button class="btn btn-primary" id="btnSalvarServico">Salvar OS</button>
-    </div>
-  </div>
-</div>
-
+<script src="/js/vendor/d3.v7.min.js"></script>
 <script src="/js/i18n.js"></script>
 <script src="/js/core.js"></script>
 <script src="/js/api.js"></script>
 <script src="/js/ui.js"></script><script src="/js/modules/notifications.js"></script>
-<script src="/js/modules/servicos.js"></script>
+<script src="/js/modules/dashboard-clientes.js"></script>
 </body>
 </html>
