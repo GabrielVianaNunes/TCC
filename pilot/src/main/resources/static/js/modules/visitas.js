@@ -7,6 +7,13 @@
 
   function _t(ptBR) { return window.I18n?.t(ptBR) ?? ptBR; }
 
+  function esc(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
   const API_URL = '/api/visitas-tecnicas';
   const PAGE_SIZE = 12;
 
@@ -32,11 +39,14 @@
     let usuarios = [];
     try {
       usuarios = await Api.get('/api/usuarios');
-    } catch { usuarios = []; }
+    } catch {
+      usuarios = [];
+      Toast.error(_t('Erro ao carregar lista de usuários.'));
+    }
     const permitidos = (Array.isArray(usuarios) ? usuarios : (usuarios.content || []))
       .filter(u => CARGOS_RESPONSAVEL_VISITA.includes(u.cargo));
     sel.innerHTML = `<option value="">${_t('Selecione...')}</option>` +
-      permitidos.map(u => `<option value="${u.id}">${u.nome}</option>`).join('');
+      permitidos.map(u => `<option value="${u.id}">${esc(u.nome)}</option>`).join('');
   }
 
   /* ── Empresa (Combobox de Cliente) ────────────────────────────────── */
@@ -181,6 +191,7 @@
       } else if (v.empresaInstituicao === CEM_EMPRESA_FIXA) {
         document.getElementById('tipoVisitaInterna').checked = true;
         toggleTipoVisita('interna');
+        empresaCombobox?.clear();
       } else {
         document.getElementById('tipoVisitaCliente').checked = true;
         toggleTipoVisita('cliente');
@@ -266,6 +277,7 @@
     document.getElementById('tipoVisitaCliente').addEventListener('change', () => toggleTipoVisita('cliente'));
     document.getElementById('tipoVisitaInterna').addEventListener('change', () => toggleTipoVisita('interna'));
     document.getElementById('btnNovaVisita').addEventListener('click', abrirModalNovo);
+    document.getElementById('visitaBtnClienteRapido')?.addEventListener('click', () => window.open('/clientes', '_blank'));
     document.getElementById('btnSalvarVisita').addEventListener('click', salvar);
     document.getElementById('btnExcluirVisita').addEventListener('click', excluir);
     document.getElementById('btnAnterior').addEventListener('click', prevPage);

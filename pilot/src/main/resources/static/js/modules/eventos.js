@@ -7,6 +7,13 @@
 
   function _t(ptBR) { return window.I18n?.t(ptBR) ?? ptBR; }
 
+  function esc(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
   const API_URL = '/api/eventos';
   const PAGE_SIZE = 12;
 
@@ -52,11 +59,14 @@
     let usuarios = [];
     try {
       usuarios = await Api.get('/api/usuarios');
-    } catch { usuarios = []; }
+    } catch {
+      usuarios = [];
+      Toast.error(_t('Erro ao carregar lista de usuários.'));
+    }
     const gestores = (Array.isArray(usuarios) ? usuarios : (usuarios.content || []))
       .filter(u => u.cargo === 'GESTOR');
     sel.innerHTML = `<option value="">${_t('Selecione...')}</option>` +
-      gestores.map(u => `<option value="${u.id}">${u.nome}</option>`).join('');
+      gestores.map(u => `<option value="${u.id}">${esc(u.nome)}</option>`).join('');
   }
 
   /* ── Load ───────────────────────────────────────────────────── */

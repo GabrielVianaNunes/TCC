@@ -73,7 +73,10 @@
     let usuarios = [];
     try {
       usuarios = await Api.get('/api/usuarios');
-    } catch { usuarios = []; }
+    } catch {
+      usuarios = [];
+      Toast.error(_t('Erro ao carregar lista de usuários.'));
+    }
     const permitidos = (Array.isArray(usuarios) ? usuarios : (usuarios.content || []))
       .filter(u => CARGOS_RECEBIDO_POR.includes(u.cargo));
     sel.innerHTML = `<option value="">${_t('Selecione...')}</option>` +

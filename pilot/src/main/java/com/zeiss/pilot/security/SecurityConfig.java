@@ -62,6 +62,11 @@ public class SecurityConfig {
                 // outros usuários, por isso fica fora da regra ADMIN/GESTOR abaixo.
                 .requestMatchers("/api/usuarios/me").authenticated()
                 .requestMatchers("/api/usuarios/admins").hasRole("ADMIN")
+                // Formularios de Amostra/Visita/Evento precisam listar usuarios
+                // para popular combos de responsavel (Tecnico/Estagiario
+                // inclusive) sem poder consultar por id, criar, alterar ou
+                // remover — isso continua restrito a ADMIN/GESTOR abaixo.
+                .requestMatchers(HttpMethod.GET, "/api/usuarios").authenticated()
                 .requestMatchers("/api/usuarios/**").hasAnyRole("ADMIN", "GESTOR")
                 .requestMatchers(HttpMethod.POST, "/api/avaliacoes").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/documentos/**").hasRole("ADMIN")

@@ -59,8 +59,27 @@ class SecurityConfigTest {
 
     @Test
     @WithMockUser(roles = "CLIENTE")
-    void usuariosAutenticadoSemRoleAdminRetorna403() throws Exception {
+    void usuariosGetAutenticadoSemRoleAdminOuGestorRetorna200() throws Exception {
+        // Fix 1 da revisão final: GET /api/usuarios (a listagem) é a fonte dos
+        // combos de responsável de Amostra/Visita/Evento — precisa estar aberta
+        // a qualquer usuário autenticado, senão Técnico/Estagiário fica sem
+        // conseguir preencher os próprios formulários que esta feature existe
+        // para servir. Só a listagem afrouxou; buscar por id, criar, alterar e
+        // excluir continuam exigindo ADMIN/GESTOR (ver testes abaixo).
         mockMvc.perform(get("/api/usuarios"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "TECNICO")
+    void usuariosGetPermiteTecnicoMasPostContinuaExigindoAdminOuGestor() throws Exception {
+        mockMvc.perform(get("/api/usuarios"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/api/usuarios")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\":\"X\",\"email\":\"x2.sct@zeiss.com\",\"senha\":\"senha123\",\"cargo\":\"ESTAGIARIO\"}"))
                 .andExpect(status().isForbidden());
     }
 
