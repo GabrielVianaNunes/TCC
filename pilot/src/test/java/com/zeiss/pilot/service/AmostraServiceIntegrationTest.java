@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zeiss.pilot.dto.AmostraDTO;
+import com.zeiss.pilot.dto.ClienteDTO;
+import com.zeiss.pilot.entity.Usuario;
 import com.zeiss.pilot.repository.AmostraRepository;
+import com.zeiss.pilot.repository.UsuarioRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -29,10 +33,40 @@ class AmostraServiceIntegrationTest {
     @Autowired
     private AmostraRepository amostraRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private ClienteService clienteService;
+
+    // System.nanoTime() % 1000 sozinho colide entre chamadas consecutivas de
+    // criar() (poucas centenas de nanosegundos de diferença, mesmo espaço de
+    // 1000 valores) — um contador monotônico garante CPF/e-mail únicos mesmo
+    // com várias amostras criadas em sequência dentro do mesmo teste.
+    private static final AtomicLong SEQ = new AtomicLong();
+
+    private Long usuarioValido(String cargo, String email) {
+        Usuario u = new Usuario();
+        u.setNome("Usuario Teste Amostra");
+        u.setEmail(email);
+        u.setSenha("senha123");
+        u.setCargo(cargo);
+        u.setRole(cargo);
+        return usuarioRepository.save(u).getId();
+    }
+
+    private Long clienteValido(String nome, String cpf) {
+        ClienteDTO dto = new ClienteDTO();
+        dto.setNome(nome);
+        dto.setCpfOuCnpj(cpf);
+        return clienteService.criar(dto).getId();
+    }
+
     private AmostraDTO criar(String cliente, String descricao, String servicoRef, String status,
                               LocalDate dataEntrada, LocalDate dataDevPrevista) {
         AmostraDTO dto = new AmostraDTO();
-        dto.setCliente(cliente);
+        dto.setResponsavelId(usuarioValido("GESTOR", "gestor." + System.nanoTime() + "@zeiss.com"));
+        dto.setClienteId(clienteValido(cliente, "111." + SEQ.incrementAndGet() + ".333-44"));
         dto.setDescricao(descricao);
         dto.setServicoRef(servicoRef);
         dto.setStatus(status);
@@ -113,7 +147,8 @@ class AmostraServiceIntegrationTest {
         AmostraDTO criada = criar("Cliente Y", "desc original", "OS-50", "Em custódia", LocalDate.now(), null);
 
         AmostraDTO novosDados = new AmostraDTO();
-        novosDados.setCliente("Cliente Y Atualizado");
+        novosDados.setResponsavelId(usuarioValido("TECNICO", "tecnico." + System.nanoTime() + "@zeiss.com"));
+        novosDados.setClienteId(clienteValido("Cliente Y Atualizado", "222." + SEQ.incrementAndGet() + ".333-55"));
         novosDados.setDescricao("desc atualizada");
         novosDados.setStatus("Devolvida");
 
@@ -140,7 +175,8 @@ class AmostraServiceIntegrationTest {
         assertEquals("OS-70", criada.getServicoRef());
 
         AmostraDTO novosDados = new AmostraDTO();
-        novosDados.setCliente("Cliente W Atualizado");
+        novosDados.setResponsavelId(usuarioValido("ESTAGIARIO", "estagiario." + System.nanoTime() + "@zeiss.com"));
+        novosDados.setClienteId(clienteValido("Cliente W Atualizado", "333." + SEQ.incrementAndGet() + ".333-66"));
         novosDados.setStatus("Em custódia");
         // servicoRef propositalmente não enviado
 
@@ -157,5 +193,28 @@ class AmostraServiceIntegrationTest {
         amostraService.deletar(criada.getId());
 
         assertTrue(amostraRepository.findById(criada.getId()).isEmpty());
+    }
+
+    @Test
+    void salvarSemResponsavelIdLancaExcecao() {
+        AmostraDTO dto = new AmostraDTO();
+        dto.setClienteId(clienteValido("Cliente Sem Responsavel", "444.111.333-77"));
+        dto.setDescricao("desc");
+        dto.setStatus("Em custódia");
+        dto.setDataEntrada(LocalDate.now());
+
+        assertThrows(IllegalArgumentException.class, () -> amostraService.salvar(dto));
+    }
+
+    @Test
+    void salvarComResponsavelDeCargoNaoPermitidoLancaExcecao() {
+        AmostraDTO dto = new AmostraDTO();
+        dto.setResponsavelId(usuarioValido("DIRETOR_CEM", "diretor.amostra.teste@zeiss.com"));
+        dto.setClienteId(clienteValido("Cliente Cargo Invalido", "555.111.333-88"));
+        dto.setDescricao("desc");
+        dto.setStatus("Em custódia");
+        dto.setDataEntrada(LocalDate.now());
+
+        assertThrows(IllegalArgumentException.class, () -> amostraService.salvar(dto));
     }
 }

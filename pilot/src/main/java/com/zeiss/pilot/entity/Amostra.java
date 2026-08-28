@@ -22,6 +22,15 @@ public class Amostra {
     private String respEnvio;
     private String telEmail;
     private String servicoRef;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "responsavel_id")
+    private Usuario responsavelUsuario;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id")
+    private Cliente clienteEntidade;
+
     @Column(length = 1000)
     private String obsRecebimento;
 
@@ -149,6 +158,10 @@ public class Amostra {
     public void setTelEmail(String telEmail) { this.telEmail = telEmail; }
     public String getServicoRef() { return servicoRef; }
     public void setServicoRef(String servicoRef) { this.servicoRef = servicoRef; }
+    public Usuario getResponsavelUsuario() { return responsavelUsuario; }
+    public void setResponsavelUsuario(Usuario responsavelUsuario) { this.responsavelUsuario = responsavelUsuario; }
+    public Cliente getClienteEntidade() { return clienteEntidade; }
+    public void setClienteEntidade(Cliente clienteEntidade) { this.clienteEntidade = clienteEntidade; }
     public String getObsRecebimento() { return obsRecebimento; }
     public void setObsRecebimento(String obsRecebimento) { this.obsRecebimento = obsRecebimento; }
     public String getCodigoCEM() { return codigoCEM; }

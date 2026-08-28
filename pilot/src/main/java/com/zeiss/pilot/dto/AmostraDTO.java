@@ -21,16 +21,21 @@ public class AmostraDTO {
     @NotBlank(message = "Horário do recebimento é obrigatório.")
     private String horario;
 
-    @NotBlank(message = "Responsável pelo recebimento é obrigatório.")
-    @Nome
+    // Autopreenchido pelo service a partir de responsavelId — não é mais
+    // entrada direta do usuário, mantido só para exibir texto legado de
+    // registros anteriores a este vínculo.
     private String responsavel;
+
+    private Long responsavelId;
 
     @Pattern(regexp = "^$|Pessoalmente|Entregadora|Correios|Motoboy|Outro",
             message = "Forma de recebimento inválida.")
     private String formaRecebimento;
 
-    @NotBlank(message = "Cliente / empresa é obrigatório.")
+    // Autopreenchido pelo service a partir de clienteId — mesmo motivo acima.
     private String cliente;
+
+    private Long clienteId;
 
     @Nome
     private String respEnvio;
@@ -162,8 +167,10 @@ public class AmostraDTO {
         dto.setDataEntrada(e.getDataEntrada());
         dto.setHorario(e.getHorario());
         dto.setResponsavel(e.getResponsavel());
+        dto.setResponsavelId(e.getResponsavelUsuario() != null ? e.getResponsavelUsuario().getId() : null);
         dto.setFormaRecebimento(e.getFormaRecebimento());
         dto.setCliente(e.getCliente());
+        dto.setClienteId(e.getClienteEntidade() != null ? e.getClienteEntidade().getId() : null);
         dto.setRespEnvio(e.getRespEnvio());
         dto.setTelEmail(e.getTelEmail());
         dto.setServicoRef(e.getServicoRef());
@@ -251,9 +258,7 @@ public class AmostraDTO {
         Amostra e = new Amostra();
         e.setDataEntrada(this.dataEntrada);
         e.setHorario(this.horario);
-        e.setResponsavel(this.responsavel);
         e.setFormaRecebimento(this.formaRecebimento);
-        e.setCliente(this.cliente);
         e.setRespEnvio(this.respEnvio);
         e.setTelEmail(this.telEmail);
         e.setServicoRef(this.servicoRef);
@@ -344,10 +349,14 @@ public class AmostraDTO {
     public void setHorario(String horario) { this.horario = horario; }
     public String getResponsavel() { return responsavel; }
     public void setResponsavel(String responsavel) { this.responsavel = responsavel; }
+    public Long getResponsavelId() { return responsavelId; }
+    public void setResponsavelId(Long responsavelId) { this.responsavelId = responsavelId; }
     public String getFormaRecebimento() { return formaRecebimento; }
     public void setFormaRecebimento(String formaRecebimento) { this.formaRecebimento = formaRecebimento; }
     public String getCliente() { return cliente; }
     public void setCliente(String cliente) { this.cliente = cliente; }
+    public Long getClienteId() { return clienteId; }
+    public void setClienteId(Long clienteId) { this.clienteId = clienteId; }
     public String getRespEnvio() { return respEnvio; }
     public void setRespEnvio(String respEnvio) { this.respEnvio = respEnvio; }
     public String getTelEmail() { return telEmail; }
