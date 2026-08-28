@@ -28,14 +28,7 @@ public class ProjetoService {
         projeto.setNomeProjeto(dto.getNomeProjeto());
         projeto.setObjetivo(dto.getObjetivo());
         projeto.setAtividades(dto.getAtividades());
-        if (dto.getResponsavelId() != null) {
-            Usuario responsavel = usuarioRepository.findById(dto.getResponsavelId())
-                    .orElseThrow(() -> new RuntimeException("Usuário responsável não encontrado: " + dto.getResponsavelId()));
-            if (!"GESTOR".equals(responsavel.getCargo())) {
-                throw new IllegalArgumentException("Responsável do projeto deve ter cargo Gestor.");
-            }
-            projeto.setResponsavel(responsavel);
-        }
+        aplicarResponsavel(projeto, dto);
         projeto.setPrioridade(dto.getPrioridade());
         projeto.setCustoAnualPrevisto(dto.getCustoAnualPrevisto());
         projeto.setRetornoPrevisto(dto.getRetornoPrevisto());
@@ -71,16 +64,7 @@ public class ProjetoService {
             projeto.setNomeProjeto(dto.getNomeProjeto());
             projeto.setObjetivo(dto.getObjetivo());
             projeto.setAtividades(dto.getAtividades());
-            if (dto.getResponsavelId() != null) {
-                Usuario responsavel = usuarioRepository.findById(dto.getResponsavelId())
-                        .orElseThrow(() -> new RuntimeException("Usuário responsável não encontrado: " + dto.getResponsavelId()));
-                if (!"GESTOR".equals(responsavel.getCargo())) {
-                    throw new IllegalArgumentException("Responsável do projeto deve ter cargo Gestor.");
-                }
-                projeto.setResponsavel(responsavel);
-            } else {
-                projeto.setResponsavel(null);
-            }
+            aplicarResponsavel(projeto, dto);
             projeto.setPrioridade(dto.getPrioridade());
             projeto.setCustoAnualPrevisto(dto.getCustoAnualPrevisto());
             projeto.setRetornoPrevisto(dto.getRetornoPrevisto());
@@ -92,6 +76,19 @@ public class ProjetoService {
             return toDTO(projetoRepository.save(projeto));
         }).orElse(null);
     }    
+
+    private void aplicarResponsavel(Projeto projeto, ProjetoDTO dto) {
+        if (dto.getResponsavelId() == null) {
+            projeto.setResponsavel(null);
+            return;
+        }
+        Usuario responsavel = usuarioRepository.findById(dto.getResponsavelId())
+                .orElseThrow(() -> new RuntimeException("Usuário responsável não encontrado: " + dto.getResponsavelId()));
+        if (!"GESTOR".equals(responsavel.getCargo())) {
+            throw new IllegalArgumentException("Responsável do projeto deve ter cargo Gestor.");
+        }
+        projeto.setResponsavel(responsavel);
+    }
 
     private ProjetoDTO toDTO(Projeto projeto) {
         ProjetoDTO dto = new ProjetoDTO();
