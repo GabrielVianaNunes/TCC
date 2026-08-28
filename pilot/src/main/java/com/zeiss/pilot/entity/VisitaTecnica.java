@@ -3,9 +3,12 @@ package com.zeiss.pilot.entity;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,22 +28,15 @@ public class VisitaTecnica {
     private String telefones;
     private String observacao;
 
-    public VisitaTecnica() {}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "responsavel_id")
+    private Usuario responsavelUsuario;
 
-    public VisitaTecnica(Long id, String responsavel, String empresaInstituicao, LocalDate dataSolicitada, 
-                         LocalDate dataAgendada, Boolean visitaRealizada, Integer quantidadeVisitantes,
-                         String localVisita, String telefones, String observacao) {
-        this.id = id;
-        this.responsavel = responsavel;
-        this.empresaInstituicao = empresaInstituicao;
-        this.dataSolicitada = dataSolicitada;
-        this.dataAgendada = dataAgendada;
-        this.visitaRealizada = visitaRealizada;
-        this.quantidadeVisitantes = quantidadeVisitantes;
-        this.localVisita = localVisita;
-        this.telefones = telefones;
-        this.observacao = observacao;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id")
+    private Cliente clienteEntidade;
+
+    public VisitaTecnica() {}
 
     // Getters e Setters
     public Long getId() { return id; }
@@ -72,4 +68,10 @@ public class VisitaTecnica {
 
     public String getObservacao() { return observacao; }
     public void setObservacao(String observacao) { this.observacao = observacao; }
+
+    public Usuario getResponsavelUsuario() { return responsavelUsuario; }
+    public void setResponsavelUsuario(Usuario responsavelUsuario) { this.responsavelUsuario = responsavelUsuario; }
+
+    public Cliente getClienteEntidade() { return clienteEntidade; }
+    public void setClienteEntidade(Cliente clienteEntidade) { this.clienteEntidade = clienteEntidade; }
 }

@@ -48,17 +48,12 @@ public class VisitaTecnicaController {
 
     @PostMapping
     public ResponseEntity<VisitaTecnicaDTO> salvarVisita(@Valid @RequestBody VisitaTecnicaDTO dto) {
-        VisitaTecnica entidade = dto.toEntity();
-        VisitaTecnica salvo = service.salvarVisita(entidade);
-        return ResponseEntity.ok(VisitaTecnicaDTO.fromEntity(salvo));
+        return ResponseEntity.ok(service.criarVisita(dto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<VisitaTecnicaDTO> atualizarVisita(@PathVariable Long id, @Valid @RequestBody VisitaTecnicaDTO dto) {
-        VisitaTecnica entidade = dto.toEntity();
-        entidade.setId(id);
-        VisitaTecnica atualizado = service.salvarVisita(entidade);
-        return ResponseEntity.ok(VisitaTecnicaDTO.fromEntity(atualizado));
+        return ResponseEntity.ok(service.atualizarVisita(id, dto));
     }
 
     @DeleteMapping("/{id}")

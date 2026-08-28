@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.zeiss.pilot.entity.VisitaTecnica;
-import com.zeiss.pilot.validation.Nome;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,13 +12,19 @@ public class VisitaTecnicaDTO {
 
     private Long id;
 
-    @NotBlank(message = "Responsável é obrigatório.")
-    @Nome
+    // Autopreenchido pelo service a partir de responsavelId — mantido só
+    // para exibir texto legado de registros anteriores a este vínculo.
     private String responsavel;
 
-    @NotBlank(message = "Empresa é obrigatória.")
-    @Nome
+    private Long responsavelId;
+
+    // Autopreenchido pelo service: nome do Cliente vinculado, ou o nome
+    // fixo do CEM quando visitaInterna=true.
     private String empresaInstituicao;
+
+    private Long clienteId;
+
+    private Boolean visitaInterna;
 
     @NotNull(message = "Data solicitada é obrigatória.")
     private LocalDate dataSolicitada;
@@ -42,57 +47,24 @@ public class VisitaTecnicaDTO {
     private String observacao;
     private LocalDateTime createdAt;
 
-    // Construtor Padrão
     public VisitaTecnicaDTO() {}
 
-    // Construtor com parâmetros
-    public VisitaTecnicaDTO(Long id, String responsavel, String empresaInstituicao, LocalDate dataSolicitada,
-                            LocalDate dataAgendada, Boolean visitaRealizada, Integer quantidadeVisitantes,
-                            String localVisita, String telefones, String observacao, LocalDateTime createdAt) {
-        this.id = id;
-        this.responsavel = responsavel;
-        this.empresaInstituicao = empresaInstituicao;
-        this.dataSolicitada = dataSolicitada;
-        this.dataAgendada = dataAgendada;
-        this.visitaRealizada = visitaRealizada;
-        this.quantidadeVisitantes = quantidadeVisitantes;
-        this.localVisita = localVisita;
-        this.telefones = telefones;
-        this.observacao = observacao;
-        this.createdAt = createdAt;
-    }
-
-    // ✅ Método para converter de entidade para DTO
     public static VisitaTecnicaDTO fromEntity(VisitaTecnica entity) {
-        return new VisitaTecnicaDTO(
-            entity.getId(),
-            entity.getResponsavel(),
-            entity.getEmpresaInstituicao(),
-            entity.getDataSolicitada(),
-            entity.getDataAgendada(),
-            entity.getVisitaRealizada(),
-            entity.getQuantidadeVisitantes(),
-            entity.getLocalVisita(),
-            entity.getTelefones(),
-            entity.getObservacao(),
-            null // ← createdAt não existe na entidade, omitido aqui
-        );
-    }
-
-    // ✅ Método para converter de DTO para entidade
-    public VisitaTecnica toEntity() {
-        return new VisitaTecnica(
-            this.id,
-            this.responsavel,
-            this.empresaInstituicao,
-            this.dataSolicitada,
-            this.dataAgendada,
-            this.visitaRealizada,
-            this.quantidadeVisitantes,
-            this.localVisita,
-            this.telefones,
-            this.observacao
-        );
+        VisitaTecnicaDTO dto = new VisitaTecnicaDTO();
+        dto.setId(entity.getId());
+        dto.setResponsavel(entity.getResponsavel());
+        dto.setResponsavelId(entity.getResponsavelUsuario() != null ? entity.getResponsavelUsuario().getId() : null);
+        dto.setEmpresaInstituicao(entity.getEmpresaInstituicao());
+        dto.setClienteId(entity.getClienteEntidade() != null ? entity.getClienteEntidade().getId() : null);
+        dto.setDataSolicitada(entity.getDataSolicitada());
+        dto.setDataAgendada(entity.getDataAgendada());
+        dto.setVisitaRealizada(entity.getVisitaRealizada());
+        dto.setQuantidadeVisitantes(entity.getQuantidadeVisitantes());
+        dto.setLocalVisita(entity.getLocalVisita());
+        dto.setTelefones(entity.getTelefones());
+        dto.setObservacao(entity.getObservacao());
+        dto.setCreatedAt(null); // createdAt não existe na entidade
+        return dto;
     }
 
     // Getters e Setters
@@ -102,8 +74,17 @@ public class VisitaTecnicaDTO {
     public String getResponsavel() { return responsavel; }
     public void setResponsavel(String responsavel) { this.responsavel = responsavel; }
 
+    public Long getResponsavelId() { return responsavelId; }
+    public void setResponsavelId(Long responsavelId) { this.responsavelId = responsavelId; }
+
     public String getEmpresaInstituicao() { return empresaInstituicao; }
     public void setEmpresaInstituicao(String empresaInstituicao) { this.empresaInstituicao = empresaInstituicao; }
+
+    public Long getClienteId() { return clienteId; }
+    public void setClienteId(Long clienteId) { this.clienteId = clienteId; }
+
+    public Boolean getVisitaInterna() { return visitaInterna; }
+    public void setVisitaInterna(Boolean visitaInterna) { this.visitaInterna = visitaInterna; }
 
     public LocalDate getDataSolicitada() { return dataSolicitada; }
     public void setDataSolicitada(LocalDate dataSolicitada) { this.dataSolicitada = dataSolicitada; }
