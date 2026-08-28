@@ -64,6 +64,49 @@
     if (el) el.checked = !!v;
   }
 
+  // ── Recebido Por (Usuário) ──────────────────────────────────────────────
+  const CARGOS_RECEBIDO_POR = ['GESTOR', 'TECNICO', 'ESTAGIARIO'];
+
+  async function carregarResponsaveisAmostra() {
+    const sel = document.getElementById('amostraResponsavel');
+    if (!sel) return;
+    let usuarios = [];
+    try {
+      usuarios = await Api.get('/api/usuarios');
+    } catch { usuarios = []; }
+    const permitidos = (Array.isArray(usuarios) ? usuarios : (usuarios.content || []))
+      .filter(u => CARGOS_RECEBIDO_POR.includes(u.cargo));
+    sel.innerHTML = `<option value="">${_t('Selecione...')}</option>` +
+      permitidos.map(u => `<option value="${u.id}">${esc(u.nome)}</option>`).join('');
+  }
+
+  // ── Cliente / Empresa (Combobox) ─────────────────────────────────────────
+  let amostraClienteCombobox = null;
+
+  function initAmostraClienteCombobox() {
+    const inputEl = document.getElementById('amostraClienteBusca');
+    const hiddenEl = document.getElementById('amostraClienteId');
+    if (!inputEl || !hiddenEl) return;
+    amostraClienteCombobox = Combobox.create({
+      inputEl,
+      hiddenEl,
+      items: [],
+      getLabel: c => c.nome,
+      getId: c => c.id,
+      placeholder: _t('Buscar cliente...'),
+      emptyMessage: _t('Nenhum cliente encontrado.'),
+    });
+  }
+
+  async function carregarClientesNoAmostraCombobox() {
+    if (!amostraClienteCombobox) return;
+    let clientes = [];
+    try {
+      clientes = await Api.get('/api/clientes');
+    } catch { clientes = []; }
+    amostraClienteCombobox.setItems(clientes);
+  }
+
   function isVencendo(a) {
     if (a.status !== 'Em custódia') return false;
     if (!a.dataDevPrevista) return false;
@@ -325,7 +368,7 @@
       if (!val('amostraDataEntrada')) { Toast.error(_t('Informe a data do recebimento.')); return false; }
       if (!val('amostraHorario'))     { Toast.error(_t('Informe o horário do recebimento.')); return false; }
       if (!val('amostraResponsavel')) { Toast.error(_t('Informe o responsável pelo recebimento.')); return false; }
-      if (!val('amostraCliente'))     { Toast.error(_t('Informe o cliente / empresa.')); return false; }
+      if (!val('amostraClienteId'))   { Toast.error(_t('Informe o cliente / empresa.')); return false; }
       if (!val('amostraDesc'))        { Toast.error(_t('Informe a descrição da peça.')); return false; }
       const qtd = parseInt(document.getElementById('amostraQtd')?.value, 10);
       if (isNaN(qtd) || qtd < 1)     { Toast.error(_t('Informe uma quantidade válida.')); return false; }
@@ -338,7 +381,7 @@
   function resetForm() {
     const ids = [
       'amostraDataEntrada','amostraHorario','amostraResponsavel','amostraFormaRecebimento',
-      'amostraCliente','amostraRespEnvio','amostraTelEmail','amostraServico',
+      'amostraRespEnvio','amostraTelEmail','amostraServico',
       'amostraObsRecebimento','amostraCodigoCEM','amostraCodigoCliente','amostraDesc',
       'amostraQtd','amostraUnidade','amostraDataDevPrev','amostraObsTecnicas',
       'amostraObjetivoCliente',
@@ -361,6 +404,7 @@
       'amostraObs',
     ];
     ids.forEach(id => setVal(id, ''));
+    amostraClienteCombobox?.clear();
 
     [
       'amostraTemDesenho','amostraTemCAD','amostraTemTolerancia','amostraTemInstrucao',
@@ -377,9 +421,9 @@
       // Seção 1
       dataEntrada:          val('amostraDataEntrada'),
       horario:              val('amostraHorario'),
-      responsavel:          val('amostraResponsavel'),
+      responsavelId:        val('amostraResponsavel') ? Number(val('amostraResponsavel')) : null,
       formaRecebimento:     val('amostraFormaRecebimento'),
-      cliente:              val('amostraCliente'),
+      clienteId:            val('amostraClienteId') ? Number(val('amostraClienteId')) : null,
       respEnvio:            val('amostraRespEnvio'),
       telEmail:             val('amostraTelEmail'),
       servicoRef:           val('amostraServico'),
@@ -470,9 +514,9 @@
   function fillForm(a) {
     setVal('amostraDataEntrada',        a.dataEntrada);
     setVal('amostraHorario',            a.horario);
-    setVal('amostraResponsavel',        a.responsavel);
+    setVal('amostraResponsavel',        a.responsavelId);
     setVal('amostraFormaRecebimento',   a.formaRecebimento);
-    setVal('amostraCliente',            a.cliente);
+    amostraClienteCombobox?.setValue(a.clienteId, a.cliente);
     setVal('amostraRespEnvio',          a.respEnvio);
     setVal('amostraTelEmail',           a.telEmail);
     setVal('amostraServico',            a.servicoRef);
@@ -549,13 +593,15 @@
   }
 
   // ── Abrir modal nova amostra ──────────────────────────────────────────────
-  function openNovaAmostra() {
+  async function openNovaAmostra() {
     editingId = null;
     editingStatus = null;
     editingDataDevRealizada = null;
     document.getElementById('modalAmostraTitle').textContent = _t('Novo Recebimento de Peças');
     resetForm();
     setVal('amostraDataEntrada', todayISO());
+    await carregarResponsaveisAmostra();
+    await carregarClientesNoAmostraCombobox();
     Modal.open('modalAmostra');
   }
 
@@ -568,6 +614,8 @@
       editingDataDevRealizada = a.dataDevRealizada;
       document.getElementById('modalAmostraTitle').textContent = _t('Editar Recebimento');
       resetForm();
+      await carregarResponsaveisAmostra();
+      await carregarClientesNoAmostraCombobox();
       fillForm(a);
       Modal.open('modalAmostra');
     } catch (err) {
@@ -579,7 +627,7 @@
   async function salvarAmostra() {
     const payload = readPayload();
 
-    if (!payload.dataEntrada || !payload.horario || !payload.responsavel || !payload.cliente ||
+    if (!payload.dataEntrada || !payload.horario || !payload.responsavelId || !payload.clienteId ||
         !payload.descricao || payload.quantidade < 1 || !payload.unidade) {
       Toast.error(_t('Preencha os campos obrigatórios (etapa 1).'));
       goToStep(1);
@@ -816,6 +864,7 @@
 
     // Modal nova amostra
     document.getElementById('btnNovaAmostra')?.addEventListener('click', openNovaAmostra);
+    document.getElementById('amostraBtnClienteRapido')?.addEventListener('click', () => window.open('/clientes', '_blank'));
     document.getElementById('btnFecharModalAmostra')?.addEventListener('click', () => Modal.close('modalAmostra'));
     document.getElementById('btnCancelarAmostra')?.addEventListener('click', () => Modal.close('modalAmostra'));
 
@@ -878,6 +927,7 @@
 
   // ── Init ──────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
+    initAmostraClienteCombobox();
     bindEvents();
     load();
   });

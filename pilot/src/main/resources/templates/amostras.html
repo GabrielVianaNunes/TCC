@@ -322,7 +322,9 @@
           </div>
           <div class="form-group">
             <label class="form-label form-label--required">Recebido Por</label>
-            <input class="form-control" type="text" id="amostraResponsavel" placeholder="Nome do técnico responsável" maxlength="80" required />
+            <select class="form-control" id="amostraResponsavel" required>
+              <option value="">Selecione...</option>
+            </select>
           </div>
           <div class="form-group">
             <label class="form-label">Forma de Recebimento</label>
@@ -336,8 +338,10 @@
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label form-label--required">Cliente / Empresa</label>
-            <input class="form-control" type="text" id="amostraCliente" placeholder="Ex: Bosch do Brasil" maxlength="120" required />
+            <label class="form-label form-label--required" for="amostraClienteBusca">Cliente / Empresa</label>
+            <input class="form-control" type="text" id="amostraClienteBusca" placeholder="Buscar cliente..." required />
+            <input type="hidden" id="amostraClienteId" />
+            <button type="button" class="btn btn--sm" id="amostraBtnClienteRapido">+ Cadastrar novo cliente</button>
           </div>
           <div class="form-group">
             <label class="form-label">Responsável pelo Envio</label>
