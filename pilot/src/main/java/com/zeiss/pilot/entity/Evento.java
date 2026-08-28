@@ -43,7 +43,7 @@ public class Evento {
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private String horario;
 
     @Column(length = 255)
