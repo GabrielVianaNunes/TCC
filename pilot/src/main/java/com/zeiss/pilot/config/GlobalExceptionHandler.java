@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, String>> handleRuntime(RuntimeException ex) {
         String msg = ex.getMessage();
-        if (msg != null && msg.contains("não encontrado")) {
+        if (msg != null && msg.contains("não encontrad")) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", msg));
         }
         return erroInterno("Erro inesperado ao processar a requisição", ex);
@@ -117,7 +117,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException ex) {
         String msg = ex.getMessage();
-        if (msg != null && msg.contains("não encontrado")) {
+        if (msg != null && msg.contains("não encontrad")) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", msg));
         }
         return ResponseEntity.badRequest().body(Map.of("message", msg));

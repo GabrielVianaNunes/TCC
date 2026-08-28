@@ -126,4 +126,23 @@ class EventoControllerTest {
                         .content(corpo))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void atualizarEventoInexistenteRetorna404() throws Exception {
+        // Cobertura que faltava (Fix 3 da revisão final): garante que o
+        // carve-out de "não encontrad*" em GlobalExceptionHandler continua
+        // roteando para 404 mesmo com a mensagem já usando a forma
+        // masculina "Evento não encontrado" — esse gap de teste (PUT-404
+        // ausente) foi o que deixou passar o bug equivalente em
+        // VisitaTecnicaService (mensagem feminina "não encontrada").
+        Long gestorId = usuarioComCargo("GESTOR", "gestor.evento.404.teste@zeiss.com");
+        String corpo = String.format("""
+                {"titulo":"Evento Inexistente","data":"2026-09-10","horario":"14:00","local":"Auditório","responsavelId":%d,"numeroParticipantes":30}
+                """, gestorId);
+        mockMvc.perform(put(ENDPOINT + "/999999").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isNotFound());
+    }
 }
