@@ -55,6 +55,17 @@ class AmostraServiceIntegrationTest {
         return usuarioRepository.save(u).getId();
     }
 
+    private Long usuarioComCargoNulo(String email) {
+        Usuario u = new Usuario();
+        u.setNome("Usuario Sem Cargo");
+        u.setEmail(email);
+        u.setSenha("senha123");
+        // cargo propositalmente não definido (fica null) — reproduz o admin
+        // bootstrap do AdminInitializer, que nunca seta cargo.
+        u.setRole("ADMIN");
+        return usuarioRepository.save(u).getId();
+    }
+
     private Long clienteValido(String nome, String cpf) {
         ClienteDTO dto = new ClienteDTO();
         dto.setNome(nome);
@@ -211,6 +222,22 @@ class AmostraServiceIntegrationTest {
         AmostraDTO dto = new AmostraDTO();
         dto.setResponsavelId(usuarioValido("DIRETOR_CEM", "diretor.amostra.teste@zeiss.com"));
         dto.setClienteId(clienteValido("Cliente Cargo Invalido", "555.111.333-88"));
+        dto.setDescricao("desc");
+        dto.setStatus("Em custódia");
+        dto.setDataEntrada(LocalDate.now());
+
+        assertThrows(IllegalArgumentException.class, () -> amostraService.salvar(dto));
+    }
+
+    @Test
+    void salvarComResponsavelDeCargoNuloLancaIllegalArgumentExceptionEmVezDeNpe() {
+        // Fix 2 da revisão final: usuarios.cargo é nullable no schema real
+        // (V1__baseline.sql) e o admin bootstrap do AdminInitializer nunca
+        // seta cargo — Set.of(...).contains(null) lança NPE sem a checagem
+        // de null explícita, virando 500 em vez do 400 esperado.
+        AmostraDTO dto = new AmostraDTO();
+        dto.setResponsavelId(usuarioComCargoNulo("sem.cargo.amostra.teste@zeiss.com"));
+        dto.setClienteId(clienteValido("Cliente Cargo Nulo", "666.111.333-99"));
         dto.setDescricao("desc");
         dto.setStatus("Em custódia");
         dto.setDataEntrada(LocalDate.now());

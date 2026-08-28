@@ -57,7 +57,7 @@ public class VisitaTecnicaService {
         }
         Usuario responsavel = usuarioRepository.findById(dto.getResponsavelId())
                 .orElseThrow(() -> new RuntimeException("Usuário responsável não encontrado: " + dto.getResponsavelId()));
-        if (!CARGOS_PERMITIDOS.contains(responsavel.getCargo())) {
+        if (responsavel.getCargo() == null || !CARGOS_PERMITIDOS.contains(responsavel.getCargo())) {
             throw new IllegalArgumentException("Usuário responsável deve ter cargo Gestor ou Técnico.");
         }
 

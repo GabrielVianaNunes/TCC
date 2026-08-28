@@ -56,6 +56,17 @@ class VisitaTecnicaControllerTest {
         return usuarioRepository.save(u).getId();
     }
 
+    private Long usuarioComCargoNulo(String emailUnico) {
+        Usuario u = new Usuario();
+        u.setNome("Usuario Sem Cargo");
+        u.setEmail(emailUnico);
+        u.setSenha("senha123");
+        // cargo propositalmente não definido (fica null) — reproduz o admin
+        // bootstrap do AdminInitializer, que nunca seta cargo.
+        u.setRole("ADMIN");
+        return usuarioRepository.save(u).getId();
+    }
+
     @Test
     @WithMockUser
     void criarVisitaSemResponsavelIdRetorna400() throws Exception {
@@ -206,5 +217,38 @@ class VisitaTecnicaControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(corpoAtualizacao))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void criarVisitaComResponsavelDeCargoNuloRetorna400EmVezDe500() throws Exception {
+        // Fix 2 da revisão final: usuarios.cargo é nullable no schema real
+        // (V1__baseline.sql) — Set.of(...).contains(null) lançava NPE (500)
+        // em vez do 400 esperado antes da checagem de null explícita.
+        Long semCargoId = usuarioComCargoNulo("sem.cargo.visita.teste@zeiss.com");
+        String corpo = String.format("""
+                {"responsavelId":%d,"visitaInterna":true,"dataSolicitada":"2026-09-01","localVisita":"Sala 3","quantidadeVisitantes":15,"telefones":"(48) 99999-0000","visitaRealizada":false}
+                """, semCargoId);
+        mockMvc.perform(post(ENDPOINT).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void atualizarVisitaInexistenteRetorna404() throws Exception {
+        // Fix 3 da revisão final: VisitaTecnicaService lança "Visita técnica
+        // não encontrada" (feminino) — GlobalExceptionHandler antes só
+        // reconhecia o radical masculino "não encontrado" e isso caía no
+        // 500 genérico em vez do 404 esperado pelo frontend.
+        Long responsavelId = usuarioComCargo("GESTOR", "gestor.visita.404.teste@zeiss.com");
+        String corpo = String.format("""
+                {"responsavelId":%d,"visitaInterna":true,"dataSolicitada":"2026-09-01","localVisita":"Sala 3","quantidadeVisitantes":15,"telefones":"(48) 99999-0000","visitaRealizada":false}
+                """, responsavelId);
+        mockMvc.perform(put(ENDPOINT + "/999999").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(corpo))
+                .andExpect(status().isNotFound());
     }
 }
