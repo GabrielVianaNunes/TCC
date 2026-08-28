@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.zeiss.pilot.dto.ProjetoDTO;
 import com.zeiss.pilot.entity.Projeto;
+import com.zeiss.pilot.entity.Usuario;
 import com.zeiss.pilot.repository.ProjetoRepository;
 import com.zeiss.pilot.repository.UsuarioRepository;
 
@@ -28,7 +29,12 @@ public class ProjetoService {
         projeto.setObjetivo(dto.getObjetivo());
         projeto.setAtividades(dto.getAtividades());
         if (dto.getResponsavelId() != null) {
-            usuarioRepository.findById(dto.getResponsavelId()).ifPresent(projeto::setResponsavel);
+            Usuario responsavel = usuarioRepository.findById(dto.getResponsavelId())
+                    .orElseThrow(() -> new RuntimeException("Usuário responsável não encontrado: " + dto.getResponsavelId()));
+            if (!"GESTOR".equals(responsavel.getCargo())) {
+                throw new IllegalArgumentException("Responsável do projeto deve ter cargo Gestor.");
+            }
+            projeto.setResponsavel(responsavel);
         }
         projeto.setPrioridade(dto.getPrioridade());
         projeto.setCustoAnualPrevisto(dto.getCustoAnualPrevisto());
@@ -66,7 +72,12 @@ public class ProjetoService {
             projeto.setObjetivo(dto.getObjetivo());
             projeto.setAtividades(dto.getAtividades());
             if (dto.getResponsavelId() != null) {
-                usuarioRepository.findById(dto.getResponsavelId()).ifPresent(projeto::setResponsavel);
+                Usuario responsavel = usuarioRepository.findById(dto.getResponsavelId())
+                        .orElseThrow(() -> new RuntimeException("Usuário responsável não encontrado: " + dto.getResponsavelId()));
+                if (!"GESTOR".equals(responsavel.getCargo())) {
+                    throw new IllegalArgumentException("Responsável do projeto deve ter cargo Gestor.");
+                }
+                projeto.setResponsavel(responsavel);
             } else {
                 projeto.setResponsavel(null);
             }

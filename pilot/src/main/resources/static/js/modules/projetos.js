@@ -15,7 +15,7 @@ const ProjetosModule = (() => {
   async function loadAdmins() {
     try {
       const data = await Api.get('/api/usuarios');
-      admins = (data.content || data).filter(u => u.role === 'ADMIN' || u.perfil === 'ADMIN');
+      admins = (data.content || data).filter(u => u.cargo === 'GESTOR');
       const sel = document.getElementById('responsavelId');
       if (!sel) return;
       sel.innerHTML = `<option value="">${_t('Selecione...')}</option>` +
