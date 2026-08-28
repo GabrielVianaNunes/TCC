@@ -207,9 +207,35 @@
     <div class="modal__body">
       <form id="visitaForm">
         <input type="hidden" id="visitaId" />
+        <div class="form-group">
+          <label class="form-label form-label--required">Tipo de Visita</label>
+          <div style="display:flex;gap:1rem;align-items:center;font-size:0.85rem">
+            <label style="display:flex;align-items:center;gap:0.35rem;cursor:pointer">
+              <input type="radio" name="tipoVisita" id="tipoVisitaCliente" value="cliente" checked />
+              Visita a Cliente
+            </label>
+            <label style="display:flex;align-items:center;gap:0.35rem;cursor:pointer">
+              <input type="radio" name="tipoVisita" id="tipoVisitaInterna" value="interna" />
+              Visita Interna (CEM)
+            </label>
+          </div>
+        </div>
         <div class="form-grid form-grid--2col">
-          <div class="form-group"><label class="form-label form-label--required">Responsável</label><input class="form-control" id="responsavel" required /></div>
-          <div class="form-group"><label class="form-label form-label--required">Empresa</label><input class="form-control" id="empresa" required /></div>
+          <div class="form-group">
+            <label class="form-label form-label--required">Responsável</label>
+            <select class="form-control" id="responsavel" required>
+              <option value="">Selecione...</option>
+            </select>
+          </div>
+          <div class="form-group" id="empresaClienteWrap">
+            <label class="form-label form-label--required" for="empresaBusca">Empresa</label>
+            <input class="form-control" type="text" id="empresaBusca" placeholder="Buscar cliente..." required />
+            <input type="hidden" id="clienteId" />
+          </div>
+          <div class="form-group" id="empresaFixaWrap" style="display:none">
+            <label class="form-label">Empresa</label>
+            <input class="form-control" id="empresaFixa" value="CEM SENAI Zeiss" disabled />
+          </div>
         </div>
         <div class="form-grid form-grid--2col">
           <div class="form-group"><label class="form-label form-label--required">Data Solicitada</label><input class="form-control" type="date" id="dataSolicitada" required /></div>

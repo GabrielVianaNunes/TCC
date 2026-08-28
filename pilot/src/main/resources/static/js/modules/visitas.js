@@ -19,6 +19,79 @@
 
   function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
 
+  /* ── CEM (visita interna) ──────────────────────────────────────────── */
+  const CEM_EMPRESA_FIXA = 'CEM SENAI Zeiss';
+  const CEM_ENDERECO_FIXO = 'R. Armogaste José da Silveira, 612 · Setor Centro Oeste · Goiânia - GO · 74560-550';
+
+  /* ── Responsável (Usuário) ─────────────────────────────────────────── */
+  const CARGOS_RESPONSAVEL_VISITA = ['GESTOR', 'TECNICO'];
+
+  async function carregarResponsaveisVisita() {
+    const sel = document.getElementById('responsavel');
+    if (!sel) return;
+    let usuarios = [];
+    try {
+      usuarios = await Api.get('/api/usuarios');
+    } catch { usuarios = []; }
+    const permitidos = (Array.isArray(usuarios) ? usuarios : (usuarios.content || []))
+      .filter(u => CARGOS_RESPONSAVEL_VISITA.includes(u.cargo));
+    sel.innerHTML = `<option value="">${_t('Selecione...')}</option>` +
+      permitidos.map(u => `<option value="${u.id}">${u.nome}</option>`).join('');
+  }
+
+  /* ── Empresa (Combobox de Cliente) ────────────────────────────────── */
+  let empresaCombobox = null;
+  let clientesCarregados = [];
+
+  function initEmpresaCombobox() {
+    const inputEl = document.getElementById('empresaBusca');
+    const hiddenEl = document.getElementById('clienteId');
+    if (!inputEl || !hiddenEl) return;
+    empresaCombobox = Combobox.create({
+      inputEl,
+      hiddenEl,
+      items: [],
+      getLabel: c => c.nome,
+      getId: c => c.id,
+      placeholder: _t('Buscar cliente...'),
+      emptyMessage: _t('Nenhum cliente encontrado.'),
+    });
+    hiddenEl.addEventListener('change', () => {
+      const cliente = clientesCarregados.find(c => String(c.id) === String(hiddenEl.value));
+      if (cliente) document.getElementById('local').value = cliente.endereco || '';
+    });
+  }
+
+  async function carregarClientesNoEmpresaCombobox() {
+    if (!empresaCombobox) return;
+    try {
+      clientesCarregados = await Api.get('/api/clientes');
+    } catch { clientesCarregados = []; }
+    empresaCombobox.setItems(clientesCarregados);
+  }
+
+  /* ── Alternador Cliente / Interna ─────────────────────────────────── */
+  function toggleTipoVisita(mode) {
+    const isInterna = mode === 'interna';
+    document.getElementById('empresaClienteWrap').style.display = isInterna ? 'none' : '';
+    document.getElementById('empresaFixaWrap').style.display = isInterna ? '' : 'none';
+    const empresaBuscaEl = document.getElementById('empresaBusca');
+    empresaBuscaEl.required = !isInterna;
+    // O Combobox (ui.js) chama setCustomValidity() sempre que o campo fica
+    // vazio, mesmo antes de o usuário interagir — isso acontece já na
+    // criação (initEmpresaCombobox) e de novo em empresaCombobox.clear()
+    // (abrirModalNovo). Sem replicar aqui a mesma checagem ao entrar/sair do
+    // modo Interna, esse "Selecione um item da lista." sobrevive escondido
+    // no campo oculto e não-obrigatório, e form.checkValidity() nunca mais
+    // fica true — bloqueando pra sempre o salvamento de uma Visita Interna.
+    empresaBuscaEl.setCustomValidity(
+      isInterna || document.getElementById('clienteId').value ? '' : 'Selecione um item da lista.'
+    );
+    if (isInterna) {
+      document.getElementById('local').value = CEM_ENDERECO_FIXO;
+    }
+  }
+
   /* ── Load ───────────────────────────────────────────────────── */
   async function loadVisitas() {
     Skeleton.tableRows(tbody, 9, 6);
@@ -84,17 +157,35 @@
     document.getElementById('visitaId').value = '';
     document.getElementById('visitaForm').reset();
     document.getElementById('visitaRealizada').value = 'false';
+    document.getElementById('tipoVisitaCliente').checked = true;
+    toggleTipoVisita('cliente');
+    empresaCombobox?.clear();
     document.getElementById('modalTitulo').textContent = _t('Agendar Visita Técnica');
     document.getElementById('btnExcluirVisita').style.display = 'none';
+    carregarResponsaveisVisita();
+    carregarClientesNoEmpresaCombobox();
     Modal.open('modalVisita');
   }
 
   async function editar(id) {
     try {
       const v = await Api.get(`${API_URL}/${id}`);
+      await carregarResponsaveisVisita();
+      await carregarClientesNoEmpresaCombobox();
       document.getElementById('visitaId').value = v.id;
-      document.getElementById('responsavel').value = v.responsavel || '';
-      document.getElementById('empresa').value = v.empresaInstituicao || '';
+      document.getElementById('responsavel').value = v.responsavelId || '';
+      if (v.clienteId) {
+        document.getElementById('tipoVisitaCliente').checked = true;
+        toggleTipoVisita('cliente');
+        empresaCombobox?.setValue(v.clienteId, v.empresaInstituicao);
+      } else if (v.empresaInstituicao === CEM_EMPRESA_FIXA) {
+        document.getElementById('tipoVisitaInterna').checked = true;
+        toggleTipoVisita('interna');
+      } else {
+        document.getElementById('tipoVisitaCliente').checked = true;
+        toggleTipoVisita('cliente');
+        empresaCombobox?.clear();
+      }
       document.getElementById('dataSolicitada').value = v.dataSolicitada ? v.dataSolicitada.substring(0, 10) : '';
       document.getElementById('dataAgendada').value = v.dataAgendada ? v.dataAgendada.substring(0, 10) : '';
       document.getElementById('local').value = v.localVisita || '';
@@ -114,9 +205,11 @@
     if (!form.checkValidity()) { form.reportValidity(); return; }
 
     const id = document.getElementById('visitaId').value;
+    const interna = document.getElementById('tipoVisitaInterna').checked;
     const body = {
-      responsavel: document.getElementById('responsavel').value,
-      empresaInstituicao: document.getElementById('empresa').value,
+      responsavelId: document.getElementById('responsavel').value ? Number(document.getElementById('responsavel').value) : null,
+      visitaInterna: interna,
+      clienteId: interna ? null : (document.getElementById('clienteId').value ? Number(document.getElementById('clienteId').value) : null),
       dataSolicitada: document.getElementById('dataSolicitada').value || null,
       dataAgendada: document.getElementById('dataAgendada').value || null,
       localVisita: document.getElementById('local').value,
@@ -169,8 +262,9 @@
   /* ── Init ───────────────────────────────────────────────────── */
   function init() {
     loadVisitas();
-    Valid?.somenteLetras?.(document.getElementById('responsavel'));
-    Valid?.somenteLetras?.(document.getElementById('empresa'));
+    initEmpresaCombobox();
+    document.getElementById('tipoVisitaCliente').addEventListener('change', () => toggleTipoVisita('cliente'));
+    document.getElementById('tipoVisitaInterna').addEventListener('change', () => toggleTipoVisita('interna'));
     document.getElementById('btnNovaVisita').addEventListener('click', abrirModalNovo);
     document.getElementById('btnSalvarVisita').addEventListener('click', salvar);
     document.getElementById('btnExcluirVisita').addEventListener('click', excluir);
