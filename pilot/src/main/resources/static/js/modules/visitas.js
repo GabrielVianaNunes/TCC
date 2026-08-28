@@ -190,8 +190,8 @@
         empresaCombobox?.setValue(v.clienteId, v.empresaInstituicao);
       } else if (v.empresaInstituicao === CEM_EMPRESA_FIXA) {
         document.getElementById('tipoVisitaInterna').checked = true;
-        toggleTipoVisita('interna');
         empresaCombobox?.clear();
+        toggleTipoVisita('interna');
       } else {
         document.getElementById('tipoVisitaCliente').checked = true;
         toggleTipoVisita('cliente');
