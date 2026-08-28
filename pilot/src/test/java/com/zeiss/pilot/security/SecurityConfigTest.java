@@ -329,14 +329,16 @@ class SecurityConfigTest {
     @WithMockUser(roles = "ADMIN")
     void criarEventoComRoleAdminRetorna200() throws Exception {
         // "horario" incluído desde V10__vincula_responsavel_cliente.sql
-        // (eventos.horario virou NOT NULL) — sem relação com o que este
-        // teste verifica (autorização por role), só evita 500 por
-        // violação de constraint antes que EventoDTO tenha @NotBlank
-        // próprio no campo (adicionado numa task posterior do mesmo plano).
+        // (eventos.horario virou NOT NULL) e "responsavelId" desde a task
+        // que deu a Evento um Responsável real (Gestor, obrigatório) — sem
+        // relação com o que este teste verifica (autorização por role), só
+        // evita 400 por validação/vínculo obrigatório antes de chegar na
+        // regra de autorização.
+        Long gestorId = salvarUsuario("gestor.evento.sct@zeiss.com", "GESTOR", "GESTOR");
         mockMvc.perform(post("/api/eventos")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"titulo\":\"Evento Teste\",\"horario\":\"10:00\"}"))
+                        .content("{\"titulo\":\"Evento Teste\",\"horario\":\"10:00\",\"responsavelId\":" + gestorId + "}"))
                 .andExpect(status().isOk());
     }
 

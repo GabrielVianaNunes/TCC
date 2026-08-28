@@ -1,6 +1,7 @@
 package com.zeiss.pilot.dto;
 
 import com.zeiss.pilot.entity.Evento;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 public class EventoDTO {
@@ -9,9 +10,18 @@ public class EventoDTO {
     private String titulo;
     private String descricao;
     private LocalDate data;
+
+    @NotBlank(message = "Horário é obrigatório.")
     private String horario;
+
     private String local;
+
+    // Autopreenchido pelo service a partir de responsavelId — mantido só
+    // para exibir texto legado de registros anteriores a este vínculo.
     private String responsavel;
+
+    private Long responsavelId;
+
     private Integer numeroParticipantes;
     private String observacao;
 
@@ -26,6 +36,7 @@ public class EventoDTO {
         dto.setHorario(e.getHorario());
         dto.setLocal(e.getLocal());
         dto.setResponsavel(e.getResponsavel());
+        dto.setResponsavelId(e.getResponsavelUsuario() != null ? e.getResponsavelUsuario().getId() : null);
         dto.setNumeroParticipantes(e.getNumeroParticipantes());
         dto.setObservacao(e.getObservacao());
         return dto;
@@ -39,7 +50,6 @@ public class EventoDTO {
         e.setDescricao(this.descricao);
         e.setHorario(this.horario);
         e.setLocal(this.local);
-        e.setResponsavel(this.responsavel);
         e.setNumeroParticipantes(this.numeroParticipantes);
         e.setObservacao(this.observacao);
         return e;
@@ -59,6 +69,8 @@ public class EventoDTO {
     public void setLocal(String local) { this.local = local; }
     public String getResponsavel() { return responsavel; }
     public void setResponsavel(String responsavel) { this.responsavel = responsavel; }
+    public Long getResponsavelId() { return responsavelId; }
+    public void setResponsavelId(Long responsavelId) { this.responsavelId = responsavelId; }
     public Integer getNumeroParticipantes() { return numeroParticipantes; }
     public void setNumeroParticipantes(Integer numeroParticipantes) { this.numeroParticipantes = numeroParticipantes; }
     public String getObservacao() { return observacao; }

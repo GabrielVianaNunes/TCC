@@ -16,6 +16,8 @@ import com.zeiss.pilot.dto.EventoDTO;
 import com.zeiss.pilot.dto.EventoRelatorioDTO;
 import com.zeiss.pilot.service.EventoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/eventos")
 public class EventoController {
@@ -42,12 +44,12 @@ public class EventoController {
     }
 
     @PostMapping
-    public ResponseEntity<EventoDTO> createEvento(@RequestBody EventoDTO eventoDTO) {
+    public ResponseEntity<EventoDTO> createEvento(@Valid @RequestBody EventoDTO eventoDTO) {
         return ResponseEntity.ok(eventoService.createEvento(eventoDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EventoDTO> updateEvento(@PathVariable Long id, @RequestBody EventoDTO eventoDTO) {
+    public ResponseEntity<EventoDTO> updateEvento(@PathVariable Long id, @Valid @RequestBody EventoDTO eventoDTO) {
         return ResponseEntity.ok(eventoService.updateEvento(id, eventoDTO));
     }
 
