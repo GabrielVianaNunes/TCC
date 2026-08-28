@@ -45,6 +45,20 @@
     let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
   }
 
+  /* ── Responsável (Usuário) ─────────────────────────────────────────── */
+  async function carregarResponsaveisEvento() {
+    const sel = document.getElementById('responsavel');
+    if (!sel) return;
+    let usuarios = [];
+    try {
+      usuarios = await Api.get('/api/usuarios');
+    } catch { usuarios = []; }
+    const gestores = (Array.isArray(usuarios) ? usuarios : (usuarios.content || []))
+      .filter(u => u.cargo === 'GESTOR');
+    sel.innerHTML = `<option value="">${_t('Selecione...')}</option>` +
+      gestores.map(u => `<option value="${u.id}">${u.nome}</option>`).join('');
+  }
+
   /* ── Load ───────────────────────────────────────────────────── */
   async function loadEventos() {
     Skeleton.tableRows(tbody, 8, 8);
@@ -115,19 +129,21 @@
     document.getElementById('eventoForm').reset();
     document.getElementById('modalTitulo').textContent = _t('Novo Evento');
     document.getElementById('btnExcluirEvento').style.display = 'none';
+    carregarResponsaveisEvento();
     Modal.open('modalEvento');
   }
 
   async function editar(id) {
     try {
       const e = await Api.get(`${API_URL}/${id}`);
+      await carregarResponsaveisEvento();
       document.getElementById('eventoId').value = e.id;
       document.getElementById('titulo').value = e.titulo || e.nome || '';
       document.getElementById('descricao').value = e.descricao || '';
       document.getElementById('data').value = e.data ? e.data.substring(0, 10) : '';
       document.getElementById('horario').value = e.horario || '';
       document.getElementById('local').value = e.local || '';
-      document.getElementById('responsavel').value = e.responsavel || '';
+      document.getElementById('responsavel').value = e.responsavelId || '';
       document.getElementById('numeroParticipantes').value = e.numeroParticipantes || '';
       document.getElementById('observacao').value = e.observacao || '';
       document.getElementById('modalTitulo').textContent = _t('Editar Evento');
@@ -138,6 +154,9 @@
 
   /* ── Save ───────────────────────────────────────────────────── */
   async function salvar() {
+    const form = document.getElementById('eventoForm');
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+
     const id = document.getElementById('eventoId').value;
     const body = {
       titulo: document.getElementById('titulo').value,
@@ -145,7 +164,7 @@
       data: document.getElementById('data').value || null,
       horario: document.getElementById('horario').value || null,
       local: document.getElementById('local').value,
-      responsavel: document.getElementById('responsavel').value,
+      responsavelId: document.getElementById('responsavel').value ? Number(document.getElementById('responsavel').value) : null,
       numeroParticipantes: document.getElementById('numeroParticipantes').value
         ? parseInt(document.getElementById('numeroParticipantes').value) : null,
       observacao: document.getElementById('observacao').value,
@@ -374,6 +393,7 @@
     document.getElementById('modalTitulo').textContent = _t('Novo Evento');
     document.getElementById('btnExcluirEvento').style.display = 'none';
     document.getElementById('data').value = dateStr;
+    carregarResponsaveisEvento();
     Modal.open('modalEvento');
   }
 

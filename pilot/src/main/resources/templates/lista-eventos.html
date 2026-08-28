@@ -280,11 +280,16 @@
         <div class="form-group"><label class="form-label">Descrição</label><textarea class="form-control" id="descricao" rows="2"></textarea></div>
         <div class="form-grid form-grid--2col">
           <div class="form-group"><label class="form-label form-label--required">Data</label><input class="form-control" type="date" id="data" required /></div>
-          <div class="form-group"><label class="form-label">Horário</label><input class="form-control" type="time" id="horario" /></div>
+          <div class="form-group"><label class="form-label form-label--required">Horário</label><input class="form-control" type="time" id="horario" required /></div>
         </div>
         <div class="form-group"><label class="form-label">Local</label><input class="form-control" id="local" /></div>
         <div class="form-grid form-grid--2col">
-          <div class="form-group"><label class="form-label">Responsável</label><input class="form-control" id="responsavel" /></div>
+          <div class="form-group">
+            <label class="form-label form-label--required">Responsável</label>
+            <select class="form-control" id="responsavel" required>
+              <option value="">Selecione...</option>
+            </select>
+          </div>
           <div class="form-group"><label class="form-label">Nº de Participantes</label><input class="form-control" type="number" id="numeroParticipantes" min="0" /></div>
         </div>
         <div class="form-group"><label class="form-label">Observação</label><textarea class="form-control" id="observacao" rows="2"></textarea></div>
