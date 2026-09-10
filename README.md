@@ -7,8 +7,24 @@
 
 Sistema de gestão para o Centro de Excelência em Metrologia (CEM) do SENAI Zeiss: controle de máquinas e calibrações, amostras, almoxarifado, estagiários, visitas técnicas, eventos, documentos e avaliações de satisfação (NPS).
 
+## Início rápido
+
+Com JDK 21 e um Postgres local já rodando:
+
+```bash
+cp pilot/src/main/resources/application.properties.example pilot/src/main/resources/application.properties
+# edite DB_PASSWORD (ou as demais variáveis) em application.properties
+
+cd pilot
+./mvnw spring-boot:run        # Linux/macOS
+./mvnw.cmd spring-boot:run     # Windows
+```
+
+Acesse [http://localhost:8090](http://localhost:8090). Veja [Configuração](#configuração) para o passo a passo completo (criação do banco, variáveis de ambiente, primeiro acesso).
+
 ## Sumário
 
+- [Início rápido](#início-rápido)
 - [Stack](#stack)
 - [Pré-requisitos](#pré-requisitos)
 - [Configuração](#configuração)
@@ -135,12 +151,12 @@ O sistema tem backup automatizado diário do banco (`pg_dump -Fc`) e dos documen
 |---|---|
 | **Máquinas** | Cadastro de equipamentos, agendamento, manutenção e documentos por máquina; cada Ordem de Serviço escolhe uma máquina e, em seguida, um tipo de serviço do catálogo real da Zeiss para a categoria daquela máquina (CMM, multissensor óptico ou tomografia computadorizada), em vez de texto livre |
 | **Clientes** | Cadastro de clientes (nome, CPF/CNPJ único, endereço, telefone, e-mail); toda Ordem de Serviço se vincula a um cliente cadastrado, em vez de texto livre. Dashboard dedicado de receita por cliente — mês específico ou ano completo, só vendas fechadas |
-| **Amostras** | Controle de amostras recebidas para análise/calibração |
+| **Amostras** | Controle de amostras recebidas para análise/calibração; "Recebido Por" e "Cliente/Empresa" vinculados a Usuário/Cliente cadastrados, em vez de texto livre |
 | **Almoxarifado** | Itens e movimentações de estoque |
 | **Estagiários** | Cadastro, notas, dashboard e quadro Kanban de atividades — de Estagiários, Técnicos e Gestores, cada papel vendo só o que tem permissão |
-| **Visitas Técnicas** | Agendamento e acompanhamento de visitas ao CEM |
+| **Visitas Técnicas** | Agendamento e acompanhamento de visitas ao CEM; alternador Cliente/Interna — visita a cliente vincula Empresa a um Cliente cadastrado e sugere o Local a partir do endereço dele, visita interna usa a identidade fixa do próprio CEM |
 | **Verificação Ambiental** | Registro de condições ambientais do laboratório |
-| **Eventos / Editais / Projetos** | Gestão de eventos, editais e projetos do centro |
+| **Eventos / Editais / Projetos** | Gestão de eventos, editais e projetos do centro; Responsável de Evento/Projeto vinculado a um Gestor cadastrado (Evento também exige Horário) |
 | **Avaliação (NPS)** | Formulário público de satisfação com dashboard de respostas |
 | **Documentos** | Upload e organização de PDFs e documentos por pasta/máquina |
 | **Usuários** | Autenticação (Spring Security) e controle de acesso por papel (`ADMIN`, `GESTOR`, `TECNICO`, `ESTAGIARIO`) |
