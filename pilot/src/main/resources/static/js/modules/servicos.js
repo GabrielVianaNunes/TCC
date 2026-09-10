@@ -28,7 +28,7 @@ const ServicosModule = (() => {
     const tbody = document.getElementById('tabelaServicos');
     if (!tbody) return;
 
-    Skeleton.tableRows(tbody, 9, 5);
+    Skeleton.tableRows(tbody, 10, 5);
 
     try {
       const params = { page, size: 10 };
@@ -50,12 +50,13 @@ const ServicosModule = (() => {
       document.getElementById('btnProximo').disabled  = currentPage >= totalPages - 1;
 
       if (!items.length) {
-        EmptyState.table(tbody, 9);
+        EmptyState.table(tbody, 10);
         return;
       }
 
       tbody.innerHTML = items.map(s => `
         <tr>
+          <td class="table-cell--muted">#${s.id}</td>
           <td class="table-cell--strong">${s.clienteNome || s.cliente || '—'}</td>
           <td>${s.solicitacao || '—'}</td>
           <td style="text-align:center">${s.quantidade ?? '—'}</td>
@@ -74,7 +75,7 @@ const ServicosModule = (() => {
         </tr>`).join('');
     } catch (err) {
       Toast.error(err.message || _t('Erro ao carregar serviços.'));
-      EmptyState.table(tbody, 9, _t('Erro ao carregar dados'), _t('Verifique sua conexão e tente novamente.'));
+      EmptyState.table(tbody, 10, _t('Erro ao carregar dados'), _t('Verifique sua conexão e tente novamente.'));
     }
   }
 
@@ -271,7 +272,7 @@ const ServicosModule = (() => {
       toggleNotaSection(s.status || '');
       await loadEstagiarios();
 
-      document.getElementById('modalTitulo').textContent = `${_t('Editar OS')} — ${s.clienteNome || s.cliente}`;
+      document.getElementById('modalTitulo').textContent = `${_t('Editar OS')} #${s.id} — ${s.clienteNome || s.cliente}`;
       document.getElementById('btnExcluirServico').style.display = 'inline-flex';
       Modal.open('modalServico');
     } catch (err) {
