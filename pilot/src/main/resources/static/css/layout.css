@@ -249,6 +249,8 @@
   flex-shrink: 0;
 }
 
+.sidebar__badge--warning { background: var(--color-warning); }
+
 .sidebar.collapsed .sidebar__badge { display: none; }
 
 /* ── Sidebar Footer ── */

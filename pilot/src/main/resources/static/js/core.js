@@ -532,26 +532,71 @@ const SidebarBadges = {
     return items.filter(s => !this.STATUS_OS_FECHADOS.has(s.status)).length;
   },
 
-  async init() {
-    const link = document.querySelector('.sidebar__nav a[href="/servicos"]');
-    if (!link || !window.Api) return;
+  /* Documentos com alerta: expirados (vermelho) e prestes a vencer (âmbar).
+   * Usa o status calculado pelo backend; cai para a data se ele faltar. */
+  async contarDocumentosEmAlerta() {
+    const data = await window.Api.get('/api/documentos', { size: 1000 });
+    const docs = Array.isArray(data) ? data : (data.content || []);
+    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    const em30 = new Date(hoje); em30.setDate(hoje.getDate() + 30);
+    const statusDe = d => {
+      if (d.status) return d.status;
+      const exp = d.dataExpiracao || d.dataVencimento;
+      if (!exp) return 'ativo';
+      const dt = new Date(exp);
+      return dt < hoje ? 'expirado' : (dt <= em30 ? 'prestes a vencer' : 'ativo');
+    };
+    const status = docs.map(statusDe);
+    return {
+      expirados: status.filter(s => s === 'expirado').length,
+      vencendo:  status.filter(s => s === 'prestes a vencer').length
+    };
+  },
 
-    let badge = document.getElementById('badgeServicos');
+  /* Cria o badge no link da sidebar (ou reaproveita o do template), já oculto
+   * para não mostrar o "—" inicial nem um círculo vazio. */
+  _montar(href, id) {
+    const link = document.querySelector(`.sidebar__nav a[href="${href}"]`);
+    if (!link) return null;
+    let badge = document.getElementById(id);
     if (!badge) {
       badge = document.createElement('span');
       badge.className = 'sidebar__badge';
-      badge.id = 'badgeServicos';
+      badge.id = id;
       link.appendChild(badge);
     }
-    badge.style.display = 'none'; // evita mostrar o "—" ou um círculo vazio
+    badge.style.display = 'none';
+    return badge;
+  },
 
-    try {
-      const abertas = await this.contarOsAbertas();
-      if (abertas > 0) {
-        badge.textContent = abertas;
-        badge.style.display = '';
-      }
-    } catch { /* sem badge se a API falhar */ }
+  _mostrar(badge, total, aviso) {
+    if (!badge || total <= 0) return;
+    badge.textContent = total;
+    badge.classList.toggle('sidebar__badge--warning', !!aviso);
+    badge.style.display = '';
+  },
+
+  async init() {
+    if (!window.Api) return;
+    const badgeServicos = this._montar('/servicos', 'badgeServicos');
+    const badgeDocs = this._montar('/documentos', 'badgeDocs');
+
+    if (badgeServicos) {
+      try {
+        this._mostrar(badgeServicos, await this.contarOsAbertas());
+      } catch { /* sem badge se a API falhar */ }
+    }
+
+    // Documentos gerais do laboratório são só do Admin (API bloqueia o resto).
+    if (badgeDocs) {
+      try {
+        if (Auth.ready) await Auth.ready();
+        if (Auth.role() !== 'ADMIN') return;
+        const { expirados, vencendo } = await this.contarDocumentosEmAlerta();
+        // Vermelho se houver algum expirado; âmbar se só houver a vencer.
+        this._mostrar(badgeDocs, expirados + vencendo, expirados === 0);
+      } catch { /* sem badge se a API falhar */ }
+    }
   }
 };
 

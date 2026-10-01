@@ -253,7 +253,6 @@ const Dashboard = (() => {
 
   async function loadDocumentos() {
     const el = document.getElementById('documentosStatus');
-    const badgeDocs = document.getElementById('badgeDocs');
     if (!el) return;
 
     try {
@@ -265,8 +264,6 @@ const Dashboard = (() => {
       const ativos    = items.filter(d => d._status === 'ativo').length;
       const vencendo  = items.filter(d => d._status === 'prestes a vencer').length;
       const expirados = items.filter(d => d._status === 'expirado').length;
-
-      if (badgeDocs) badgeDocs.textContent = vencendo + expirados || '';
 
       // ── Alert banner ──
       const banner = document.getElementById('alertBanner');
