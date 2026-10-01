@@ -58,9 +58,11 @@ public class EventoService {
         evento.setHorario(eventoDTO.getHorario());
         evento.setLocal(eventoDTO.getLocal());
         aplicarResponsavel(evento, eventoDTO);
-        evento.setNumeroParticipantes(eventoDTO.getNumeroParticipantes());
-        evento.setNumeroConvidados(eventoDTO.getNumeroConvidados() != null ? eventoDTO.getNumeroConvidados() : 0);
-        evento.setNumeroPresentes(eventoDTO.getNumeroParticipantes() != null ? eventoDTO.getNumeroParticipantes() : 0);
+        Integer participantes = eventoDTO.getNumeroParticipantes();
+        Integer convidados = eventoDTO.getNumeroConvidados();
+        evento.setNumeroParticipantes(participantes);
+        evento.setNumeroConvidados(convidados != null ? convidados : 0);
+        evento.setNumeroPresentes(participantes != null ? participantes : 0);
         evento.setObservacao(eventoDTO.getObservacao());
 
         evento = eventoRepository.save(evento);
