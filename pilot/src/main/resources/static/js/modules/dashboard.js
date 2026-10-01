@@ -20,15 +20,6 @@ const Dashboard = (() => {
     })}`;
   }
 
-  /* ── OS em aberto: tudo que não está finalizado nem desistido ── */
-  const STATUS_OS_FECHADOS = new Set(['Venda finalizada', 'Desistiu']);
-
-  async function contarOsAbertas() {
-    const data = await Api.get('/api/servicos', { size: 1000 });
-    const items = Array.isArray(data) ? data : (data.content || []);
-    return items.filter(s => !STATUS_OS_FECHADOS.has(s.status)).length;
-  }
-
   /* ── KPI Cards ── */
   async function loadKPIs(isAdmin) {
     const grid = document.getElementById('kpiGrid');
@@ -47,7 +38,7 @@ const Dashboard = (() => {
     const fetches = kpis.map(k => {
       // "OS Abertas" não é o total de OS: exclui as já finalizadas/desistidas.
       const req = k.id === 'os'
-        ? contarOsAbertas().then(n => ({ totalElements: n }))
+        ? ZP.SidebarBadges.contarOsAbertas().then(n => ({ totalElements: n }))
         : Api.get(k.endpoint, k.params);
       return req.then(data => ({ ok: true, k, data })).catch(() => ({ ok: false, k }));
     });
@@ -475,15 +466,6 @@ const Dashboard = (() => {
     });
   }
 
-  /* ── Update sidebar badges ── */
-  async function loadSidebarBadges() {
-    try {
-      const abertos = await contarOsAbertas();
-      const badge = document.getElementById('badgeServicos');
-      if (badge) badge.textContent = abertos || '';
-    } catch { /**/ }
-  }
-
   /* ── Init ── */
   async function init() {
     if (window.ZP?.Auth?.ready) await window.ZP.Auth.ready();
@@ -503,7 +485,6 @@ const Dashboard = (() => {
     loadProximasVisitas();
     loadProjetosEmAndamento();
     if (isAdmin) loadDocumentos();
-    loadSidebarBadges();
   }
 
   document.addEventListener('DOMContentLoaded', init);

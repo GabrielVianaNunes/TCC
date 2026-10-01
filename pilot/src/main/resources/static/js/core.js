@@ -519,6 +519,42 @@ const PageTransition = {
   }
 };
 
+/* ── Sidebar badges ──
+ * A sidebar é duplicada em cada template; por isso o badge de OS em aberto
+ * é montado aqui (core.js é carregado em todas as telas), e não só no
+ * dashboard. Reaproveita o <span id="badgeServicos"> quando já existe. */
+const SidebarBadges = {
+  STATUS_OS_FECHADOS: new Set(['Venda finalizada', 'Desistiu']),
+
+  async contarOsAbertas() {
+    const data = await window.Api.get('/api/servicos', { size: 1000 });
+    const items = Array.isArray(data) ? data : (data.content || []);
+    return items.filter(s => !this.STATUS_OS_FECHADOS.has(s.status)).length;
+  },
+
+  async init() {
+    const link = document.querySelector('.sidebar__nav a[href="/servicos"]');
+    if (!link || !window.Api) return;
+
+    let badge = document.getElementById('badgeServicos');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'sidebar__badge';
+      badge.id = 'badgeServicos';
+      link.appendChild(badge);
+    }
+    badge.style.display = 'none'; // evita mostrar o "—" ou um círculo vazio
+
+    try {
+      const abertas = await this.contarOsAbertas();
+      if (abertas > 0) {
+        badge.textContent = abertas;
+        badge.style.display = '';
+      }
+    } catch { /* sem badge se a API falhar */ }
+  }
+};
+
 /* ── App Bootstrap ── */
 const App = {
   init() {
@@ -527,11 +563,12 @@ const App = {
     Topbar.init();
     Auth.init();
     PageTransition.init();
+    SidebarBadges.init();
   }
 };
 
 document.addEventListener('DOMContentLoaded', () => App.init());
 
 /* ── Exports ── */
-window.ZP   = { CSRF, Theme, Sidebar, Fmt, Dom, App, Auth };
+window.ZP   = { CSRF, Theme, Sidebar, Fmt, Dom, App, Auth, SidebarBadges };
 window.Auth = Auth;
