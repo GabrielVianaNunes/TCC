@@ -43,7 +43,7 @@
 
     setEl('kpiTotalEventos', total || 0);
 
-    const adesao = typeof adesaoMedia === 'number' ? adesaoMedia.toFixed(1) : (adesaoMedia || '—');
+    const adesao = typeof adesaoMedia === 'number' ? adesaoMedia.toFixed(1).replace('.', ',') + '%' : (adesaoMedia || '—');
     setEl('kpiAdesaoMedia', adesao);
 
     const best = months.reduce((b, d) => d.count > b.count ? d : b, months[0]);
