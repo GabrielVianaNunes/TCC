@@ -20,6 +20,15 @@ const Dashboard = (() => {
     })}`;
   }
 
+  /* ── OS em aberto: tudo que não está finalizado nem desistido ── */
+  const STATUS_OS_FECHADOS = new Set(['Venda finalizada', 'Desistiu']);
+
+  async function contarOsAbertas() {
+    const data = await Api.get('/api/servicos', { size: 1000 });
+    const items = Array.isArray(data) ? data : (data.content || []);
+    return items.filter(s => !STATUS_OS_FECHADOS.has(s.status)).length;
+  }
+
   /* ── KPI Cards ── */
   async function loadKPIs(isAdmin) {
     const grid = document.getElementById('kpiGrid');
@@ -35,9 +44,13 @@ const Dashboard = (() => {
       ...(isAdmin ? [{ id: 'docs', variant: 'success', label: _t('Documentos Ativos'), icon: 'doc', endpoint: '/api/documentos', params: { size: 1 } }] : []),
     ];
 
-    const fetches = kpis.map(k =>
-      Api.get(k.endpoint, k.params).then(data => ({ ok: true, k, data })).catch(() => ({ ok: false, k }))
-    );
+    const fetches = kpis.map(k => {
+      // "OS Abertas" não é o total de OS: exclui as já finalizadas/desistidas.
+      const req = k.id === 'os'
+        ? contarOsAbertas().then(n => ({ totalElements: n }))
+        : Api.get(k.endpoint, k.params);
+      return req.then(data => ({ ok: true, k, data })).catch(() => ({ ok: false, k }));
+    });
 
     const results = await Promise.all(fetches);
 
@@ -465,10 +478,7 @@ const Dashboard = (() => {
   /* ── Update sidebar badges ── */
   async function loadSidebarBadges() {
     try {
-      const data = await Api.get('/api/servicos', { size: 1000 });
-      const items = Array.isArray(data) ? data : (data.content || []);
-      const CLOSED = new Set(['Venda finalizada', 'Desistiu']);
-      const abertos = items.filter(s => !CLOSED.has(s.status)).length;
+      const abertos = await contarOsAbertas();
       const badge = document.getElementById('badgeServicos');
       if (badge) badge.textContent = abertos || '';
     } catch { /**/ }
