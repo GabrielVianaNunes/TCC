@@ -35,9 +35,13 @@ const Dashboard = (() => {
       ...(isAdmin ? [{ id: 'docs', variant: 'success', label: _t('Documentos Ativos'), icon: 'doc', endpoint: '/api/documentos', params: { size: 1 } }] : []),
     ];
 
-    const fetches = kpis.map(k =>
-      Api.get(k.endpoint, k.params).then(data => ({ ok: true, k, data })).catch(() => ({ ok: false, k }))
-    );
+    const fetches = kpis.map(k => {
+      // "OS Abertas" não é o total de OS: exclui as já finalizadas/desistidas.
+      const req = k.id === 'os'
+        ? ZP.SidebarBadges.contarOsAbertas().then(n => ({ totalElements: n }))
+        : Api.get(k.endpoint, k.params);
+      return req.then(data => ({ ok: true, k, data })).catch(() => ({ ok: false, k }));
+    });
 
     const results = await Promise.all(fetches);
 
@@ -249,7 +253,6 @@ const Dashboard = (() => {
 
   async function loadDocumentos() {
     const el = document.getElementById('documentosStatus');
-    const badgeDocs = document.getElementById('badgeDocs');
     if (!el) return;
 
     try {
@@ -261,8 +264,6 @@ const Dashboard = (() => {
       const ativos    = items.filter(d => d._status === 'ativo').length;
       const vencendo  = items.filter(d => d._status === 'prestes a vencer').length;
       const expirados = items.filter(d => d._status === 'expirado').length;
-
-      if (badgeDocs) badgeDocs.textContent = vencendo + expirados || '';
 
       // ── Alert banner ──
       const banner = document.getElementById('alertBanner');
@@ -462,18 +463,6 @@ const Dashboard = (() => {
     });
   }
 
-  /* ── Update sidebar badges ── */
-  async function loadSidebarBadges() {
-    try {
-      const data = await Api.get('/api/servicos', { size: 1000 });
-      const items = Array.isArray(data) ? data : (data.content || []);
-      const CLOSED = new Set(['Venda finalizada', 'Desistiu']);
-      const abertos = items.filter(s => !CLOSED.has(s.status)).length;
-      const badge = document.getElementById('badgeServicos');
-      if (badge) badge.textContent = abertos || '';
-    } catch { /**/ }
-  }
-
   /* ── Init ── */
   async function init() {
     if (window.ZP?.Auth?.ready) await window.ZP.Auth.ready();
@@ -493,7 +482,6 @@ const Dashboard = (() => {
     loadProximasVisitas();
     loadProjetosEmAndamento();
     if (isAdmin) loadDocumentos();
-    loadSidebarBadges();
   }
 
   document.addEventListener('DOMContentLoaded', init);

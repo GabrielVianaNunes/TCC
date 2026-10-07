@@ -88,7 +88,7 @@ public class DashboardEstagiarioService {
         totais.setTotalEstagiarios(estagiarios.size());
         totais.setTotalTarefas(totalTarefas);
         totais.setTotalConcluidas(totalConcluidas);
-        totais.setMediaGeralNotas(countNotas > 0 ? somaNotas / countNotas : null);
+        totais.setMediaGeralNotas(countNotas > 0 ? Math.round(somaNotas / countNotas * 10.0) / 10.0 : null);
 
         DashboardEstagiarioDTO dto = new DashboardEstagiarioDTO();
         dto.setTotais(totais);

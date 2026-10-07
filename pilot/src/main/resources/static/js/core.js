@@ -519,6 +519,87 @@ const PageTransition = {
   }
 };
 
+/* ── Sidebar badges ──
+ * A sidebar é duplicada em cada template; por isso o badge de OS em aberto
+ * é montado aqui (core.js é carregado em todas as telas), e não só no
+ * dashboard. Reaproveita o <span id="badgeServicos"> quando já existe. */
+const SidebarBadges = {
+  STATUS_OS_FECHADOS: new Set(['Venda finalizada', 'Desistiu']),
+
+  async contarOsAbertas() {
+    const data = await window.Api.get('/api/servicos', { size: 1000 });
+    const items = Array.isArray(data) ? data : (data.content || []);
+    return items.filter(s => !this.STATUS_OS_FECHADOS.has(s.status)).length;
+  },
+
+  /* Documentos com alerta: expirados (vermelho) e prestes a vencer (âmbar).
+   * Usa o status calculado pelo backend; cai para a data se ele faltar. */
+  async contarDocumentosEmAlerta() {
+    const data = await window.Api.get('/api/documentos', { size: 1000 });
+    const docs = Array.isArray(data) ? data : (data.content || []);
+    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    const em30 = new Date(hoje); em30.setDate(hoje.getDate() + 30);
+    const statusDe = d => {
+      if (d.status) return d.status;
+      const exp = d.dataExpiracao || d.dataVencimento;
+      if (!exp) return 'ativo';
+      const dt = new Date(exp);
+      return dt < hoje ? 'expirado' : (dt <= em30 ? 'prestes a vencer' : 'ativo');
+    };
+    const status = docs.map(statusDe);
+    return {
+      expirados: status.filter(s => s === 'expirado').length,
+      vencendo:  status.filter(s => s === 'prestes a vencer').length
+    };
+  },
+
+  /* Cria o badge no link da sidebar (ou reaproveita o do template), já oculto
+   * para não mostrar o "—" inicial nem um círculo vazio. */
+  _montar(href, id) {
+    const link = document.querySelector(`.sidebar__nav a[href="${href}"]`);
+    if (!link) return null;
+    let badge = document.getElementById(id);
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'sidebar__badge';
+      badge.id = id;
+      link.appendChild(badge);
+    }
+    badge.style.display = 'none';
+    return badge;
+  },
+
+  _mostrar(badge, total, aviso) {
+    if (!badge || total <= 0) return;
+    badge.textContent = total;
+    badge.classList.toggle('sidebar__badge--warning', !!aviso);
+    badge.style.display = '';
+  },
+
+  async init() {
+    if (!window.Api) return;
+    const badgeServicos = this._montar('/servicos', 'badgeServicos');
+    const badgeDocs = this._montar('/documentos', 'badgeDocs');
+
+    if (badgeServicos) {
+      try {
+        this._mostrar(badgeServicos, await this.contarOsAbertas());
+      } catch { /* sem badge se a API falhar */ }
+    }
+
+    // Documentos gerais do laboratório são só do Admin (API bloqueia o resto).
+    if (badgeDocs) {
+      try {
+        if (Auth.ready) await Auth.ready();
+        if (Auth.role() !== 'ADMIN') return;
+        const { expirados, vencendo } = await this.contarDocumentosEmAlerta();
+        // Vermelho se houver algum expirado; âmbar se só houver a vencer.
+        this._mostrar(badgeDocs, expirados + vencendo, expirados === 0);
+      } catch { /* sem badge se a API falhar */ }
+    }
+  }
+};
+
 /* ── App Bootstrap ── */
 const App = {
   init() {
@@ -527,11 +608,12 @@ const App = {
     Topbar.init();
     Auth.init();
     PageTransition.init();
+    SidebarBadges.init();
   }
 };
 
 document.addEventListener('DOMContentLoaded', () => App.init());
 
 /* ── Exports ── */
-window.ZP   = { CSRF, Theme, Sidebar, Fmt, Dom, App, Auth };
+window.ZP   = { CSRF, Theme, Sidebar, Fmt, Dom, App, Auth, SidebarBadges };
 window.Auth = Auth;
