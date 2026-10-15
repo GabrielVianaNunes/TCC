@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Profile;
 
 import com.zeiss.pilot.dto.AgendamentoMaquinaDTO;
 import com.zeiss.pilot.dto.AmostraDTO;
@@ -57,8 +59,17 @@ import jakarta.annotation.PostConstruct;
  * Passa por Service (nunca grava direto via SQL) para que hashing de senha,
  * criptografia de CPF/CNPJ/endereço (CryptoConverter) e geração de código OS
  * aconteçam exatamente como aconteceriam via a UI.
+ *
+ * <p>Depende do admin de bootstrap e das máquinas 1 a 4, criados por outros
+ * inicializadores que ele não injeta — o @DependsOn torna a ordem explícita
+ * (em banco vazio, sem ele, o Spring não garante que rodem antes).
+ *
+ * <p>Não roda no perfil "test": os testes assumem tabelas sem dados de
+ * desenvolvimento (contagens, CPFs fixos) e o seeder os quebrava.
  */
 @Configuration
+@Profile("!test")
+@DependsOn({"adminInitializer", "maquinaDataInitializer"})
 public class DataSeeder {
 
     private final ClienteRepository clienteRepository;
@@ -541,12 +552,14 @@ public class DataSeeder {
         dto.setHorario(horario);
         dto.setLocal(local);
         dto.setNumeroParticipantes(presentes);
+        // EventoService.validarPresencas rejeita participantes > convidados.
+        dto.setNumeroConvidados(convidados);
         dto.setObservacao(observacao);
         EventoDTO salvo = eventoService.createEvento(dto);
 
-        // numeroConvidados/numeroPresentes alimentam o cálculo de adesão do
-        // relatório de eventos, mas o DTO/service do redesign não os expõe —
-        // ajustamos direto na entidade para o dashboard mostrar dado real.
+        // numeroPresentes (junto de numeroConvidados) alimenta o cálculo de
+        // adesão do relatório de eventos e não passa pelo DTO — ajustamos
+        // direto na entidade para o dashboard mostrar dado real.
         Evento entidade = eventoRepository.findById(salvo.getId()).orElseThrow();
         entidade.setNumeroConvidados(convidados);
         entidade.setNumeroPresentes(presentes);

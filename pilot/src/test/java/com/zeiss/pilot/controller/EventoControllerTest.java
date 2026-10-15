@@ -97,7 +97,7 @@ class EventoControllerTest {
     void criarEventoComPayloadValidoRetorna200() throws Exception {
         Long gestorId = usuarioComCargo("GESTOR", "gestor.evento.teste2@zeiss.com");
         String corpo = String.format("""
-                {"titulo":"Feira de Metrologia","data":"2026-09-10","horario":"14:00","local":"Auditório","responsavelId":%d,"numeroParticipantes":30}
+                {"titulo":"Feira de Metrologia","data":"2026-09-10","horario":"14:00","local":"Auditório","responsavelId":%d,"numeroParticipantes":30,"numeroConvidados":40}
                 """, gestorId);
         mockMvc.perform(post(ENDPOINT).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
