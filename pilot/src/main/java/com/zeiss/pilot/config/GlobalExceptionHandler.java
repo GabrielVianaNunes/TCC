@@ -86,14 +86,16 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Só a UNIQUE index de CPF/CNPJ ({@code idx_clientes_cpf_hash}, criada em
-     * V7__cria_clientes.sql) vira 409 "duplicata" — é o único caso em que essa
-     * mensagem faz sentido (dois clientes concorrentes passam pela checagem de
-     * aplicação e o perdedor bate na restrição do banco). Qualquer outra
-     * DataIntegrityViolationException (NOT NULL, FK, CHECK — ex.: um valor de
-     * status fora do domínio em /api/servicos) é erro de dado inválido ou bug,
-     * não duplicata, e cai no tratamento genérico (500), igual ao
-     * comportamento antes deste handler existir.
+     * Só duas UNIQUE viram 409 "duplicata": a de CPF/CNPJ
+     * ({@code idx_clientes_cpf_hash}, criada em V7__cria_clientes.sql — dois
+     * clientes concorrentes passam pela checagem de aplicação e o perdedor
+     * bate na restrição do banco) e a de e-mail de usuário
+     * ({@code usuarios_email_unique}, V1__baseline.sql — o cadastro não
+     * consulta o e-mail antes de salvar, então a restrição do banco é a
+     * checagem). Qualquer outra DataIntegrityViolationException (NOT NULL,
+     * FK, CHECK — ex.: um valor de status fora do domínio em /api/servicos) é
+     * erro de dado inválido ou bug, não duplicata, e cai no tratamento
+     * genérico (500), igual ao comportamento antes deste handler existir.
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, String>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
@@ -103,6 +105,11 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Map.of("message", "Conflito ao salvar: um registro com os mesmos dados já existe.",
                                  "referencia", referencia));
+        }
+        if (causaRaiz != null && causaRaiz.contains("usuarios_email_unique")) {
+            // Erro do usuário, não falha do servidor: sem log de erro nem referência.
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "Já existe um usuário cadastrado com este e-mail."));
         }
         return erroInterno("Violação de integridade de dados", ex);
     }
