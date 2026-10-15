@@ -902,21 +902,21 @@
 
 /* ── Hierarquia de Permissões por Cargo ──────────────────────── */
 
-/* Estagiário: sem excluir */
-[data-role="ESTAGIARIO"] #btnExcluirServico,
-[data-role="ESTAGIARIO"] #btnExcluirProjeto,
-[data-role="ESTAGIARIO"] #btnExcluirEvento,
-[data-role="ESTAGIARIO"] #btnExcluirEdital,
-[data-role="ESTAGIARIO"] #btnExcluirVisita,
-[data-role="ESTAGIARIO"] #btnExcluirUsuario,
-[data-role="ESTAGIARIO"] #btnConfirmarDelete,
-[data-role="ESTAGIARIO"] .perm-delete { display: none !important; }
+/* Estagiário e Técnico: sem excluir (a API também devolve 403 — ver SecurityConfig) */
+:is([data-role="ESTAGIARIO"], [data-role="TECNICO"]) :is(
+  #btnExcluirServico, #btnExcluirProjeto, #btnExcluirEvento, #btnExcluirEdital,
+  #btnExcluirVisita, #btnExcluirUsuario, #btnConfirmarDelete,
+  .almo-btn--delete, .amos-btn--delete, [data-action="excluir"], .perm-delete
+) { display: none !important; }
 
 /* Estagiário: sem editar */
 [data-role="ESTAGIARIO"] .perm-edit { display: none !important; }
 
-/* Estagiário: sem dados financeiros */
-[data-role="ESTAGIARIO"] .perm-financial { display: none !important; }
+/* Estagiário e Técnico: sem dados financeiros */
+:is([data-role="ESTAGIARIO"], [data-role="TECNICO"]) .perm-financial { display: none !important; }
+
+/* Só o Admin cria evento (POST /api/eventos exige ADMIN) */
+:is([data-role="ESTAGIARIO"], [data-role="TECNICO"], [data-role="GESTOR"]) #btnNovoEvento { display: none !important; }
 
 /* Gestor: sem excluir usuários (page guard cuida do acesso, mas esconde botão por segurança) */
 [data-role="GESTOR"] #btnExcluirUsuario { display: none !important; }
