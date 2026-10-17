@@ -155,6 +155,7 @@
       document.getElementById('local').value = e.local || '';
       document.getElementById('responsavel').value = e.responsavelId || '';
       document.getElementById('numeroParticipantes').value = e.numeroParticipantes || '';
+      document.getElementById('numeroConvidados').value = e.numeroConvidados || '';
       document.getElementById('observacao').value = e.observacao || '';
       document.getElementById('modalTitulo').textContent = _t('Editar Evento');
       document.getElementById('btnExcluirEvento').style.display = '';
@@ -177,6 +178,8 @@
       responsavelId: document.getElementById('responsavel').value ? Number(document.getElementById('responsavel').value) : null,
       numeroParticipantes: document.getElementById('numeroParticipantes').value
         ? parseInt(document.getElementById('numeroParticipantes').value) : null,
+      numeroConvidados: document.getElementById('numeroConvidados').value
+        ? parseInt(document.getElementById('numeroConvidados').value) : null,
       observacao: document.getElementById('observacao').value,
     };
 

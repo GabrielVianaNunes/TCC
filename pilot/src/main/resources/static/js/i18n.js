@@ -1034,7 +1034,7 @@
 
     // ── Dashboard Eventos ────────────────────────────────────────────
     'Visão geral da participação e distribuição mensal de eventos': { 'pt-BR':'Visão geral da participação e distribuição mensal de eventos', 'en':'Overview of participation and monthly event distribution', 'de':'Übersicht der Teilnahme und monatlichen Veranstaltungsverteilung' },
-    'participantes / evento':                     { 'pt-BR':'participantes / evento',                     'en':'participants / event',                          'de':'Teilnehmer / Veranstaltung'                        },
+    'participantes / convidados':                 { 'pt-BR':'participantes / convidados',                 'en':'participants / invitees',                       'de':'Teilnehmer / Eingeladene'                          },
     'Mês Mais Ativo':                             { 'pt-BR':'Mês Mais Ativo',                             'en':'Most Active Month',                             'de':'Aktivster Monat'                                   },
     'Meses com Eventos':                          { 'pt-BR':'Meses com Eventos',                          'en':'Months with Events',                            'de':'Monate mit Veranstaltungen'                        },
     'de 12 meses':                                { 'pt-BR':'de 12 meses',                                'en':'of 12 months',                                  'de':'von 12 Monaten'                                    },

@@ -23,6 +23,7 @@ public class EventoDTO {
     private Long responsavelId;
 
     private Integer numeroParticipantes;
+    private Integer numeroConvidados;
     private String observacao;
 
     public EventoDTO() {}
@@ -38,6 +39,7 @@ public class EventoDTO {
         dto.setResponsavel(e.getResponsavel());
         dto.setResponsavelId(e.getResponsavelUsuario() != null ? e.getResponsavelUsuario().getId() : null);
         dto.setNumeroParticipantes(e.getNumeroParticipantes());
+        dto.setNumeroConvidados(e.getNumeroConvidados());
         dto.setObservacao(e.getObservacao());
         return dto;
     }
@@ -51,6 +53,8 @@ public class EventoDTO {
         e.setHorario(this.horario);
         e.setLocal(this.local);
         e.setNumeroParticipantes(this.numeroParticipantes);
+        e.setNumeroConvidados(this.numeroConvidados != null ? this.numeroConvidados : 0);
+        e.setNumeroPresentes(this.numeroParticipantes != null ? this.numeroParticipantes : 0);
         e.setObservacao(this.observacao);
         return e;
     }
@@ -73,6 +77,8 @@ public class EventoDTO {
     public void setResponsavelId(Long responsavelId) { this.responsavelId = responsavelId; }
     public Integer getNumeroParticipantes() { return numeroParticipantes; }
     public void setNumeroParticipantes(Integer numeroParticipantes) { this.numeroParticipantes = numeroParticipantes; }
+    public Integer getNumeroConvidados() { return numeroConvidados; }
+    public void setNumeroConvidados(Integer numeroConvidados) { this.numeroConvidados = numeroConvidados; }
     public String getObservacao() { return observacao; }
     public void setObservacao(String observacao) { this.observacao = observacao; }
 }

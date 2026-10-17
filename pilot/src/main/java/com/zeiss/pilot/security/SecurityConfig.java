@@ -72,6 +72,24 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/documentos/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/eventos").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/backup/**").hasRole("ADMIN")
+                // Hierarquia por papel imposta no servidor — espelha PAGE_ROLES/PERMS
+                // de core.js, que só escondem menu/botão na UI. Criar e editar
+                // continuam abertos a qualquer autenticado (Técnico/Estagiário
+                // precisam registrar e atualizar o próprio trabalho).
+                .requestMatchers("/documentos").hasRole("ADMIN")
+                .requestMatchers(
+                    "/usuarios", "/editais/**", "/lista-editais", "/detalhes-edital", "/api/editais/**",
+                    "/dashboard-clientes", "/dashboardServicos",
+                    "/servicos/relatorio-servicos/**", "/clientes/dashboard/**"
+                ).hasAnyRole("ADMIN", "GESTOR")
+                // Excluir é de Gestor/Admin. Ficam de fora: kanban-cards (o
+                // KanbanCardService decide por dono) e sessões/agendamentos de
+                // máquina (cada um cancela o próprio uso).
+                .requestMatchers(HttpMethod.DELETE,
+                    "/api/clientes/*", "/api/servicos/*", "/api/projetos/*", "/api/eventos/*",
+                    "/api/visitas-tecnicas/*", "/api/amostras/*", "/api/estagiarios/*",
+                    "/api/almoxarifado/itens/*", "/api/maquinas/*", "/api/maquinas/*/manutencoes/*"
+                ).hasAnyRole("ADMIN", "GESTOR")
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().authenticated()
             )

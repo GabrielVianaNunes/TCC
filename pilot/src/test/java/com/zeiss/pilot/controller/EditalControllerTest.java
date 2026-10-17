@@ -38,7 +38,7 @@ class EditalControllerTest {
     private static final String ENDPOINT = "/api/editais";
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "GESTOR")
     void criarEditalSemNomeRetorna400() throws Exception {
         String corpo = """
                 {"status":"Aguardando aprovação","instituicaoFornecedora":"FINEP","valor":10000.00}
@@ -50,7 +50,7 @@ class EditalControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "GESTOR")
     void criarEditalSemStatusRetorna400() throws Exception {
         String corpo = """
                 {"nomeEdital":"Edital Teste","instituicaoFornecedora":"FINEP","valor":10000.00}
@@ -62,7 +62,7 @@ class EditalControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "GESTOR")
     void criarEditalSemInstituicaoFornecedoraRetorna400() throws Exception {
         String corpo = """
                 {"nomeEdital":"Edital Teste","status":"Aguardando aprovação","valor":10000.00}
@@ -74,7 +74,7 @@ class EditalControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "GESTOR")
     void criarEditalSemValorRetorna400() throws Exception {
         String corpo = """
                 {"nomeEdital":"Edital Teste","status":"Aguardando aprovação","instituicaoFornecedora":"FINEP"}
@@ -86,7 +86,7 @@ class EditalControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "GESTOR")
     void criarEditalComValorZeroRetorna400() throws Exception {
         String corpo = """
                 {"nomeEdital":"Edital Teste","status":"Aguardando aprovação","instituicaoFornecedora":"FINEP","valor":0}
@@ -98,7 +98,7 @@ class EditalControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "GESTOR")
     void criarEditalComInstituicaoFornecedoraContendoNumeroRetorna400() throws Exception {
         String corpo = """
                 {"nomeEdital":"Edital Teste","status":"Aguardando aprovação","instituicaoFornecedora":"FINEP99","valor":10000.00}
@@ -110,7 +110,7 @@ class EditalControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "GESTOR")
     void criarEditalComPayloadCompletoEValidoRetorna200() throws Exception {
         String corpo = """
                 {"nomeEdital":"Edital de Fomento 2027","status":"Aguardando aprovação","instituicaoFornecedora":"FINEP","instituicaoParceira":"SENAI Nacional","valor":150000.00,"observacao":"Teste"}
@@ -122,7 +122,7 @@ class EditalControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "GESTOR")
     void criarEditalComInstituicaoParceiraContendoNumeroRetorna400() throws Exception {
         String corpo = """
                 {"nomeEdital":"Edital Teste","status":"Aguardando aprovação","instituicaoFornecedora":"FINEP","instituicaoParceira":"SENAI99","valor":10000.00}
@@ -134,7 +134,7 @@ class EditalControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "GESTOR")
     void atualizarEditalSemNomeRetorna400() throws Exception {
         Edital existente = new Edital();
         existente.setNomeEdital("Edital Original");

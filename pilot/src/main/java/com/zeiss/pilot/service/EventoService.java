@@ -40,6 +40,7 @@ public class EventoService {
     }
 
     public EventoDTO createEvento(EventoDTO eventoDTO) {
+        validarPresencas(eventoDTO);
         Evento evento = eventoDTO.toEntity();
         aplicarResponsavel(evento, eventoDTO);
         evento = eventoRepository.save(evento);
@@ -50,17 +51,34 @@ public class EventoService {
         Evento evento = eventoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Evento não encontrado com id: " + id));
 
+        validarPresencas(eventoDTO);
         if (eventoDTO.getTitulo() != null) evento.setNome(eventoDTO.getTitulo());
         if (eventoDTO.getData() != null)   evento.setDataEvento(eventoDTO.getData());
         evento.setDescricao(eventoDTO.getDescricao());
         evento.setHorario(eventoDTO.getHorario());
         evento.setLocal(eventoDTO.getLocal());
         aplicarResponsavel(evento, eventoDTO);
-        evento.setNumeroParticipantes(eventoDTO.getNumeroParticipantes());
+        Integer participantes = eventoDTO.getNumeroParticipantes();
+        Integer convidados = eventoDTO.getNumeroConvidados();
+        evento.setNumeroParticipantes(participantes);
+        evento.setNumeroConvidados(convidados != null ? convidados : 0);
+        evento.setNumeroPresentes(participantes != null ? participantes : 0);
         evento.setObservacao(eventoDTO.getObservacao());
 
         evento = eventoRepository.save(evento);
         return EventoDTO.fromEntity(evento);
+    }
+
+    private void validarPresencas(EventoDTO dto) {
+        if (dto.getNumeroConvidados() != null && dto.getNumeroConvidados() < 0
+                || dto.getNumeroParticipantes() != null && dto.getNumeroParticipantes() < 0) {
+            throw new IllegalArgumentException("Convidados e participantes não podem ser negativos.");
+        }
+        int convidados = dto.getNumeroConvidados() != null ? dto.getNumeroConvidados() : 0;
+        int participantes = dto.getNumeroParticipantes() != null ? dto.getNumeroParticipantes() : 0;
+        if (participantes > convidados) {
+            throw new IllegalArgumentException("Nº de participantes não pode exceder o nº de convidados.");
+        }
     }
 
     private void aplicarResponsavel(Evento evento, EventoDTO dto) {
@@ -90,6 +108,7 @@ public class EventoService {
                 .mapToDouble(e -> (double) e.getNumeroPresentes() / e.getNumeroConvidados() * 100)
                 .average()
                 .orElse(0.0);
+        adesaoMedia = Math.round(adesaoMedia * 10.0) / 10.0;
 
         Map<String, Long> distribuicaoMensal = new HashMap<>();
         for (Month mes : Month.values()) {
