@@ -24,8 +24,11 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
            "AND (:status IS NULL OR :status = '' OR s.status = :status)")
     Page<Servico> search(@Param("query") String query, @Param("status") String status, Pageable pageable);
 
+    // Só "Venda finalizada" é receita — mesmo critério do Dashboard de Clientes. Contar
+    // OS em negociação/desistência inflava a quantidade e distorcia o ticket médio.
     @Query("SELECT new com.zeiss.pilot.dto.RelatorioMensalDTO(YEAR(s.dataCriacao), MONTH(s.dataCriacao), SUM(s.valor), COUNT(s)) " +
-           "FROM Servico s GROUP BY YEAR(s.dataCriacao), MONTH(s.dataCriacao) ORDER BY YEAR(s.dataCriacao), MONTH(s.dataCriacao)")
+           "FROM Servico s WHERE s.status = 'Venda finalizada' " +
+           "GROUP BY YEAR(s.dataCriacao), MONTH(s.dataCriacao) ORDER BY YEAR(s.dataCriacao), MONTH(s.dataCriacao)")
     List<RelatorioMensalDTO> calcularArrecadacaoMensal();
 
     boolean existsByClienteEntidadeId(Long clienteId);

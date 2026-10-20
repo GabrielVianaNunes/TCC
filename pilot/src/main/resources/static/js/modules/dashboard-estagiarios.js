@@ -38,13 +38,6 @@
     return Number(nota).toFixed(1).replace('.', ',');
   }
 
-  function stars(nota) {
-    if (nota === null || nota === undefined) return '<span style="color:var(--text-muted);font-size:var(--font-size-xs)">Sem notas</span>';
-    const full  = Math.floor(nota);
-    const empty = 5 - full;
-    return '★'.repeat(full) + '☆'.repeat(empty);
-  }
-
   // Usam os tokens de TEXTO: as variáveis sem sufixo são tons para fundo e
   // ficam ilegíveis quando aplicadas como cor de texto no tema escuro.
   function starsColor(nota) {
@@ -103,7 +96,7 @@
     tbody.innerHTML = '';
 
     if (!estagiarios.length) {
-      tbody.innerHTML = `<tr><td colspan="9" class="table-empty">${_t('destag.empty','Nenhum estagiário ativo encontrado.')}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" class="table-empty">${_t('destag.empty','Nenhum estagiário ativo encontrado.')}</td></tr>`;
       return;
     }
 
@@ -115,21 +108,21 @@
       const cpc   = e.cardsPorColuna || {};
       const emAnd = (cpc['em-andamento'] || 0) + (cpc['revisao'] || 0);
 
+      const concl = cpc['concluido'] || 0;
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>
           <div style="display:flex;align-items:center;gap:var(--space-2)">
-            <div style="width:32px;height:32px;border-radius:50%;background:${cor};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">${ini}</div>
-            <div>
-              <div style="font-weight:var(--font-weight-semibold);color:var(--text-primary)">${e.nome}</div>
-              <div style="font-size:var(--font-size-xs);color:var(--text-muted)">${e.orientador || ''}</div>
+            <div style="width:28px;height:28px;border-radius:50%;background:${cor};color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">${ini}</div>
+            <div style="min-width:0">
+              <div style="font-weight:var(--font-weight-semibold);color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.nome}</div>
+              <div style="font-size:var(--font-size-xs);color:var(--text-muted)">${e.area || '—'}</div>
             </div>
           </div>
         </td>
-        <td><span class="badge badge--neutral">${e.area || '—'}</span></td>
-        <td style="text-align:center">${e.totalCards}</td>
-        <td style="text-align:center"><span style="color:var(--color-success-text);font-weight:var(--font-weight-semibold)">${cpc['concluido'] || 0}</span></td>
-        <td style="text-align:center">${emAnd}</td>
+        <td style="text-align:center" title="${_t('destag.col.ongoing','Em Andamento')}: ${emAnd}">
+          <span style="color:var(--color-success-text);font-weight:var(--font-weight-semibold)">${concl}</span><span style="color:var(--text-muted)"> / ${e.totalCards}</span>
+        </td>
         <td style="text-align:center">
           ${e.vencidas > 0
             ? `<span style="color:var(--color-danger-text);font-weight:var(--font-weight-semibold)">${e.vencidas}</span>`
@@ -139,17 +132,16 @@
           <span style="font-weight:var(--font-weight-semibold);color:${taxaColor(taxa)}">${taxa}%</span>
         </td>
         <td style="text-align:center">
-          <span style="color:${starsColor(nota)};font-size:16px;letter-spacing:1px">${stars(nota)}</span>
-          ${nota !== null ? `<div style="font-size:var(--font-size-xs);color:var(--text-muted)">${fmtNota(nota)}/5</div>` : ''}
+          ${nota !== null
+            ? `<span style="color:${starsColor(nota)};font-weight:var(--font-weight-semibold)">★ ${fmtNota(nota)}</span><span style="color:var(--text-muted)">/5</span>`
+            : `<span style="color:var(--text-muted)">—</span>`}
         </td>
         <td class="actions-cell" style="white-space:nowrap">
-          <button class="btn btn-ghost btn-sm" data-estag-id="${e.id}" data-action="nota" title="Adicionar nota">
+          <button class="btn btn-ghost btn-sm" data-estag-id="${e.id}" data-action="nota" title="${_t('destag.btn.eval','Avaliar')}" aria-label="${_t('destag.btn.eval','Avaliar')} ${e.nome}">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            ${_t('destag.btn.eval','Avaliar')}
           </button>
-          <button class="btn btn-ghost btn-sm" data-estag-id="${e.id}" data-action="print" title="${_t('btn.print','Imprimir relatório')}">
+          <button class="btn btn-ghost btn-sm" data-estag-id="${e.id}" data-action="print" title="${_t('btn.print','Imprimir relatório')}" aria-label="${_t('btn.print','Imprimir relatório')} ${e.nome}">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-            ${_t('btn.print','Imprimir')}
           </button>
         </td>`;
       tbody.appendChild(tr);
