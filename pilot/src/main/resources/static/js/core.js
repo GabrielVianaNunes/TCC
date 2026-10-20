@@ -357,17 +357,25 @@ const Auth = (() => {
   // Gestor, Técnico e Estagiário não têm acesso, nem visual nem de dado
   // (a API em DocumentoPDFController também está travada com @PreAuthorize
   // hasRole('ADMIN'); isto aqui é só a UI acompanhar a regra real).
+  // Dashboards/relatórios financeiros (Relatório Serviços, Dashboard Clientes)
+  // também são de Gestor/Admin no servidor (SecurityConfig) — sem as entradas
+  // abaixo o menu os mostrava a todos e o clique caía num 403 cru.
   const PAGE_ROLES = {
     '/editais/lista':    ['GESTOR', 'ADMIN'],
     '/editais/detalhes': ['GESTOR', 'ADMIN'],
     '/documentos':       ['ADMIN'],
     '/usuarios':         ['GESTOR', 'ADMIN'],
+    '/dashboard-clientes':          ['GESTOR', 'ADMIN'],
+    '/dashboardServicos':           ['GESTOR', 'ADMIN'],
+    '/servicos/relatorio-servicos': ['GESTOR', 'ADMIN'],
   };
 
   const NAV_ROLES = {
     '/editais/lista': ['GESTOR', 'ADMIN'],
     '/documentos':    ['ADMIN'],
     '/usuarios':      ['GESTOR', 'ADMIN'],
+    '/dashboard-clientes':          ['GESTOR', 'ADMIN'],
+    '/servicos/relatorio-servicos': ['GESTOR', 'ADMIN'],
   };
 
   const ROLE_COLORS = {

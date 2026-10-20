@@ -740,6 +740,19 @@ const FieldRules = (() => {
   };
 })();
 
+/* ── Botão "Voltar" ──
+ * Links com [data-back] voltam à tela anterior do histórico quando ela é do
+ * próprio sistema; sem histórico (aba nova, link direto) seguem o href. */
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('a[data-back]');
+  if (!link || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+  const veioDoSistema = document.referrer && new URL(document.referrer).origin === window.location.origin;
+  if (veioDoSistema && window.history.length > 1) {
+    e.preventDefault();
+    window.history.back();
+  }
+});
+
 /* ── Exports ── */
 window.Toast     = Toast;
 window.Modal     = Modal;

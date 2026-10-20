@@ -27,12 +27,12 @@ const Dashboard = (() => {
     Skeleton.kpis(grid, isAdmin ? 4 : 3);
 
     const kpis = [
-      { id: 'os',       variant: 'primary', label: _t('Ordens de Serviço Abertas'), icon: 'file', endpoint: '/api/servicos',         params: { size: 1 } },
-      { id: 'projetos', variant: 'accent',  label: _t('Projetos Ativos'),           icon: 'star', endpoint: '/api/projetos',         params: { size: 1 } },
-      { id: 'visitas',  variant: 'warning', label: _t('Visitas Agendadas'),         icon: 'user', endpoint: '/api/visitas-tecnicas', params: { size: 1 } },
+      { id: 'os',       variant: 'primary', label: _t('Ordens de Serviço Abertas'), icon: 'file', href: '/servicos',          endpoint: '/api/servicos',         params: { size: 1 } },
+      { id: 'projetos', variant: 'accent',  label: _t('Projetos Ativos'),           icon: 'star', href: '/projetos',          endpoint: '/api/projetos',         params: { size: 1 } },
+      { id: 'visitas',  variant: 'warning', label: _t('Visitas Agendadas'),         icon: 'user', href: '/visitas-tecnicas',  endpoint: '/api/visitas-tecnicas', params: { size: 1 } },
       // Documentos gerais do laboratório são só do Admin (ver core.js Auth.PERMS
       // e DocumentoPDFController — @PreAuthorize hasRole('ADMIN') na API real).
-      ...(isAdmin ? [{ id: 'docs', variant: 'success', label: _t('Documentos Ativos'), icon: 'doc', endpoint: '/api/documentos', params: { size: 1 } }] : []),
+      ...(isAdmin ? [{ id: 'docs', variant: 'success', label: _t('Documentos Ativos'), icon: 'doc', href: '/documentos', endpoint: '/api/documentos', params: { size: 1 } }] : []),
     ];
 
     const fetches = kpis.map(k => {
@@ -57,13 +57,13 @@ const Dashboard = (() => {
         ? (Array.isArray(data) ? data.length : (data.totalElements ?? data.content?.length ?? 0))
         : '—';
       return `
-        <div class="kpi-card kpi-${k.variant}">
+        <a href="${k.href}" class="kpi-card kpi-card--link kpi-${k.variant}" aria-label="${k.label}: ${total}">
           <div class="kpi-card__left">
             <div class="kpi-card__label">${k.label}</div>
             <div class="kpi-card__value">${total}</div>
           </div>
           <div class="kpi-card__icon-wrap">${ICONS[k.icon]}</div>
-        </div>`;
+        </a>`;
     }).join('');
   }
 

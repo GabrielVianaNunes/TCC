@@ -322,4 +322,40 @@ class ServicoServiceIntegrationTest {
         assertEquals("Digitalização 3D de peças atualizada", atualizado.getSolicitacao());
         assertEquals(criado.getCodigoOs(), atualizado.getCodigoOs());
     }
+
+    @Test
+    void relatorioMensalSomaApenasOsComVendaFinalizada() {
+        com.zeiss.pilot.dto.ClienteDTO cliente = clienteService.criar(clienteDeTeste("Cliente Relatório", "104.104.104-04"));
+        Long maquinaId = maquinaDeTeste();
+        Long tipoServicoId = tipoServicoDeTeste();
+
+        // Mesmo critério do Dashboard de Clientes: só "Venda finalizada" é receita.
+        // Ano 2019 isola o teste de qualquer dado já existente no banco.
+        String[][] ordens = {
+            {"Venda finalizada", "1000.00"},
+            {"Venda finalizada", "500.00"},
+            {"Negociação", "9000.00"},
+            {"Desistiu", "4000.00"},
+        };
+        for (String[] ordem : ordens) {
+            ServicoDTO dto = novoServico("Cliente Relatório");
+            dto.setClienteId(cliente.getId());
+            dto.setMaquinaId(maquinaId);
+            dto.setTipoServicoId(tipoServicoId);
+            dto.setStatus(ordem[0]);
+            dto.setValor(new BigDecimal(ordem[1]));
+            dto.setDataCriacao(LocalDate.of(2019, 5, 10));
+            servicoService.criarServico(dto);
+        }
+
+        com.zeiss.pilot.dto.RelatorioMensalDTO maio2019 = servicoService.obterRelatorioMensal().stream()
+                .filter(r -> r.getAno() == 2019 && r.getMes() == 5)
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Maio/2019 não apareceu no relatório"));
+
+        assertEquals(2, maio2019.getQuantidadeServicos(),
+                "Negociação e Desistiu não entram na contagem de OS do relatório");
+        assertEquals(0, new BigDecimal("1500.00").compareTo(maio2019.getValorTotal()),
+                "Só as OS com Venda finalizada compõem a receita");
+    }
 }

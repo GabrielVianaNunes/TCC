@@ -172,6 +172,9 @@
       const valEl = document.getElementById('totalValorTbFoot');
       if (osEl) osEl.textContent = totalOS;
       if (valEl) valEl.textContent = fmtBRL(totalVal);
+      // Ticket médio do total = receita total ÷ nº de OS (não a média dos tickets mensais).
+      const ticketEl = document.getElementById('ticketMedioTbFoot');
+      if (ticketEl) ticketEl.textContent = totalOS > 0 ? fmtBRL(totalVal / totalOS) : '—';
     }
   }
 
