@@ -82,6 +82,21 @@
     .btn:hover { opacity: 0.85; }
     .btn-primary { background: #0033a0; color: #fff; }
 
+    /* Voltar */
+    .qr-back {
+      align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 6px;
+      width: 100%; max-width: 480px; margin-bottom: 12px;
+      font-size: 0.9rem; font-weight: 600; color: #374151;
+      text-decoration: none;
+    }
+    .qr-back a {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 8px; color: inherit; text-decoration: none;
+    }
+    .qr-back a:hover { background: #e5e9f0; }
+    .qr-back a:focus-visible { outline: 2px solid #0033a0; outline-offset: 2px; }
+
     /* Footer */
     .qr-footer {
       margin-top: 32px; font-size: 0.75rem; color: #9ca3af; text-align: center;
@@ -91,11 +106,18 @@
     @media print {
       body { background: #fff; padding: 0; }
       .qr-page { box-shadow: none; border-radius: 0; padding: 32px; max-width: 100%; }
-      .qr-actions, .qr-footer { display: none; }
+      .qr-actions, .qr-footer, .qr-back { display: none; }
     }
   </style>
 </head>
 <body>
+
+<div class="qr-back">
+  <a href="/" id="btnVoltar">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12,19 5,12 12,5"/></svg>
+    <span data-i18n="Voltar">Voltar</span>
+  </a>
+</div>
 
 <div class="qr-page" id="qrPage">
 
@@ -126,6 +148,17 @@
 <script src="/js/i18n.js"></script>
 <script src="/js/vendor/qrcode.min.js"></script>
 <script>
+  (function () {
+    // Volta à tela anterior do sistema; sem histórico (link direto) segue o href.
+    document.getElementById('btnVoltar').addEventListener('click', function (e) {
+      const veioDoSistema = document.referrer && new URL(document.referrer).origin === window.location.origin;
+      if (veioDoSistema && window.history.length > 1) {
+        e.preventDefault();
+        window.history.back();
+      }
+    });
+  })();
+
   (function () {
     const formUrl = window.location.origin + '/avaliacao?pub=1';
 
