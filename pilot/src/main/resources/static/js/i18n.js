@@ -674,6 +674,7 @@
     'destag.addNota':                  { 'pt-BR':'Adicionar Nota',                  'en':'Add Note',                            'de':'Notiz hinzufügen'                      },
     'destag.col.intern':               { 'pt-BR':'Estagiário',                      'en':'Intern',                              'de':'Praktikant'                            },
     'destag.col.area':                 { 'pt-BR':'Área',                            'en':'Area',                                'de':'Bereich'                               },
+    'destag.col.tasksDone':            { 'pt-BR':'Concluídas / Tarefas',            'en':'Completed / Tasks',                   'de':'Abgeschlossen / Aufgaben'              },
     'destag.col.tasks':                { 'pt-BR':'Tarefas',                         'en':'Tasks',                               'de':'Aufgaben'                              },
     'destag.col.done':                 { 'pt-BR':'Concluídas',                      'en':'Completed',                           'de':'Abgeschlossen'                         },
     'destag.col.ongoing':              { 'pt-BR':'Em Andamento',                    'en':'Ongoing',                             'de':'In Bearbeitung'                        },
