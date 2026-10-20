@@ -593,6 +593,53 @@ select.form-control { cursor: pointer; }
   min-width: 280px;
 }
 
+/* Variante moderna da barra de pesquisa (Amostras, Almoxarifado):
+   formato pílula, ícone que acompanha o foco e anel de foco suave. */
+.search-bar--modern {
+  flex: 1;
+  min-width: 220px;
+}
+
+.search-bar--modern .search-bar__icon {
+  left: 16px;
+  width: 18px;
+  height: 18px;
+  transition: color 0.2s ease;
+}
+
+.search-bar--modern .search-bar__input {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  padding: 0 18px 0 44px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-full);
+  background: var(--color-surface-alt, var(--color-surface));
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.search-bar--modern .search-bar__input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-bar--modern:hover .search-bar__input {
+  border-color: var(--text-muted);
+}
+
+.search-bar--modern .search-bar__input:focus {
+  outline: none;
+  background: var(--color-surface);
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--border-focus) 18%, transparent);
+}
+
+.search-bar--modern:focus-within .search-bar__icon {
+  color: var(--border-focus);
+}
+
 /* ── Filter Toolbar ── */
 .filter-toolbar {
   display: flex;
