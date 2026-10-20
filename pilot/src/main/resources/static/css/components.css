@@ -223,6 +223,18 @@
 
 .kpi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 
+/* KPI que leva a outra tela (ex.: cards do Dashboard Executivo) */
+.kpi-card--link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.kpi-card--link:focus-visible {
+  outline: 2px solid var(--kpi-accent, var(--color-primary));
+  outline-offset: 2px;
+  box-shadow: var(--shadow-md);
+}
+
 .kpi-card__left { flex: 1; min-width: 0; }
 
 .kpi-card__label {
