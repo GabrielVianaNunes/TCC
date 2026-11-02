@@ -293,5 +293,5 @@ input, select, textarea {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .btn:hover, .kpi-card:hover { transform: none !important; }
+  .btn:hover, .btn:active, .kpi-card:hover { transform: none !important; }
 }

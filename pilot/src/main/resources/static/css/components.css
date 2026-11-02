@@ -121,6 +121,14 @@
   flex-shrink: 0;
 }
 
+/* Feedback ao pressionar: o botão "afunda" um pouco, cancelando o
+   deslocamento do hover. Não se aplica a botões desabilitados. */
+.btn:active:not(:disabled):not([disabled]) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
+  filter: brightness(0.96);
+}
+
 .btn:disabled,
 .btn[disabled] {
   opacity: 0.5;
