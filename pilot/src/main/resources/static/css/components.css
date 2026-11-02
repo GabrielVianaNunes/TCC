@@ -410,6 +410,15 @@
   font-size: var(--font-size-base);
 }
 
+/* Dígitos de largura fixa: valores em R$, quantidades e percentuais alinham
+   verticalmente em vez de "dançar" de linha para linha. */
+.table td,
+.table tfoot td,
+.kpi-card__value,
+.kpi-card__delta {
+  font-variant-numeric: tabular-nums;
+}
+
 .table tbody tr:last-child td { border-bottom: none; }
 
 .table tbody tr {
