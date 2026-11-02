@@ -196,6 +196,13 @@
   margin: 1px 8px;
 }
 
+/* Foco de teclado na sidebar: fundo escuro, então usa o azul claro da marca. */
+.sidebar__nav-item:focus-visible,
+.sidebar__toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
 .sidebar__nav-item:hover {
   background: var(--sidebar-bg-hover);
   color: var(--sidebar-text-active);
