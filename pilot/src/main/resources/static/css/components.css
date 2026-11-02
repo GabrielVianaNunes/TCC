@@ -455,6 +455,20 @@
   background: var(--color-surface-hover);
 }
 
+/* Quem navega por teclado vê em que linha está: o foco em qualquer botão ou
+   link da linha realça a linha inteira, como o hover faz com o mouse. */
+.table tbody tr:focus-within {
+  background: var(--color-surface-hover);
+}
+
+/* Opt-in para tabelas cuja linha abre um detalhe (ainda nenhuma): cursor de
+   clique e realce um pouco mais forte no hover. */
+.table--interactive tbody tr { cursor: pointer; }
+.table--interactive tbody tr:hover,
+.table--interactive tbody tr:focus-within {
+  background: var(--color-primary-50);
+}
+
 .table-cell--muted { color: var(--text-muted); font-size: var(--font-size-sm); }
 .table-cell--strong { font-weight: var(--font-weight-semibold); }
 .table-cell--mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: var(--font-size-sm); }
