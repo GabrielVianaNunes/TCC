@@ -281,3 +281,17 @@ input, select, textarea {
   outline-offset: 2px;
   border-radius: var(--border-radius-sm);
 }
+
+/* ── MOVIMENTO REDUZIDO ──
+   Quem pede "reduzir movimento" no sistema operacional não recebe animações,
+   transições nem rolagem suave; os efeitos de hover que deslocam o elemento
+   também são desligados. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .btn:hover, .kpi-card:hover { transform: none !important; }
+}
