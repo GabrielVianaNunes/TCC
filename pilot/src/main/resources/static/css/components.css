@@ -463,11 +463,21 @@
   padding: var(--space-10) var(--space-6);
 }
 
+.table-empty__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-4);
+  border-radius: 50%;
+  background: var(--color-surface-alt);
+}
+
 .table-empty__icon {
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   color: var(--text-muted);
-  margin: 0 auto var(--space-3);
 }
 
 .table-empty__title {
@@ -482,6 +492,10 @@
   color: var(--text-muted);
   max-width: 320px;
   margin: 0 auto;
+}
+
+.table-empty__action {
+  margin-top: var(--space-4);
 }
 
 /* ══════════════════════════════════════════

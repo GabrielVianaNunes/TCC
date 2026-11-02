@@ -165,7 +165,9 @@
     if (countLabel) countLabel.textContent = `${filteredItens.length} ${_t('item(s)')}`;
 
     if (!filteredItens.length) {
-      EmptyState.table(tbody, 7, _t('Nenhum item encontrado'), _t('Ajuste os filtros ou cadastre um novo item.'));
+      const filtrosAtivos = ['searchInput','filterCategoria','filterStatus'].some(id => document.getElementById(id)?.value);
+      EmptyState.table(tbody, 7, _t('Nenhum item encontrado'), _t('Ajuste os filtros ou cadastre um novo item.'),
+        filtrosAtivos ? { label: _t('Limpar filtros'), onClick: () => document.getElementById('btnLimparFiltros')?.click() } : null);
       return;
     }
 

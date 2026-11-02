@@ -197,7 +197,9 @@
     if (countLabel) countLabel.textContent = `${totalElements || filteredAmostras.length} ${_t('registro(s)')}`;
 
     if (!filteredAmostras.length) {
-      EmptyState.table(tbody, 7, _t('Nenhuma amostra encontrada'), _t('Ajuste os filtros ou cadastre uma nova amostra.'));
+      const filtrosAtivos = ['searchInput','filterStatus'].some(id => document.getElementById(id)?.value);
+      EmptyState.table(tbody, 7, _t('Nenhuma amostra encontrada'), _t('Ajuste os filtros ou cadastre uma nova amostra.'),
+        filtrosAtivos ? { label: _t('Limpar filtros'), onClick: () => document.getElementById('btnLimparFiltros')?.click() } : null);
       return;
     }
 
