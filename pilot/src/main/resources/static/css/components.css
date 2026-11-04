@@ -121,6 +121,14 @@
   flex-shrink: 0;
 }
 
+/* Feedback ao pressionar: o botão "afunda" um pouco, cancelando o
+   deslocamento do hover. Não se aplica a botões desabilitados. */
+.btn:active:not(:disabled):not([disabled]) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
+  filter: brightness(0.96);
+}
+
 .btn:disabled,
 .btn[disabled] {
   opacity: 0.5;
@@ -375,6 +383,24 @@
   box-shadow: var(--shadow-card);
 }
 
+/* Listas longas e paginadas: a tabela rola dentro do cartão e o cabeçalho
+   fica fixo no topo, para não perder o contexto das colunas. Precisa de uma
+   altura máxima — sem ela a tabela não rola e o sticky não tem efeito. O
+   box-shadow substitui a borda inferior, que some em th sticky com
+   border-collapse. */
+.table-container--sticky {
+  max-height: max(360px, calc(100vh - 340px));
+  overflow-y: auto;
+}
+
+.table-container--sticky .table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--color-surface-alt, #F8FAFC);
+  box-shadow: inset 0 -2px 0 var(--border-color);
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -410,6 +436,15 @@
   font-size: var(--font-size-base);
 }
 
+/* Dígitos de largura fixa: valores em R$, quantidades e percentuais alinham
+   verticalmente em vez de "dançar" de linha para linha. */
+.table td,
+.table tfoot td,
+.kpi-card__value,
+.kpi-card__delta {
+  font-variant-numeric: tabular-nums;
+}
+
 .table tbody tr:last-child td { border-bottom: none; }
 
 .table tbody tr {
@@ -418,6 +453,20 @@
 
 .table tbody tr:hover {
   background: var(--color-surface-hover);
+}
+
+/* Quem navega por teclado vê em que linha está: o foco em qualquer botão ou
+   link da linha realça a linha inteira, como o hover faz com o mouse. */
+.table tbody tr:focus-within {
+  background: var(--color-surface-hover);
+}
+
+/* Opt-in para tabelas cuja linha abre um detalhe (ainda nenhuma): cursor de
+   clique e realce um pouco mais forte no hover. */
+.table--interactive tbody tr { cursor: pointer; }
+.table--interactive tbody tr:hover,
+.table--interactive tbody tr:focus-within {
+  background: var(--color-primary-50);
 }
 
 .table-cell--muted { color: var(--text-muted); font-size: var(--font-size-sm); }
@@ -436,11 +485,21 @@
   padding: var(--space-10) var(--space-6);
 }
 
+.table-empty__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-4);
+  border-radius: 50%;
+  background: var(--color-surface-alt);
+}
+
 .table-empty__icon {
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   color: var(--text-muted);
-  margin: 0 auto var(--space-3);
 }
 
 .table-empty__title {
@@ -455,6 +514,10 @@
   color: var(--text-muted);
   max-width: 320px;
   margin: 0 auto;
+}
+
+.table-empty__action {
+  margin-top: var(--space-4);
 }
 
 /* ══════════════════════════════════════════

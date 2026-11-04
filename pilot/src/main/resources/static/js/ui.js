@@ -316,19 +316,36 @@ const StatusBadge = (() => {
    EMPTY STATE
 ══════════════════════════════════════════ */
 const EmptyState = {
-  table(tbody, cols, message = 'Nenhum registro encontrado', hint = 'Utilize o botão acima para adicionar um novo item.') {
-    if (!tbody) return;
+  /** Marcação do estado vazio. `action` ({ label, onClick }) é opcional. */
+  _markup(message, hint, action) {
     const _t = k => window.I18n?.t(k) ?? k;
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="${cols}">
-          <div class="table-empty">
-            <svg class="table-empty__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="14" y2="13"/></svg>
-            <div class="table-empty__title">${_t(message)}</div>
-            <div class="table-empty__desc">${_t(hint)}</div>
-          </div>
-        </td>
-      </tr>`;
+    const esc = v => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return `
+      <div class="table-empty">
+        <div class="table-empty__icon-wrap">
+          <svg class="table-empty__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="14" y2="13"/></svg>
+        </div>
+        <div class="table-empty__title">${esc(_t(message))}</div>
+        <div class="table-empty__desc">${esc(_t(hint))}</div>
+        ${action ? `<button type="button" class="btn btn-secondary btn-sm table-empty__action" data-empty-action>${esc(action.label)}</button>` : ''}
+      </div>`;
+  },
+
+  _bindAction(root, action) {
+    if (action) root.querySelector('[data-empty-action]')?.addEventListener('click', action.onClick);
+  },
+
+  table(tbody, cols, message = 'Nenhum registro encontrado', hint = 'Utilize o botão acima para adicionar um novo item.', action = null) {
+    if (!tbody) return;
+    tbody.innerHTML = `<tr><td colspan="${cols}">${this._markup(message, hint, action)}</td></tr>`;
+    this._bindAction(tbody, action);
+  },
+
+  /** Estado vazio fora de tabela (gráficos e cartões dos dashboards). */
+  render(container, { message = 'Nenhum dado disponível', hint = '', action = null } = {}) {
+    if (!container) return;
+    container.innerHTML = this._markup(message, hint, action);
+    this._bindAction(container, action);
   }
 };
 

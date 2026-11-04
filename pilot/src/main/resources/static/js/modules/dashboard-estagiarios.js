@@ -502,6 +502,7 @@
   // ── Load ──────────────────────────────────────────────────────────────────
 
   async function load() {
+    Skeleton.tableRows(document.getElementById('tabelaDesempenho'), 6, 4);
     try {
       const [dash, servResp, cardsResp, notasResp] = await Promise.all([
         Api.get(API_DASH),
