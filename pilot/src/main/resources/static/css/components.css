@@ -121,6 +121,14 @@
   flex-shrink: 0;
 }
 
+/* Feedback ao pressionar: o botão "afunda" um pouco, cancelando o
+   deslocamento do hover. Não se aplica a botões desabilitados. */
+.btn:active:not(:disabled):not([disabled]) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
+  filter: brightness(0.96);
+}
+
 .btn:disabled,
 .btn[disabled] {
   opacity: 0.5;
@@ -447,6 +455,20 @@
   background: var(--color-surface-hover);
 }
 
+/* Quem navega por teclado vê em que linha está: o foco em qualquer botão ou
+   link da linha realça a linha inteira, como o hover faz com o mouse. */
+.table tbody tr:focus-within {
+  background: var(--color-surface-hover);
+}
+
+/* Opt-in para tabelas cuja linha abre um detalhe (ainda nenhuma): cursor de
+   clique e realce um pouco mais forte no hover. */
+.table--interactive tbody tr { cursor: pointer; }
+.table--interactive tbody tr:hover,
+.table--interactive tbody tr:focus-within {
+  background: var(--color-primary-50);
+}
+
 .table-cell--muted { color: var(--text-muted); font-size: var(--font-size-sm); }
 .table-cell--strong { font-weight: var(--font-weight-semibold); }
 .table-cell--mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: var(--font-size-sm); }
@@ -463,11 +485,21 @@
   padding: var(--space-10) var(--space-6);
 }
 
+.table-empty__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-4);
+  border-radius: 50%;
+  background: var(--color-surface-alt);
+}
+
 .table-empty__icon {
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   color: var(--text-muted);
-  margin: 0 auto var(--space-3);
 }
 
 .table-empty__title {
@@ -482,6 +514,10 @@
   color: var(--text-muted);
   max-width: 320px;
   margin: 0 auto;
+}
+
+.table-empty__action {
+  margin-top: var(--space-4);
 }
 
 /* ══════════════════════════════════════════

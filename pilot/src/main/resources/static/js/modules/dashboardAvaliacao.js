@@ -330,6 +330,7 @@
 
   // ── Carregar dados (API + localStorage) ──────────────────────────────────
   async function load() {
+    Skeleton.tableRows(document.getElementById('tbodyRespostas'), 5, 5);
     try {
       const resp   = await Api.get(API, { size: 5000 });
       const server = Array.isArray(resp) ? resp : (resp.content || []);
