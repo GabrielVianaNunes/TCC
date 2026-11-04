@@ -375,6 +375,24 @@
   box-shadow: var(--shadow-card);
 }
 
+/* Listas longas e paginadas: a tabela rola dentro do cartão e o cabeçalho
+   fica fixo no topo, para não perder o contexto das colunas. Precisa de uma
+   altura máxima — sem ela a tabela não rola e o sticky não tem efeito. O
+   box-shadow substitui a borda inferior, que some em th sticky com
+   border-collapse. */
+.table-container--sticky {
+  max-height: max(360px, calc(100vh - 340px));
+  overflow-y: auto;
+}
+
+.table-container--sticky .table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--color-surface-alt, #F8FAFC);
+  box-shadow: inset 0 -2px 0 var(--border-color);
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -408,6 +426,15 @@
   border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
   font-size: var(--font-size-base);
+}
+
+/* Dígitos de largura fixa: valores em R$, quantidades e percentuais alinham
+   verticalmente em vez de "dançar" de linha para linha. */
+.table td,
+.table tfoot td,
+.kpi-card__value,
+.kpi-card__delta {
+  font-variant-numeric: tabular-nums;
 }
 
 .table tbody tr:last-child td { border-bottom: none; }

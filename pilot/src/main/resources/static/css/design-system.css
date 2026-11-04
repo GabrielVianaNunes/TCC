@@ -80,6 +80,7 @@
   --border-color:         #E2E8F0;
   --border-hover:         #CBD5E1;
   --border-focus:         #0033A0;
+  --focus-ring:           #0033A0;   /* anel de foco de teclado (contraste ≥ 3:1 sobre a superfície) */
   --border-width:         1px;
   --border-radius-xs:     4px;
   --border-radius-sm:     6px;
@@ -160,6 +161,7 @@
 
 /* ── DARK MODE OVERRIDES (optional toggle) ── */
 [data-theme="dark"] {
+  --focus-ring:           #5CA8FF;
   /* Surfaces & BG */
   --color-bg:             #0D1117;
   --color-bg-alt:         #161B22;
@@ -269,3 +271,27 @@ input, select, textarea {
 ::-webkit-scrollbar-track  { background: var(--color-bg); }
 ::-webkit-scrollbar-thumb  { background: var(--border-hover); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ── FOCO DE TECLADO ──
+   Anel único para links, botões e elementos focáveis que não definem o seu
+   próprio (.btn e os campos de formulário têm o deles). :where() mantém a
+   especificidade em zero, então qualquer estilo de foco específico vence. */
+:where(a, button, summary, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+/* ── MOVIMENTO REDUZIDO ──
+   Quem pede "reduzir movimento" no sistema operacional não recebe animações,
+   transições nem rolagem suave; os efeitos de hover que deslocam o elemento
+   também são desligados. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .btn:hover, .kpi-card:hover { transform: none !important; }
+}
