@@ -55,6 +55,7 @@
 
   async function loadClientes() {
     const tbody = document.getElementById('tbodyClientes');
+    Skeleton.tableRows(tbody, 5, 5);
     let clientes = [];
     try {
       clientes = await Api.get(API_URL);
@@ -137,6 +138,7 @@
 
   async function loadRanking() {
     const tbody = document.getElementById('tbodyRanking');
+    Skeleton.tableRows(tbody, 5, 5);
     let ranking = [];
     try {
       ranking = await Api.get(RANKING_URL);
