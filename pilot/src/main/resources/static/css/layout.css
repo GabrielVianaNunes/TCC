@@ -740,6 +740,11 @@
   to   { opacity: 0; }
 }
 
+/* Telas com tabelas largas (Serviços, Visitas, Projetos): o limite padrão de
+   1100px força rolagem lateral mesmo com espaço sobrando. Continua sendo um
+   teto (max-width), então em telas menores o conteúdo segue fluido. */
+.content-area--wide { max-width: 1440px; }
+
 /* Centered narrow content (forms, single-entity pages) */
 .content-area--centered {
   display: flex;
